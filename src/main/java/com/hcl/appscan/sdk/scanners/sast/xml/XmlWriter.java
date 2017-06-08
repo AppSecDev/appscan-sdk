@@ -16,7 +16,7 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import com.hcl.appscan.sdk.scanners.sast.target.ISASTTarget;
+import com.hcl.appscan.sdk.scanners.sast.targets.ISASTTarget;
 
 public class XmlWriter extends ModelWriter 
 implements	IModelXMLConstants 

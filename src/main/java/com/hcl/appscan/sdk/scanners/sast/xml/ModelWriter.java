@@ -19,7 +19,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
-import com.hcl.appscan.sdk.scanners.sast.target.ISASTTarget;
+import com.hcl.appscan.sdk.scanners.sast.targets.ISASTTarget;
 
 
 /**
