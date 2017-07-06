@@ -150,7 +150,8 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 				m_hasResults = true;
 			}
 		} catch (IOException | JSONException | NullPointerException e) {
-			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS)), e);
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
+			m_status = FAILED;
 		}
 	}
 	
