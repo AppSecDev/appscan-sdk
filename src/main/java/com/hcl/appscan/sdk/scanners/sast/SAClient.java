@@ -108,7 +108,14 @@ public class SAClient implements SASTConstants {
 		return proc.exitValue();
 	}
 	
-	private String getClientScript() throws IOException, ScannerException {
+	/**
+	 * Gets the absolute path to the "appscan" script for running the IRGen process, downloading the package if it's
+	 * not found or if the current version is out of date.
+	 * @return The absolute path to the "appscan" script.
+	 * @throws IOException
+	 * @throws ScannerException
+	 */
+	public String getClientScript() throws IOException, ScannerException {
 		//See if we already have the client package.
 		String scriptPath = "bin" + File.separator + getScriptName(); //$NON-NLS-1$
 		File install = findClientInstall();
