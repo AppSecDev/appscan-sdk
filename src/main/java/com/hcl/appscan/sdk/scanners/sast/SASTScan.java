@@ -106,7 +106,7 @@ public class SASTScan extends ASoCScan implements SASTConstants {
 			return new File("logs"); //$NON-NLS-1$
 		}
 		String logsFile = m_irx.getName();
-		logsFile = logsFile.substring(0, logsFile.lastIndexOf(".") - 1); //$NON-NLS-1$
+		logsFile = logsFile.substring(0, logsFile.lastIndexOf(".")); //$NON-NLS-1$
 		logsFile += "_logs.zip"; //$NON-NLS-1$
 		return new File(m_irx.getParentFile(), logsFile);
 	}

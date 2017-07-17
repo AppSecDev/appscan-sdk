@@ -72,6 +72,7 @@ public class SAClient implements SASTConstants {
 		arguments.addAll(args);
 		m_builder = new ProcessBuilder(arguments);
 		m_builder.directory(new File(workingDir));
+		m_builder.redirectErrorStream(true);
 		
 		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(PREPARING_IRX, getLocalClientVersion())));
 		final Process proc = m_builder.start();
