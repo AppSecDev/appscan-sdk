@@ -74,13 +74,14 @@ public class SASTScanManager implements IScanManager{
 		}
 	}
 
-	private String createConfig() throws AppScanException  {
+	private void createConfig() throws AppScanException  {
+		if(m_targets.isEmpty())
+			return;
 		try {
 			ModelWriter writer = new XmlWriter();
 			writer.initWriters(new File(m_workingDirectory));		
 			writer.visit(m_targets);
 			writer.write();
-			return writer.getOutputLocation();
 		} catch (IOException | TransformerException  e) {
 			throw new AppScanException(e.getLocalizedMessage(), e);
 		}
