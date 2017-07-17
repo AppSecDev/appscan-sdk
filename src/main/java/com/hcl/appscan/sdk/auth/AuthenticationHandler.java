@@ -78,8 +78,8 @@ public class AuthenticationHandler implements CoreConstants {
 		}
 
 		HttpClient client = new HttpClient();
-	    HttpResponse response = client.postForm(url, headers, params);
-	    JSONObject object = (JSONObject)response.getResponseBodyAsJSON();
+	    	HttpResponse response = client.postForm(url, headers, params);
+	    	JSONObject object = (JSONObject)response.getResponseBodyAsJSON();
 	    
 		if(response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
 			if(persist) {
