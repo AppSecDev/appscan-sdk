@@ -78,18 +78,18 @@ public class AuthenticationHandler implements CoreConstants {
 		}
 
 		HttpClient client = new HttpClient();
-	    	HttpResponse response = client.postForm(url, headers, params);
-	    	JSONObject object = (JSONObject)response.getResponseBodyAsJSON();
+	    HttpResponse response = client.postForm(url, headers, params);
 	    
 		if(response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
 			if(persist) {
+				JSONObject object = (JSONObject)response.getResponseBodyAsJSON();
 				String token = object.getString(TOKEN);
 				m_authProvider.saveConnection(token);
 			}
 			return true;
 		}
 		else {
-			String reason = object.has(MESSAGE) ? object.getString(MESSAGE) : Messages.getMessage("message.unknown"); //$NON-NLS-1$
+			String reason = response.getResponseBodyAsString() == null ? Messages.getMessage("message.unknown") : response.getResponseBodyAsString(); //$NON-NLS-1$
 			throw new HttpException(response.getResponseCode(), reason);
 		}
 	}
