@@ -16,6 +16,8 @@ import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
 import com.hcl.appscan.sdk.CoreConstants;
+import com.hcl.appscan.sdk.Messages;
+import com.hcl.appscan.sdk.error.HttpException;
 import com.hcl.appscan.sdk.http.HttpClient;
 import com.hcl.appscan.sdk.http.HttpResponse;
 
@@ -86,7 +88,10 @@ public class AuthenticationHandler implements CoreConstants {
 			}
 			return true;
 		}
-		return false;
+		else {
+			String reason = response.getResponseBodyAsString() == null ? Messages.getMessage("message.unknown") : response.getResponseBodyAsString(); //$NON-NLS-1$
+			throw new HttpException(response.getResponseCode(), reason);
+		}
 	}
 	
 	public boolean isTokenExpired() {
