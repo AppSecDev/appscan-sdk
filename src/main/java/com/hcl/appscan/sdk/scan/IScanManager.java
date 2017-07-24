@@ -6,11 +6,11 @@
 
 package com.hcl.appscan.sdk.scan;
 
+import java.io.File;
 import java.util.Map;
 
 import com.hcl.appscan.sdk.error.AppScanException;
 import com.hcl.appscan.sdk.logging.IProgress;
-import com.hcl.appscan.sdk.scan.IScanServiceProvider;
 
 public interface IScanManager {
 	
@@ -36,4 +36,11 @@ public interface IScanManager {
 	 * @param target
 	 */
 	void addScanTarget(ITarget target);	
+	
+	/**
+	 * Retrieves the scan results as a file.
+	 * @return A file containing the results.
+	 * @throws AppScanException if there are no results available.
+	 */
+	void getScanResults(File destination, String format) throws AppScanException;
 }
