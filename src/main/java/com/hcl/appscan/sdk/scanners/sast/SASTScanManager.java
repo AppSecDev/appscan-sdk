@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.xml.transform.TransformerException;
 
 import com.hcl.appscan.sdk.CoreConstants;
+import com.hcl.appscan.sdk.Messages;
 import com.hcl.appscan.sdk.error.AppScanException;
 import com.hcl.appscan.sdk.error.InvalidTargetException;
 import com.hcl.appscan.sdk.error.ScannerException;
@@ -65,6 +66,14 @@ public class SASTScanManager implements IScanManager{
 			m_targets.add((ISASTTarget)target);
 	}
 
+	@Override
+	public void getScanResults(File destination, String format) throws AppScanException {
+		if(m_scan != null && m_scan.getResultsProvider() != null)
+			m_scan.getResultsProvider().getResultsFile(destination, format);
+		else
+			throw new AppScanException(Messages.getMessage("message.results.unavailable")); //$NON-NLS-1$
+	}
+	
 	private  void run(IProgress progress,Map<String, String> properties, IScanServiceProvider provider) throws AppScanException {
 		try {
 			m_scan = new SASTScan(properties, progress, provider);
