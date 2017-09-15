@@ -127,6 +127,11 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		return m_reportFormat;
 	}
 	
+	@Override
+	public void setProgress(IProgress progress) {
+		m_progress = progress;
+	}
+	
 	/**
 	 * Specifies the format to use for reports.
 	 * 
