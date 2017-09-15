@@ -130,6 +130,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	@Override
 	public void setProgress(IProgress progress) {
 		m_progress = progress;
+		m_scanProvider.setProgress(progress);
 	}
 	
 	/**
