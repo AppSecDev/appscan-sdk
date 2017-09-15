@@ -14,6 +14,7 @@ import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
 import com.hcl.appscan.sdk.auth.IAuthenticationProvider;
+import com.hcl.appscan.sdk.logging.IProgress;
 
 /**
  * A provider of scanning services.
@@ -52,4 +53,10 @@ public interface IScanServiceProvider {
 	 * @return
 	 */
 	public IAuthenticationProvider getAuthenticationProvider();
+	
+	/**
+	 * Sets the {@link IProgress} used to record status messages.
+	 * @param progress The {@link IProgress}.
+	 */
+	public void setProgress(IProgress progress);
 }

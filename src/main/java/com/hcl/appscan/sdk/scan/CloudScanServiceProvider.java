@@ -144,4 +144,9 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_INVALID_APP, appId)));
 		return false;
 	}
+	
+	@Override
+	public void setProgress(IProgress progress) {
+		m_progress = progress;
+	}
 }
