@@ -9,6 +9,8 @@ package com.hcl.appscan.sdk.results;
 import java.io.File;
 import java.util.Collection;
 
+import com.hcl.appscan.sdk.logging.IProgress;
+
 /**
  * Provides access to the results of a security scan.
  */
@@ -80,4 +82,10 @@ public interface IResultsProvider {
 	 * @return The format of the results file.
 	 */
 	public String getResultsFormat();
+	
+	/**
+	 * Sets the IProgress for tracking status.
+	 * @param progress The IProgress.
+	 */
+	public void setProgress(IProgress progress);
 }
