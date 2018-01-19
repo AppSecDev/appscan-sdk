@@ -46,6 +46,7 @@ public interface SASTConstants {
 	//Errors
 	String IRX_MISSING					= "error.irx.missing";				//$NON-NLS-1$
 	String ERROR_CHECKING_SACLIENT_VER 	= "error.checking.local.version";	//$NON-NLS-1$
+	String ERROR_DOWNLOADING_CLIENT 	= "error.download.client";			//$NON-NLS-1$
 	String ERROR_GENERATING_IRX			= "error.generating.irx";			//$NON-NLS-1$
 	String ERROR_SUBMITTING_IRX			= "error.submitting.irx";			//$NON-NLS-1$
 	String DOWNLOAD_OUT_OF_MEMORY		= "error.out.of.memory";			//$NON-NLS-1$

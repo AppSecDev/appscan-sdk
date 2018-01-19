@@ -129,14 +129,16 @@ public class SAClient implements SASTConstants {
 			deleteDirectory(install);
 		
 		File clientZip = new File(m_installDir, SACLIENT + ".zip"); //$NON-NLS-1$
-		if(clientZip.exists())
+		if(clientZip.isFile())
 			clientZip.delete();
 		
 		try {
 			ServiceUtil.getSAClientUtil(clientZip);
 		} catch(OutOfMemoryError e) {
-			throw new ScannerException(Messages.getMessage(DOWNLOAD_OUT_OF_MEMORY), e);
-		}	
+			throw new ScannerException(Messages.getMessage(DOWNLOAD_OUT_OF_MEMORY));
+		} catch(IOException e) {
+			throw new ScannerException(Messages.getMessage(ERROR_DOWNLOADING_CLIENT, e.getLocalizedMessage()));
+		}
 		
 		if(clientZip.isFile()) {
 			m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(DOWNLOAD_COMPLETE)));
@@ -196,10 +198,11 @@ public class SAClient implements SASTConstants {
 			reader = new BufferedReader(new FileReader(versionInfo));
 			version = reader.readLine(); //The version is the first line of the version.info file.
 		} catch (IOException e) {
-			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_CHECKING_SACLIENT_VER,e)));
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_CHECKING_SACLIENT_VER, e.getLocalizedMessage())));
 		} finally {
 			try {
-				reader.close();
+				if(reader != null)
+					reader.close();
 			} catch (IOException e) {
 			}
 		}
