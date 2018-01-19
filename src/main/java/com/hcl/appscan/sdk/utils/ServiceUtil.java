@@ -42,6 +42,8 @@ public class ServiceUtil implements CoreConstants {
 			
 			response.getResponseBodyAsFile(destination);
 		}
+		else
+			throw new IOException(response.getResponseBodyAsString());
 	}
 	
 	/**
