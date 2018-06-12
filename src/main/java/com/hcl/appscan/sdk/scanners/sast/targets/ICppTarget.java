@@ -24,4 +24,16 @@ public interface ICppTarget extends ISASTTarget {
 	 * @return
 	 */
 	String getIncludeDirs();
+
+	/**
+	 * Gets the source files for the target.
+	 * @return
+	 */
+	String getSourceFiles();
+
+	/**
+	 * Gets the version of the target.
+	 * @return
+	 */
+	String getVersion();
 }
