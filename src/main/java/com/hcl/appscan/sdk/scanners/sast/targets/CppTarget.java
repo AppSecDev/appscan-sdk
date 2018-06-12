@@ -15,9 +15,11 @@ public abstract class CppTarget extends DefaultTarget implements ICppTarget {
 	@Override
 	public Map<String, String> getProperties() {
 		HashMap<String, String> buildInfos = new HashMap<String, String>();
-		buildInfos.put(IModelXMLConstants.A_ADDITIONAL_CLASSPATH, getCompilerOptions());
+		buildInfos.put(IModelXMLConstants.A_COMPILER_OPTS, getCompilerOptions());
 		buildInfos.put(IModelXMLConstants.A_MACROS, getMacros());
 		buildInfos.put(IModelXMLConstants.A_INCLUDE_PATHS, getIncludeDirs());
+                buildInfos.put(IModelXMLConstants.A_SOURCES, getSourceFiles());
+                buildInfos.put(IModelXMLConstants.A_VS_VERSION, getVersion());
 		return buildInfos;
 	}
 }

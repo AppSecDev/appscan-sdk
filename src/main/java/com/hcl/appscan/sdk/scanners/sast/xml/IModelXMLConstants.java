@@ -33,6 +33,8 @@ public interface IModelXMLConstants {
 	String A_MACROS					= "macros";					//$NON-NLS-1$
 	String A_INCLUDE_PATHS			= "include_paths";			//$NON-NLS-1$
 	String A_BUILD_CONFIG			= "build_configuration";	//$NON-NLS-1$
+	String A_SOURCES			= "sources";			//$NON-NLS-1$
+	String A_VS_VERSION			= "vs_version";			//$NON-NLS-1$
 	
 	//.NET
 	String A_REFERENCES 			= "references";				//$NON-NLS-1$
