@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2018. 
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -158,21 +158,9 @@ public class SAClient implements SASTConstants {
 		String serverVersion = ServiceUtil.getSAClientVersion();
 		String localVersion = getLocalClientVersion();
 
-		if(localVersion != null && serverVersion != null) {
-			String[] local = localVersion.split("\\."); //$NON-NLS-1$
-			String[] server = serverVersion.split("\\."); //$NON-NLS-1$
-
-			for(int iter = 0; iter < local.length && iter < server.length; iter++) {
-				int lVersion = Integer.parseInt(local[iter]);
-				int sVersion = Integer.parseInt(server[iter]);
-				
-				if (((iter==0) && lVersion<sVersion)
-						|| (iter==1 && lVersion<sVersion)
-						|| (iter==2 && lVersion<sVersion)) {
-					m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(SACLIENT_OUTDATED, localVersion, serverVersion)));
-					return true;
-				}
-			}
+		if(compareVersions(localVersion, serverVersion)) {
+			m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(SACLIENT_OUTDATED, localVersion, serverVersion)));
+			return true;
 		}
 		return false;
 	}
@@ -186,7 +174,27 @@ public class SAClient implements SASTConstants {
 				return name.startsWith(SACLIENT) && new File(dir, name).isDirectory();
 			}
 		});
-		return files.length == 0 ? null : files[0];
+		
+		//If there's more than 1 directory, we need to determine the latest. Delete any older directories that are found.
+		if(files.length > 1) {
+			File latest = files[0];
+			String latestVersion = getVersionFromString(latest.getName());
+			
+			for(int i = 1; i < files.length; i++) {
+				String otherVersion = getVersionFromString(files[i].getName());
+				if(compareVersions(latestVersion, otherVersion)) {
+					deleteDirectory(latest);
+					latest = files[i];
+					latestVersion = getVersionFromString(latest.getName());
+				}
+				else
+					deleteDirectory(files[i]);
+			}
+			
+			return latest;
+		}
+		else
+			return files.length == 0 ? null : files[0];
 	}
 	
 	private String getLocalClientVersion() {
@@ -255,5 +263,35 @@ public class SAClient implements SASTConstants {
 			args.add(OPT_THIRD_PARTY);
 		
 		return args;
+	}
+	
+	private boolean compareVersions(String baseVersion, String newVersion) {
+		if(baseVersion != null && newVersion != null) {
+			String[] base = baseVersion.split("\\."); //$NON-NLS-1$
+			String[] next = newVersion.split("\\."); //$NON-NLS-1$
+
+			try {
+				for(int iter = 0; iter < base.length && iter < next.length; iter++) {
+					int lVersion = Integer.parseInt(base[iter]);
+					int sVersion = Integer.parseInt(next[iter]);
+					
+					if (((iter==0) && lVersion<sVersion)
+							|| (iter==1 && lVersion<sVersion)
+							|| (iter==2 && lVersion<sVersion)) {
+						return true;
+					}
+				}
+			} catch (NumberFormatException e) {
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	private String getVersionFromString(String name) {
+		String version = name.substring(SACLIENT.length());
+		if(version.trim().startsWith(".")) //$NON-NLS-1$
+			version = version.substring(1);
+		return version;
 	}
 }
