@@ -28,7 +28,7 @@ public class ServiceUtil implements CoreConstants {
 	 * Gets the SAClientUtil package used for running static analysis.
 	 * 
 	 * @param destination The file to save the package to.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public static void getSAClientUtil(File destination) throws IOException {
 		String request_url = SystemUtil.getDefaultServer() + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
@@ -50,7 +50,7 @@ public class ServiceUtil implements CoreConstants {
 	 * Gets the latest available version of the SAClientUtil package used for running static analysis.
 	 * 
 	 * @return The current version of the package.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public static String getSAClientVersion() throws IOException {
 		String request_url = SystemUtil.getDefaultServer() + String.format(API_SACLIENT_VERSION, API_SCX, SystemUtil.getOS(), "true"); //$NON-NLS-1$

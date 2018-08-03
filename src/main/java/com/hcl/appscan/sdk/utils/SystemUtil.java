@@ -100,7 +100,7 @@ public class SystemUtil {
 	/**
 	 * Gets the server url.
 	 * 
-	 * @return
+	 * @return The server url.
 	 */
 	public static String getDefaultServer() {
 		setSystemProperties();

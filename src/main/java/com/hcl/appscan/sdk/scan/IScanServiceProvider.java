@@ -35,7 +35,7 @@ public interface IScanServiceProvider {
 	 * 
 	 * @param file The file to submit.
 	 * @return The id of the submitted file.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public String submitFile(File file) throws IOException;
 
@@ -44,13 +44,15 @@ public interface IScanServiceProvider {
 	 * 
 	 * @param scanId The id of the scan to retrieve the description.
 	 * @return JSONObject The detailed description in JSON.
+	 * @throws IOException If an error occurs.
+	 * @throws JSONException If an error occurs.
 	 */
 	public JSONObject getScanDetails(String scanId) throws IOException, JSONException;
 	
 	/**
 	 * Gets the {@link IAuthenticationProvider} used to authenticate with a scanning service.
 	 * 
-	 * @return
+	 * @return The {@link IAuthenticationProvider}.
 	 */
 	public IAuthenticationProvider getAuthenticationProvider();
 	

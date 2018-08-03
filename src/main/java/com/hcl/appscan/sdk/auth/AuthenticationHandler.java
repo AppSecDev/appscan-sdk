@@ -31,12 +31,12 @@ public class AuthenticationHandler implements CoreConstants {
 	
 	/**
 	 * Authenticates a user with the IBM Application Security on Cloud service using a username and password.
-	 * @param username
-	 * @param password
+	 * @param username The username.
+	 * @param password The password.
 	 * @param persist True to persist the credentials.
 	 * @return True if successful.
-	 * @throws IOException 
-	 * @throws JSONException 
+	 * @throws IOException If an error occurs.
+	 * @throws JSONException If an error occurs.
 	 */
 	public boolean login(String username, String password, boolean persist) throws IOException, JSONException {
 		return login(username, password, persist, LoginType.ASoC);
@@ -44,13 +44,13 @@ public class AuthenticationHandler implements CoreConstants {
 
 	/**
 	 * Authenticates a user using the given LoginType.
-	 * @param id The key id.
-	 * @param secret The key secret.
+	 * @param username The username.
+	 * @param password The password.
 	 * @param persist True to persist the credentials.
 	 * @param type The LoginType.
 	 * @return True if successful.
-	 * @throws IOException 
-	 * @throws JSONException 
+	 * @throws IOException If an error occurs.
+	 * @throws JSONException If an error occurs.
 	 */
 	public boolean login(String username, String password, boolean persist, LoginType type) throws IOException, JSONException {
 		

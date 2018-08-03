@@ -17,9 +17,9 @@ public interface IScanFactory {
 	 * Creates a new {@link IScan}.
 	 * 
 	 * @param properties A {@link Map} of properties for the scan.
-	 * @param progrss An {@link IProgress} for reporting status.
+	 * @param progress An {@link IProgress} for reporting status.
 	 * @param provider An {@link IAuthenticationProvider} for providing authentication services.
-	 * @return
+	 * @return The created {@link IScan}.
 	 */
 	public IScan create(Map<String, String> properties, IProgress progress, IAuthenticationProvider provider);
 	

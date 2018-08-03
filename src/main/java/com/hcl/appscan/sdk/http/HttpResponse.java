@@ -72,8 +72,8 @@ public class HttpResponse {
 	 * JSONArtifact. Returns null if no response body was recorded.
 	 * 
 	 * @return A JSONArtifact representation of the response body.
-	 * @throws JSONException
-	 * @throws IOException
+	 * @throws JSONException If an error occurs.
+	 * @throws IOException If an error occurs.
 	 */
 	public JSONArtifact getResponseBodyAsJSON() throws IOException, JSONException {
 		if (!hasResponseBody())
@@ -86,7 +86,7 @@ public class HttpResponse {
 	 * file. If the response body is empty, this method has no effect.
 	 * 
 	 * @param destination The destination file for the content.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public void getResponseBodyAsFile(File destination) throws IOException {
 		FileOutputStream out = new FileOutputStream(destination, false);

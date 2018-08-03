@@ -51,14 +51,20 @@ public class SAClient implements SASTConstants {
 	 * @param workingDir The directory where the SAClient will run.
 	 * @param properties A Map of properties that will be converted to program arguments.
 	 * @return The process exit code, 0 for success.
-	 * @throws IOException
-	 * @throws ScannerException
+	 * @throws IOException If an error occurs.
+	 * @throws ScannerException If an error occurs.
 	 */
 	public int run(String workingDir, Map<String, String> properties) throws IOException, ScannerException {
 		return runClient(workingDir, getClientArgs(properties));
 	}
 	
 	/**
+	 * Run the SAClient
+	 * @param workingDir The directory where the SAClient will run.
+	 * @param args A List of program arguments.
+	 * @return The process exit code, 0 for success.
+	 * @throws IOException If an error occurs.
+	 * @throws ScannerException If an error occurs.
 	 * @deprecated Use {@link #run(String, Map)} instead.
 	 */
 	@Deprecated
@@ -112,8 +118,8 @@ public class SAClient implements SASTConstants {
 	 * Gets the absolute path to the "appscan" script for running the IRGen process, downloading the package if it's
 	 * not found or if the current version is out of date.
 	 * @return The absolute path to the "appscan" script.
-	 * @throws IOException
-	 * @throws ScannerException
+	 * @throws IOException If an error occurs.
+	 * @throws ScannerException If an error occurs getting the client.
 	 */
 	public String getClientScript() throws IOException, ScannerException {
 		//See if we already have the client package.
