@@ -18,7 +18,7 @@ public interface IScanManager {
 	 * Performs any steps necessary to prepare for a scan.
 	 * @param progress Tracks the progress of preparation.
 	 * @param properties Additional properties to be used.
-	 * @throws AppScanException
+	 * @throws AppScanException If an error occurs.
 	 */
 	void prepare(IProgress progress, Map<String, String> properties)  throws AppScanException;
 	
@@ -27,19 +27,18 @@ public interface IScanManager {
 	 * @param progress Tracks the progress of analysis.
 	 * @param properties Additional properties to be used in analysis.
 	 * @param provider A provider of scanning services.
-	 * @throws AppScanException
+	 * @throws AppScanException If an error occurs.
 	 */
 	void analyze(IProgress progress, Map<String, String> properties, IScanServiceProvider provider) throws AppScanException;
 	
 	/**
 	 * Adds an item to be scanned.
-	 * @param target
+	 * @param target The target to add.
 	 */
 	void addScanTarget(ITarget target);	
 	
 	/**
 	 * Retrieves the scan results as a file.
-	 * @return A file containing the results.
 	 * @throws AppScanException if there are no results available.
 	 */
 	void getScanResults(File destination, String format) throws AppScanException;

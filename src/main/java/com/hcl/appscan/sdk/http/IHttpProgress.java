@@ -14,8 +14,7 @@ public interface IHttpProgress {
 	/**
 	 * Set progress percentage.
 	 * 
-	 * @param percentage
-	 *            The percentage of the progress.
+	 * @param percentage The percentage of the progress.
 	 */
 	void setProgress(int percentage);
 

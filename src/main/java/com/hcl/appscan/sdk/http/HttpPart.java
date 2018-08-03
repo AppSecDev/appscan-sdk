@@ -33,7 +33,6 @@ public class HttpPart {
 	 * 
 	 * @param name The name of the field.
 	 * @param value The String value of the part.
-	 * @throws IOException
 	 */
 	public HttpPart(String name, String value) {
 		this();
@@ -49,7 +48,7 @@ public class HttpPart {
 	 * @param fieldName The name of the file part.
 	 * @param file The file to be uploaded.
 	 * @param contentType The content type of the file.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpPart(String fieldName, File file, String contentType) throws IOException {
 		this();

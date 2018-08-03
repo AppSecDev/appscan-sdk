@@ -10,13 +10,13 @@ public interface IDotNetTarget extends ISASTTarget {
 
 	/**
 	 * Gets the dependencies of this target as a string.
-	 * @return
+	 * @return The dependencies as a String.
 	 */
 	String getReferences();
 
 	/**
 	 * Gets the targeted framework version of this target.
-	 * @return
+	 * @return The target framework version as a String.
 	 */
 	String getFrameworkVersion();
 }

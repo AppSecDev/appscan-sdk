@@ -87,7 +87,7 @@ implements	IModelXMLConstants
 
 	/**
 	 * Returns the location of the generated configuration file.
-	 * @return
+	 * @return The location of the generated configuration file.
 	 */
 	@Override
 	public String getOutputLocation() {

@@ -50,7 +50,7 @@ public class HttpClient {
 	 * @param headerProperties An optional Map of header properties.
 	 * @param body An optional request body or payload as a string.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse get(String url,
 			Map<String, String> headerProperties, String body)
@@ -65,7 +65,7 @@ public class HttpClient {
 	 * @param headerProperties An optional Map of header properties.
 	 * @param body An optional request body or payload as a string.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse post(String url,
 			Map<String, String> headerProperties, String body)
@@ -81,7 +81,7 @@ public class HttpClient {
 	 * @param headerProperties An optional Map of header properties.
 	 * @param body An optional request body or payload as a string.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse put(String url,
 			Map<String, String> headerProperties, String body)
@@ -96,7 +96,7 @@ public class HttpClient {
 	 * @param headerProperties An optional Map of header properties.
 	 * @param body An optional request body or payload as a string.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse delete(String url,
 			Map<String, String> headerProperties, String body)
@@ -111,7 +111,7 @@ public class HttpClient {
 	 * @param headerProperties An optional Map of header properties.
 	 * @param params An optional Map of parameters.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse getForm(String url,
 			Map<String, String> headerProperties, Map<String, String> params)
@@ -127,7 +127,7 @@ public class HttpClient {
 	 * @param headerProperties An optional Map of header properties.
 	 * @param params An optional Map of parameters.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse postForm(String url,
 			Map<String, String> headerProperties, Map<String, String> params)
@@ -143,7 +143,7 @@ public class HttpClient {
 	 * @param headerProperties An optional Map of header properties.
 	 * @param params An optional Map of parameters.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse putForm(String url,
 			Map<String, String> headerProperties, Map<String, String> params)
@@ -159,7 +159,7 @@ public class HttpClient {
 	 * @param headerProperties An optional Map of header properties.
 	 * @param params An optional Map of parameters.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse deleteForm(String url,
 			Map<String, String> headerProperties, Map<String, String> params)
@@ -173,9 +173,9 @@ public class HttpClient {
 	 * 
 	 * @param url The URL string.
 	 * @param headerProperties An optional Map of header properties.
-	 * @param params An optional Map of parameters.
+	 * @param parts A list of parts.
 	 * @return The response as a byte array.
-	 * @throws IOException
+	 * @throws IOException If an error occurs.
 	 */
 	public HttpResponse postMultipart(String url,
 			Map<String, String> headerProperties, List<HttpPart> parts)

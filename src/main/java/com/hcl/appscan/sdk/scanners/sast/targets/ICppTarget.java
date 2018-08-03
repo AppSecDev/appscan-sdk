@@ -9,31 +9,31 @@ public interface ICppTarget extends ISASTTarget {
 
 	/**
 	 * Gets the compiler options used to build the target.
-	 * @return
+	 * @return A String representation o the compiler options.
 	 */
 	String getCompilerOptions();
 	
 	/**
 	 * Gets the macros defined for the target.
-	 * @return
+	 * @return The macros as a String.
 	 */
 	String getMacros();
 	
 	/**
 	 * Gets the include directories for the target.
-	 * @return
+	 * @return The include directories as a String.
 	 */
 	String getIncludeDirs();
 
 	/**
 	 * Gets the source files for the target.
-	 * @return
+	 * @return The source files as a String.
 	 */
 	String getSourceFiles();
 
 	/**
 	 * Gets the version of the target.
-	 * @return
+	 * @return The version as a String.
 	 */
 	String getVersion();
 }
