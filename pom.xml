@@ -133,8 +133,8 @@
 </distributionManagement>
   
   <scm>
-  	<connection>scm:git:git://github.com:hclproducts/appscan-sdk.git</connection>
-  	<developerConnection>scm:git:ssh://git@github.com:hclproducts/appscan-sdk.git</developerConnection>
+  	<connection>scm:git:ssh://github.com/hclproducts/appscan-sdk.git</connection>
+  	<developerConnection>scm:git:ssh://git@github.com/hclproducts/appscan-sdk.git</developerConnection>
   	<url>https://github.com/hclproducts/appscan-sdk</url>
  </scm>
   
