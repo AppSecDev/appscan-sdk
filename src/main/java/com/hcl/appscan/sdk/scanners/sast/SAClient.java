@@ -13,6 +13,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,9 +57,9 @@ public class SAClient implements SASTConstants {
 	 * @throws ScannerException If an error occurs.
 	 */
 	public int run(String workingDir, Map<String, String> properties) throws IOException, ScannerException {
-		return runClient(workingDir, getClientArgs(properties));
+		return runClient(workingDir, getClientArgs(properties), getClientEnvVariables(properties));
 	}
-	
+
 	/**
 	 * Run the SAClient
 	 * @param workingDir The directory where the SAClient will run.
@@ -69,16 +71,19 @@ public class SAClient implements SASTConstants {
 	 */
 	@Deprecated
 	public int run(String workingDir, List<String> args) throws IOException, ScannerException {
-		return runClient(workingDir, args);
+		return runClient(workingDir, args, Collections.<String, String>emptyMap());
 	}
 		
-	private int runClient(String workingDir, List<String> args) throws IOException, ScannerException {
-		ArrayList<String> arguments = new ArrayList<String>();
+	private int runClient(String workingDir, List<String> args, Map<String, String> envVariables) throws IOException, ScannerException {
+		List<String> arguments = new ArrayList<String>();
 		arguments.add(getClientScript());
 		arguments.addAll(args);
 		m_builder = new ProcessBuilder(arguments);
 		m_builder.directory(new File(workingDir));
 		m_builder.redirectErrorStream(true);
+		for (String envVariable : envVariables.keySet()) {
+			m_builder.environment().put(envVariable, envVariables.get(envVariable));
+		}
 		
 		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(PREPARING_IRX, getLocalClientVersion())));
 		final Process proc = m_builder.start();
@@ -270,7 +275,21 @@ public class SAClient implements SASTConstants {
 		
 		return args;
 	}
-	
+
+	private Map<String, String> getClientEnvVariables(Map<String, String> properties) {
+		Map<String, String> envVariables = new HashMap<>();
+		if (properties.containsKey(APPSCAN_IRGEN_CLIENT)) {
+			String thisIRGenClient = properties.get(APPSCAN_IRGEN_CLIENT);
+			for (IRGenClient client : IRGenClient.values()) {
+				if (client.name().equals(thisIRGenClient)) {
+					envVariables.put(APPSCAN_IRGEN_CLIENT, thisIRGenClient);
+					break;
+				}
+			}
+		}
+		return envVariables;
+	}
+
 	private boolean compareVersions(String baseVersion, String newVersion) {
 		if(baseVersion != null && newVersion != null) {
 			String[] base = baseVersion.split("\\."); //$NON-NLS-1$

@@ -10,6 +10,7 @@ package com.hcl.appscan.sdk.scanners.sast;
 public interface SASTConstants {
 
 	String APPSCAN_INSTALL_DIR			= "APPSCAN_INSTALL_DIR";			//$NON-NLS-1$
+	String APPSCAN_IRGEN_CLIENT         = "APPSCAN_IRGEN_CLIENT";			//$NON-NLS-1$
 	String ARSA_FILE_ID					= "ARSAFileId";						//$NON-NLS-1$
 	String WIN_SCRIPT					= "appscan.bat";					//$NON-NLS-1$
 	String UNIX_SCRIPT					= "appscan.sh";						//$NON-NLS-1$
@@ -50,4 +51,8 @@ public interface SASTConstants {
 	String ERROR_GENERATING_IRX			= "error.generating.irx";			//$NON-NLS-1$
 	String ERROR_SUBMITTING_IRX			= "error.submitting.irx";			//$NON-NLS-1$
 	String DOWNLOAD_OUT_OF_MEMORY		= "error.out.of.memory";			//$NON-NLS-1$
+
+	public enum IRGenClient {
+		CLI, Eclipse, IntelliJ, VisualStudio, Maven, Jenkins
+	}
 }
