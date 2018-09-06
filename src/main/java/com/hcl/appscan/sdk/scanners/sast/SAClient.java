@@ -23,14 +23,12 @@ import com.hcl.appscan.sdk.logging.DefaultProgress;
 import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.logging.Message;
 import com.hcl.appscan.sdk.utils.ArchiveUtil;
-import com.hcl.appscan.sdk.utils.FileUtil;
 import com.hcl.appscan.sdk.utils.ServiceUtil;
 import com.hcl.appscan.sdk.utils.SystemUtil;
 
 public class SAClient implements SASTConstants {
 
 	private static final File DEFAULT_INSTALL_DIR = new File(System.getProperty("user.home"), ".appscan"); //$NON-NLS-1$ //$NON-NLS-2$
-	private static final File JENKINS_INSTALL_DIR=new File(System.getProperty("user.dir"),".appscan");//$NON-NLS-1$ //$NON-NLS-2$
 	private static final String SACLIENT = "SAClientUtil"; //$NON-NLS-1$
 	private static final String VERSION_INFO = "version.info"; //$NON-NLS-1$
 	
@@ -46,15 +44,7 @@ public class SAClient implements SASTConstants {
 		m_progress = progress;
 		String install = System.getProperty(CoreConstants.SACLIENT_INSTALL_DIR);
 		m_installDir = install == null ? DEFAULT_INSTALL_DIR : new File(install);
-		
-		//to handle the windows re direction issue in jenkins 
-		if (SystemUtil.isWindows() && m_installDir.toString().toLowerCase().indexOf("system32")>=0) {
-			m_installDir=JENKINS_INSTALL_DIR;
-			
-		}
-		
 	}
-	
 	
 	/**
 	 * Run the SAClient
@@ -162,7 +152,7 @@ public class SAClient implements SASTConstants {
 			ArchiveUtil.unzip(clientZip, m_installDir);
 			m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(DONE)));
 		}
-		
+
 		return new File(findClientInstall(), scriptPath).getAbsolutePath();
 	}
 	
