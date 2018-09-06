@@ -51,8 +51,4 @@ public interface SASTConstants {
 	String ERROR_GENERATING_IRX			= "error.generating.irx";			//$NON-NLS-1$
 	String ERROR_SUBMITTING_IRX			= "error.submitting.irx";			//$NON-NLS-1$
 	String DOWNLOAD_OUT_OF_MEMORY		= "error.out.of.memory";			//$NON-NLS-1$
-
-	public enum IRGenClient {
-		CLI, Eclipse, IntelliJ, VisualStudio, Maven, Jenkins
-	}
 }
