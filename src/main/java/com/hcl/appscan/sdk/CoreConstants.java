@@ -68,6 +68,7 @@ public interface CoreConstants {
 	String READY						= "Ready";												//$NON-NLS-1$
 	String FAILED						= "Failed";												//$NON-NLS-1$
 	
+	String API_NONCOMPLIANT_ISSUES 		= API_ENV + "/Scans/%s/NonCompliantIssues";						//$NON-NLS-1$
 	String TOTAL_ISSUES					= "NIssuesFound";										//$NON-NLS-1$
 	String HIGH_ISSUES					= "NHighIssues";										//$NON-NLS-1$
 	String MEDIUM_ISSUES				= "NMediumIssues";										//$NON-NLS-1$

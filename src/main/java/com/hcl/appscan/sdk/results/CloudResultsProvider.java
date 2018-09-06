@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
@@ -146,19 +147,50 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		try {
 			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
 			obj = (JSONObject) obj.get(LATEST_EXECUTION);
+			HttpResponse response=m_scanProvider.getNonCompliantIssues(m_scanId);
+			
+			JSONArray array=(JSONArray) response.getResponseBodyAsJSON();
+			
+			
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !m_status.equalsIgnoreCase(RUNNING)) {
-				m_totalFindings = obj.getInt(TOTAL_ISSUES);
-				m_highFindings = obj.getInt(HIGH_ISSUES);
-				m_mediumFindings = obj.getInt(MEDIUM_ISSUES);
-				m_lowFindings = obj.getInt(LOW_ISSUES);
-				m_infoFindings = obj.getInt(INFO_ISSUES);
+				m_totalFindings = array.length();
+				int high=0;
+				int medium=0;
+				int low=0;
+				int info=0;
+				for (int i=0;i<array.length();i++) {
+					JSONObject jobj=array.getJSONObject(i);
+					String sev=jobj.getString("Severity");
+					switch (sev) {
+					case "High":
+						high++;
+						break;
+					case "Medium":
+						medium++;
+						break;
+					case "Low":
+						low++;
+						break;
+					case "Info":
+						info++;
+						break;
+						
+					default:
+						break;
+					}
+				}
+				m_highFindings = high;
+				m_mediumFindings = medium;
+				m_lowFindings = low;
+				m_infoFindings = info;
 				m_hasResults = true;
 			}
 		} catch (IOException | JSONException | NullPointerException e) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
 			m_status = FAILED;
 		}
+	
 	}
 	
 	private void getReport(String scanId, String format, File destination) throws IOException, JSONException {

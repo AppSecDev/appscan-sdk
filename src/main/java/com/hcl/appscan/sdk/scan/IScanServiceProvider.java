@@ -14,6 +14,7 @@ import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
 import com.hcl.appscan.sdk.auth.IAuthenticationProvider;
+import com.hcl.appscan.sdk.http.HttpResponse;
 import com.hcl.appscan.sdk.logging.IProgress;
 
 /**
@@ -54,6 +55,8 @@ public interface IScanServiceProvider {
 	 * 
 	 * @return The {@link IAuthenticationProvider}.
 	 */
+	
+	public HttpResponse getNonCompliantIssues(String scanId) throws IOException, JSONException;
 	public IAuthenticationProvider getAuthenticationProvider();
 	
 	/**

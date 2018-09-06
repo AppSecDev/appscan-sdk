@@ -121,7 +121,26 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		
 		return null;
 	}
+	
+	public HttpResponse getNonCompliantIssues(String scanId) throws IOException, JSONException {
+		if(loginExpired())
+			return null;
+		
+		String request_url = m_authProvider.getServer() + String.format(API_NONCOMPLIANT_ISSUES, scanId);
+		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
+		
+		HttpClient client = new HttpClient();
+		HttpResponse response = client.get(request_url, request_headers, null);
+		
+		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED)
+			return response;
 
+		if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_INVALID_JOB_ID, scanId)));
+		
+		return null;
+	}
+	
 	@Override
 	public IAuthenticationProvider getAuthenticationProvider() {
 		return m_authProvider;
