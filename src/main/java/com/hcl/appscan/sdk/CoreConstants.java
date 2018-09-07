@@ -55,6 +55,7 @@ public interface CoreConstants {
 	String API_SCAN						= API_ENV + "/%s";										//$NON-NLS-1$
 	String API_SCANNER					= API_ENV + "/Scans/%s";								//$NON-NLS-1$
 	String API_SCANS					= API_ENV + "/Scans";									//$NON-NLS-1$
+	String API_NONCOMPLIANT_ISSUES 		= API_ENV + "/Scans/%s/NonCompliantIssues";				//$NON-NLS-1$
 	String API_SCANS_REPORT				= API_ENV + "/Scans/%s/Report/%s";						//$NON-NLS-1$
 	String API_SCX						= "SCX";												//$NON-NLS-1$
 	String API_SACLIENT_DOWNLOAD		= "/api/%s/StaticAnalyzer/SAClientUtil?os=%s"; 			//$NON-NLS-1$
@@ -68,7 +69,6 @@ public interface CoreConstants {
 	String READY						= "Ready";												//$NON-NLS-1$
 	String FAILED						= "Failed";												//$NON-NLS-1$
 	
-	String API_NONCOMPLIANT_ISSUES 		= API_ENV + "/Scans/%s/NonCompliantIssues";						//$NON-NLS-1$
 	String TOTAL_ISSUES					= "NIssuesFound";										//$NON-NLS-1$
 	String HIGH_ISSUES					= "NHighIssues";										//$NON-NLS-1$
 	String MEDIUM_ISSUES				= "NMediumIssues";										//$NON-NLS-1$

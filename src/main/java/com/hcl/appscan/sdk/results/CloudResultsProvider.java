@@ -151,35 +151,27 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !m_status.equalsIgnoreCase(RUNNING)) {
 				m_totalFindings = array.length();
-				int high=0;
-				int medium=0;
-				int low=0;
-				int info=0;
 				for (int i=0;i<array.length();i++) {
 					JSONObject jobj=array.getJSONObject(i);
 					String sev=jobj.getString("Severity");
 					switch (sev) {
 					case "High":
-						high++;
+						m_highFindings++;
 						break;
 					case "Medium":
-						medium++;
+						m_mediumFindings++;
 						break;
 					case "Low":
-						low++;
+						m_lowFindings++;
 						break;
 					case "Info":
-						info++;
+						m_infoFindings++;
 						break;
 						
 					default:
 						break;
 					}
 				}
-				m_highFindings = high;
-				m_mediumFindings = medium;
-				m_lowFindings = low;
-				m_infoFindings = info;
 				m_hasResults = true;
 			}
 		} catch (IOException | JSONException | NullPointerException e) {

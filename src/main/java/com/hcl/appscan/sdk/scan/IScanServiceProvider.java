@@ -55,7 +55,7 @@ public interface IScanServiceProvider {
 	 * Gets the non compliant issues in JSON format.
 	 * 
 	 * @param scanId The id of the scan to retrieve all the non compliant issues.
-	 * @return JSONArray containing the issues a json objects.
+	 * @return JSONArray containing the issues as JSON objects.
 	 * @throws IOException If an error occurs.
 	 * @throws JSONException If an error occurs.
 	 */
