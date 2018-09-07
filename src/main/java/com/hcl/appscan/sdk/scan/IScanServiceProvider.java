@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
@@ -51,12 +52,21 @@ public interface IScanServiceProvider {
 	public JSONObject getScanDetails(String scanId) throws IOException, JSONException;
 	
 	/**
+	 * Gets the non compliant issues in JSON format.
+	 * 
+	 * @param scanId The id of the scan to retrieve all the non compliant issues.
+	 * @return JSONArray containing the issues a json objects.
+	 * @throws IOException If an error occurs.
+	 * @throws JSONException If an error occurs.
+	 */
+	public JSONArray getNonCompliantIssues(String scanId) throws IOException, JSONException;
+	
+	/**
 	 * Gets the {@link IAuthenticationProvider} used to authenticate with a scanning service.
 	 * 
 	 * @return The {@link IAuthenticationProvider}.
 	 */
 	
-	public HttpResponse getNonCompliantIssues(String scanId) throws IOException, JSONException;
 	public IAuthenticationProvider getAuthenticationProvider();
 	
 	/**

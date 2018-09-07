@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
@@ -122,7 +123,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		return null;
 	}
 	
-	public HttpResponse getNonCompliantIssues(String scanId) throws IOException, JSONException {
+	public JSONArray getNonCompliantIssues(String scanId) throws IOException, JSONException {
 		if(loginExpired())
 			return null;
 		
@@ -133,7 +134,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		HttpResponse response = client.get(request_url, request_headers, null);
 		
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED)
-			return response;
+			return (JSONArray)response.getResponseBodyAsJSON();
 
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_INVALID_JOB_ID, scanId)));

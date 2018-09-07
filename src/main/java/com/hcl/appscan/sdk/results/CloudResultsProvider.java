@@ -147,11 +147,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		try {
 			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
 			obj = (JSONObject) obj.get(LATEST_EXECUTION);
-			HttpResponse response=m_scanProvider.getNonCompliantIssues(m_scanId);
-			
-			JSONArray array=(JSONArray) response.getResponseBodyAsJSON();
-			
-			
+			JSONArray array=(JSONArray) m_scanProvider.getNonCompliantIssues(m_scanId);
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !m_status.equalsIgnoreCase(RUNNING)) {
 				m_totalFindings = array.length();
