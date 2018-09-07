@@ -55,7 +55,7 @@ public class SAClient implements SASTConstants {
 	 * @throws ScannerException If an error occurs.
 	 */
 	public int run(String workingDir, Map<String, String> properties) throws IOException, ScannerException {
-		return runClient(workingDir, getClientArgs(properties), getIRGenClient(properties));
+		return runClient(workingDir, getClientArgs(properties), properties.get(APPSCAN_IRGEN_CLIENT));
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class SAClient implements SASTConstants {
 		m_builder = new ProcessBuilder(arguments);
 		m_builder.directory(new File(workingDir));
 		m_builder.redirectErrorStream(true);
-		if (!irGenClient.isEmpty()) {
+		if (irGenClient != null && !irGenClient.isEmpty()) {
 			m_builder.environment().put(APPSCAN_IRGEN_CLIENT, irGenClient);
 		}
 		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(PREPARING_IRX, getLocalClientVersion())));
@@ -271,14 +271,6 @@ public class SAClient implements SASTConstants {
 			args.add(OPT_THIRD_PARTY);
 		
 		return args;
-	}
-
-	private String getIRGenClient(Map<String, String> properties) {
-		String irGenClient = "";
-		if (properties.containsKey(APPSCAN_IRGEN_CLIENT)) {
-			irGenClient = properties.get(APPSCAN_IRGEN_CLIENT);
-		}
-		return irGenClient;
 	}
 
 	private boolean compareVersions(String baseVersion, String newVersion) {
