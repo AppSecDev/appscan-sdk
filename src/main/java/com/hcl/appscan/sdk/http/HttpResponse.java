@@ -118,6 +118,9 @@ public class HttpResponse {
 	
 		if (responseCode != HttpURLConnection.HTTP_NO_CONTENT) {
 			InputStream is = error ? m_connection.getErrorStream() : m_connection.getInputStream();
+			if(is == null)
+				return;
+
 			byte[] buf = new byte[READ_SIZE];
 			int result = 0;
 			

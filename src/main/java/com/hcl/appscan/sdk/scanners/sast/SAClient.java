@@ -55,9 +55,9 @@ public class SAClient implements SASTConstants {
 	 * @throws ScannerException If an error occurs.
 	 */
 	public int run(String workingDir, Map<String, String> properties) throws IOException, ScannerException {
-		return runClient(workingDir, getClientArgs(properties));
+		return runClient(workingDir, getClientArgs(properties), properties.get(APPSCAN_IRGEN_CLIENT));
 	}
-	
+
 	/**
 	 * Run the SAClient
 	 * @param workingDir The directory where the SAClient will run.
@@ -69,17 +69,19 @@ public class SAClient implements SASTConstants {
 	 */
 	@Deprecated
 	public int run(String workingDir, List<String> args) throws IOException, ScannerException {
-		return runClient(workingDir, args);
+		return runClient(workingDir, args, "");
 	}
 		
-	private int runClient(String workingDir, List<String> args) throws IOException, ScannerException {
-		ArrayList<String> arguments = new ArrayList<String>();
+	private int runClient(String workingDir, List<String> args, String irGenClient) throws IOException, ScannerException {
+		List<String> arguments = new ArrayList<String>();
 		arguments.add(getClientScript());
 		arguments.addAll(args);
 		m_builder = new ProcessBuilder(arguments);
 		m_builder.directory(new File(workingDir));
 		m_builder.redirectErrorStream(true);
-		
+		if (irGenClient != null && !irGenClient.isEmpty()) {
+			m_builder.environment().put(APPSCAN_IRGEN_CLIENT, irGenClient);
+		}
 		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(PREPARING_IRX, getLocalClientVersion())));
 		final Process proc = m_builder.start();
 		new Thread(new Runnable() {
@@ -270,7 +272,7 @@ public class SAClient implements SASTConstants {
 		
 		return args;
 	}
-	
+
 	private boolean compareVersions(String baseVersion, String newVersion) {
 		if(baseVersion != null && newVersion != null) {
 			String[] base = baseVersion.split("\\."); //$NON-NLS-1$
