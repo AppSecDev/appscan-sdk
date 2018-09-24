@@ -45,6 +45,12 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
     private IProgress m_progress;
     private String m_type;
     
+    private int m_totalFindings;
+    private int m_highFindings;
+    private int m_mediumFindings;
+    private int m_lowFindings;
+    private int m_infoFindings;
+    
     public NonCompliantIssuesProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
         super(scanId, type, provider, progress);
         m_scanId=scanId;
@@ -95,7 +101,7 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
 						break;
 					}
 				}
-				m_hasResults = true;
+				setHasResult(true);
 			}
 		} catch (IOException | JSONException | NullPointerException e) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
@@ -189,7 +195,7 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
 		configParams.put("ReportFileType", format);
 		configParams.put("Title", getScanName());
 		configParams.put("Notes", "");
-		configParams.put("Locale", Locale.getDefault().toString());
+		configParams.put("Locale", SystemUtil.getLocale());
 		return configParams;
 	}
         

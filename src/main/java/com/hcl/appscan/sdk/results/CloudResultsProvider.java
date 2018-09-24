@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017,2018. 
+ * © Copyright HCL Technologies Ltd. 2017. 
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -14,7 +14,6 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
@@ -36,7 +35,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	
 	private String m_type;
 	private String m_scanId;
-	private String m_status;
+	protected String m_status;
 	private String m_reportFormat;
 	private boolean m_hasResults;
 	private IScanServiceProvider m_scanProvider;
@@ -117,6 +116,10 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		return m_hasResults;
 	}
 	
+        protected void setHasResult(boolean value){
+            m_hasResults=value;
+        }
+        
 	@Override
 	public String getStatus() {
 		checkResults();
@@ -147,38 +150,19 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		try {
 			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
 			obj = (JSONObject) obj.get(LATEST_EXECUTION);
-			JSONArray array= m_scanProvider.getNonCompliantIssues(m_scanId);
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !m_status.equalsIgnoreCase(RUNNING)) {
-				m_totalFindings = array.length();
-				for (int i=0;i<array.length();i++) {
-					JSONObject jobj=array.getJSONObject(i);
-					String sev=jobj.getString("Severity");
-					switch (sev) {
-					case "High":
-						m_highFindings++;
-						break;
-					case "Medium":
-						m_mediumFindings++;
-						break;
-					case "Low":
-						m_lowFindings++;
-						break;
-					case "Info":
-						m_infoFindings++;
-						break;
-						
-					default:
-						break;
-					}
-				}
+				m_totalFindings = obj.getInt(TOTAL_ISSUES);
+				m_highFindings = obj.getInt(HIGH_ISSUES);
+				m_mediumFindings = obj.getInt(MEDIUM_ISSUES);
+				m_lowFindings = obj.getInt(LOW_ISSUES);
+				m_infoFindings = obj.getInt(INFO_ISSUES);
 				m_hasResults = true;
 			}
 		} catch (IOException | JSONException | NullPointerException e) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
 			m_status = FAILED;
 		}
-	
 	}
 	
 	private void getReport(String scanId, String format, File destination) throws IOException, JSONException {
