@@ -118,7 +118,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 			return (JSONObject) response.getResponseBodyAsJSON();
 
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
-			m_progress.setStatus(new Message(Message.ERROR, response.getResponseBodyAsString()));//what can we print here?
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_INVALID_JOB_ID, scanId)));
 		
 		return null;
 	}
@@ -139,7 +139,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_INVALID_JOB_ID, scanId)));
                 else 
-                        m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(response.)));
+                        m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(response.getResponseBodyAsString())));//what can we print here?
 		
 		return null;
 	}
