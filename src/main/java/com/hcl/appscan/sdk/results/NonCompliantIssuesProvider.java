@@ -28,6 +28,7 @@ import org.apache.wink.json4j.JSONObject;
  */
 public class NonCompliantIssuesProvider extends CloudResultsProvider{
 	private static final long serialVersionUID = 1L;
+        private static final String SCOPE="Scan";
     
     public NonCompliantIssuesProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
         super(scanId, type, provider, progress);
@@ -123,7 +124,7 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
 			return null;
 		}
 	
-		String request_url = authProvider.getServer() + String.format(API_REPORT_SELECTED_ISSUES,"Scan", scanId);
+		String request_url = authProvider.getServer() + String.format(API_REPORT_SELECTED_ISSUES,SCOPE, scanId);
 		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
                 request_headers.put("Content-Type", "application/json; charset=UTF-8");
                 request_headers.put("Accept", "application/json");
