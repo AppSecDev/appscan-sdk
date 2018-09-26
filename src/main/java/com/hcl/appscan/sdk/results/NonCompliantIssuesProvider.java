@@ -5,18 +5,6 @@
  */
 package com.hcl.appscan.sdk.results;
 
-import static com.hcl.appscan.sdk.CoreConstants.API_DOWNLOAD_REPORT;
-import static com.hcl.appscan.sdk.CoreConstants.API_REPORT_SELECTED_ISSUES;
-import static com.hcl.appscan.sdk.CoreConstants.CONTENT_LENGTH;
-import static com.hcl.appscan.sdk.CoreConstants.DEFAULT_RESULT_NAME;
-import static com.hcl.appscan.sdk.CoreConstants.ERROR_GETTING_DETAILS;
-import static com.hcl.appscan.sdk.CoreConstants.ERROR_GETTING_RESULT;
-import static com.hcl.appscan.sdk.CoreConstants.ERROR_LOGIN_EXPIRED;
-import static com.hcl.appscan.sdk.CoreConstants.FAILED;
-import static com.hcl.appscan.sdk.CoreConstants.LATEST_EXECUTION;
-import static com.hcl.appscan.sdk.CoreConstants.MESSAGE;
-import static com.hcl.appscan.sdk.CoreConstants.RUNNING;
-import static com.hcl.appscan.sdk.CoreConstants.STATUS;
 import com.hcl.appscan.sdk.Messages;
 import com.hcl.appscan.sdk.auth.IAuthenticationProvider;
 import com.hcl.appscan.sdk.http.HttpClient;
@@ -28,7 +16,6 @@ import com.hcl.appscan.sdk.utils.SystemUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Locale;
 import java.util.Map;
 import javax.net.ssl.HttpsURLConnection;
 import org.apache.wink.json4j.JSONArray;
@@ -40,6 +27,7 @@ import org.apache.wink.json4j.JSONObject;
  * @author anurag-s
  */
 public class NonCompliantIssuesProvider extends CloudResultsProvider{
+	private static final long serialVersionUID = 1L;
     
     public NonCompliantIssuesProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
         super(scanId, type, provider, progress);

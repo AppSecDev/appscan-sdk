@@ -40,8 +40,13 @@ public interface IScan {
 	 * @return The {@link IResultsProvider}.
 	 */
 	public IResultsProvider getResultsProvider();
-        
-        public IResultsProvider getNonCompliantResultProvider();
+    
+	/**
+	 * Gets a provider for accessing the scan results of non compliant issues.
+	 * 
+	 * @return The {@link IResultsProvider}.
+	 */
+    public IResultsProvider getNonCompliantResultProvider();
 	
 	/**
 	 * Gets the name of the scan.

@@ -36,8 +36,8 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	protected String m_type;
 	protected String m_scanId;
 	protected String m_status;
-	private String m_reportFormat;
-	private boolean m_hasResults;
+	private   String m_reportFormat;
+	private   boolean m_hasResults;
 	protected IScanServiceProvider m_scanProvider;
 	protected IProgress m_progress;
 	
