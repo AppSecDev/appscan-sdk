@@ -40,39 +40,13 @@ import org.apache.wink.json4j.JSONObject;
  * @author anurag-s
  */
 public class NonCompliantIssuesProvider extends CloudResultsProvider{
-    private String m_scanId;
-    private IScanServiceProvider m_scanProvider;
-    private IProgress m_progress;
-    private String m_type;
-    
-    private int m_totalFindings;
-    private int m_highFindings;
-    private int m_mediumFindings;
-    private int m_lowFindings;
-    private int m_infoFindings;
     
     public NonCompliantIssuesProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
         super(scanId, type, provider, progress);
-        m_scanId=scanId;
-        m_scanProvider=provider;
-        m_progress=progress;
-        m_type=type;
     }
     
-    public void getResultsFile(File file, String format) {
-		if(format == null)
-			format = getResultsFormat();
-		
-		if(file != null && !file.exists()) {
-			try {
-				getNonCompliantIssuesReport(m_scanId, format, file);
-			} catch (IOException | JSONException e) {
-				m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_RESULT)), e);
-			}
-		}
-	}
-    
-    private void loadResults() {
+    @Override
+    protected void loadResults() {
 		try {
 			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
 			obj = (JSONObject) obj.get(LATEST_EXECUTION);
@@ -110,7 +84,8 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
 	
 	}
     
-    private void getNonCompliantIssuesReport(String scanId, String format, File destination) throws IOException, JSONException {
+    @Override
+    protected void getReport(String scanId, String format, File destination) throws IOException, JSONException {
 		
                 String reportId=createNonCompliantIssuesReport(scanId,format);
                 HttpResponse response=downloadNonCompliantIssuesReport(reportId);
@@ -205,8 +180,8 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
 			obj = m_scanProvider.getScanDetails(m_scanId);
 			return obj.getString("Name");
 		} catch (IOException | JSONException e) {
-			e.printStackTrace();
-			return null;
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
+			return "";
 		}
 		
 	}

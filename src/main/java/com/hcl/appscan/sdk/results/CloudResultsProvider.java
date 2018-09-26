@@ -33,19 +33,19 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 
 	private static String DEFAULT_REPORT_FORMAT = "html"; //$NON-NLS-1$
 	
-	private String m_type;
-	private String m_scanId;
+	protected String m_type;
+	protected String m_scanId;
 	protected String m_status;
 	private String m_reportFormat;
 	private boolean m_hasResults;
-	private IScanServiceProvider m_scanProvider;
-	private IProgress m_progress;
+	protected IScanServiceProvider m_scanProvider;
+	protected IProgress m_progress;
 	
-	private int m_totalFindings;
-	private int m_highFindings;
-	private int m_mediumFindings;
-	private int m_lowFindings;
-	private int m_infoFindings;
+	protected int m_totalFindings;
+	protected int m_highFindings;
+	protected int m_mediumFindings;
+	protected int m_lowFindings;
+	protected int m_infoFindings;
 	
 	public CloudResultsProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
 		m_type = type;
@@ -59,7 +59,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	@Override
 	public void getResultsFile(File file, String format) {
 		if(format == null)
-			format = m_reportFormat;
+			format = getResultsFormat();
 		
 		if(file != null && !file.exists()) {
 			try {
@@ -146,7 +146,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		m_reportFormat = format;
 	}
 	
-	private void loadResults() {
+	protected void loadResults() {
 		try {
 			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
 			obj = (JSONObject) obj.get(LATEST_EXECUTION);
@@ -165,7 +165,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		}
 	}
 	
-	private void getReport(String scanId, String format, File destination) throws IOException, JSONException {
+	protected void getReport(String scanId, String format, File destination) throws IOException, JSONException {
 		IAuthenticationProvider authProvider = m_scanProvider.getAuthenticationProvider();
 		if(authProvider.isTokenExpired()) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_LOGIN_EXPIRED)));
