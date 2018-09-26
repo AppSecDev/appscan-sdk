@@ -103,7 +103,7 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
                 if (responseCode == HttpsURLConnection.HTTP_OK)
                     return response;
                 else if (responseCode == HttpsURLConnection.HTTP_INTERNAL_ERROR)
-                    return downloadNonCompliantIssuesReport(reportId);
+                    return downloadNonCompliantIssuesReport(reportId); // should we add some timeout here?
                 else {
                     JSONObject object = (JSONObject) response.getResponseBodyAsJSON();
 			if (object.has(MESSAGE)) {
