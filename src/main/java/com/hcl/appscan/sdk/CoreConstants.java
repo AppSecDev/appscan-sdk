@@ -86,6 +86,7 @@ public interface CoreConstants {
 	String ERROR_DOWNLOADING_CLIENT 	= "error.download.client";								//$NON-NLS-1$
 	String ERROR_GETTING_DETAILS		= "error.getting.details";								//$NON-NLS-1$
 	String ERROR_GETTING_RESULT			= "error.getting.result";								//$NON-NLS-1$
+        String ERROR_GENERATING_REPORT                  = "error.generating.report";                                                            //$NON-NLS-1$
 	String ERROR_INVALID_APP			= "error.invalid.app";									//$NON-NLS-1$	
 	String ERROR_INVALID_OPTIONS		= "error.invalid.opts";									//$NON-NLS-1$
 	String ERROR_LOADING_APPS			= "error.loading.apps";									//$NON-NLS-1$

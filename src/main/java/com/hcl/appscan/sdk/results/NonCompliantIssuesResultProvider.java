@@ -26,11 +26,11 @@ import org.apache.wink.json4j.JSONObject;
  *
  * @author anurag-s
  */
-public class NonCompliantIssuesProvider extends CloudResultsProvider{
+public class NonCompliantIssuesResultProvider extends CloudResultsProvider{
 	private static final long serialVersionUID = 1L;
         private static final String SCOPE="Scan";
     
-    public NonCompliantIssuesProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
+    public NonCompliantIssuesResultProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
         super(scanId, type, provider, progress);
     }
     
@@ -77,6 +77,9 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
     protected void getReport(String scanId, String format, File destination) throws IOException, JSONException {
 		
                 String reportId=createNonCompliantIssuesReport(scanId,format);
+                if (reportId==null){
+                    return;
+                }
                 HttpResponse response=downloadNonCompliantIssuesReport(reportId);
                 if (destination.isDirectory()) {
 			String fileName = DEFAULT_RESULT_NAME + "_" + SystemUtil.getTimeStamp() + "." + format; //$NON-NLS-1$ //$NON-NLS-2$
@@ -133,7 +136,7 @@ public class NonCompliantIssuesProvider extends CloudResultsProvider{
 		HttpClient client = new HttpClient();
 		HttpResponse response = client.post(request_url, request_headers, getBodyParams(format).toString());
 		if (response.getResponseCode()!=HttpsURLConnection.HTTP_OK) {
-			return null;
+		    return null;
 		}
                 JSONObject obj=(JSONObject)response.getResponseBodyAsJSON();
 		String reportId=obj.getString("Id");

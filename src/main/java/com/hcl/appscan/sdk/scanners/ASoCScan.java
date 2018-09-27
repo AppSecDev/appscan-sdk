@@ -14,7 +14,7 @@ import com.hcl.appscan.sdk.logging.DefaultProgress;
 import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.results.CloudResultsProvider;
 import com.hcl.appscan.sdk.results.IResultsProvider;
-import com.hcl.appscan.sdk.results.NonCompliantIssuesProvider;
+import com.hcl.appscan.sdk.results.NonCompliantIssuesResultProvider;
 import com.hcl.appscan.sdk.scan.IScan;
 import com.hcl.appscan.sdk.scan.IScanServiceProvider;
 import com.hcl.appscan.sdk.utils.SystemUtil;
@@ -59,7 +59,7 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
         
     @Override
     public IResultsProvider getNonCompliantResultProvider(){
-        NonCompliantIssuesProvider provider = new NonCompliantIssuesProvider(m_scanId, getType(), m_serviceProvider, m_progress);
+        NonCompliantIssuesResultProvider provider = new NonCompliantIssuesResultProvider(m_scanId, getType(), m_serviceProvider, m_progress);
 		provider.setReportFormat(getReportFormat());
 		return provider;
     }
