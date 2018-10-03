@@ -39,24 +39,24 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider{
 		try {
 			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
 			obj = (JSONObject) obj.get(LATEST_EXECUTION);
-			JSONArray array= m_scanProvider.getNonCompliantIssues(m_scanId);
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !m_status.equalsIgnoreCase(RUNNING)) {
+                               JSONArray array= m_scanProvider.getNonCompliantIssues(m_scanId);
 				m_totalFindings = array.length();
 				for (int i=0;i<array.length();i++) {
 					JSONObject jobj=array.getJSONObject(i);
 					String sev=jobj.getString("Severity");
-					switch (sev) {
-					case "High":
+					switch (sev.toLowerCase()) {
+					case "high":
 						m_highFindings++;
 						break;
-					case "Medium":
+					case "medium":
 						m_mediumFindings++;
 						break;
-					case "Low":
+					case "low":
 						m_lowFindings++;
 						break;
-					case "Info":
+					case "info":
 						m_infoFindings++;
 						break;
 						

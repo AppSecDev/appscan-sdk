@@ -123,6 +123,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		return null;
 	}
 	
+        @Override
 	public JSONArray getNonCompliantIssues(String scanId) throws IOException, JSONException {
 		if(loginExpired())
 			return null;
@@ -138,8 +139,17 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_INVALID_JOB_ID, scanId)));
-                else 
-                        m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(response.getResponseBodyAsString())));//what can we print here?
+                else {
+                        JSONObject obj=(JSONObject)response.getResponseBodyAsJSON();
+                        if (obj!=null && obj.has(MESSAGE)){
+                            m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(obj.getString(MESSAGE))));
+                        }
+                        else {
+                            m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_RESULT, response.getResponseCode())));
+                        }
+                        
+                }
+                        
 		
 		return null;
 	}

@@ -57,12 +57,6 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 		return provider;
 	}
         
-    @Override
-    public IResultsProvider getNonCompliantResultProvider(){
-        NonCompliantIssuesResultProvider provider = new NonCompliantIssuesResultProvider(m_scanId, getType(), m_serviceProvider, m_progress);
-		provider.setReportFormat(getReportFormat());
-		return provider;
-    }
 
 	protected void setScanId(String id) {
 		m_scanId = id;
@@ -76,11 +70,11 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 		return m_target;
 	}
 	
-	protected IProgress getProgress() {
+	public IProgress getProgress() {
 		return m_progress;
 	}
 	
-	protected IScanServiceProvider getServiceProvider() {
+	public IScanServiceProvider getServiceProvider() {
 		return m_serviceProvider;
 	}
 	
