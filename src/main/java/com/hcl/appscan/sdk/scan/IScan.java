@@ -63,4 +63,6 @@ public interface IScan {
 	 * @return The {@link IScanServiceProvider}.
 	 */
         public IScanServiceProvider getServiceProvider(); 
+        
+        public String getReportFormat();
 }

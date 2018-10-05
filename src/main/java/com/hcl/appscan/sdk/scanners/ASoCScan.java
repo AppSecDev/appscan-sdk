@@ -87,5 +87,5 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 		return m_properties;
 	}
 	
-	protected abstract String getReportFormat();
+	public abstract String getReportFormat();
 }

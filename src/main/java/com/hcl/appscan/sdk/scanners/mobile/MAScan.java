@@ -61,7 +61,7 @@ public class MAScan extends ASoCScan implements MAConstants {
 	}
 
 	@Override
-	protected String getReportFormat() {
+	public String getReportFormat() {
 		return REPORT_FORMAT;
 	}
 }
