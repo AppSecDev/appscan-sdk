@@ -51,13 +51,6 @@ public interface IScan {
 	public String getName();
         
         /**
-	 * Gets the IProgress instance to track the progress
-	 * 
-	 * @return The {@link IProgress}.
-	 */
-        public IProgress getProgress();
-        
-        /**
 	 * Gets the provider of scanning services. 
 	 * 
 	 * @return The {@link IScanServiceProvider}.
