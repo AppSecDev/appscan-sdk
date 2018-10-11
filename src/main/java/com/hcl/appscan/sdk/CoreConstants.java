@@ -23,6 +23,7 @@ public interface CoreConstants {
 	String SCANNER_TYPE					= "type";												//$NON-NLS-1$
 	String STATUS						= "Status";												//$NON-NLS-1$
 	String TARGET						= "target";												//$NON-NLS-1$
+        String OPEN_SOURCE_ONLY                                 = "openSourceOnly";                                                                     //$NON-NLS-1$
 	String VERSION_NUMBER				= "VersionNumber";										//$NON-NLS-1$
 
 	String BINDING_ID					= "Bindingid";											//$NON-NLS-1$
