@@ -8,6 +8,7 @@ package com.hcl.appscan.sdk.scan;
 
 import com.hcl.appscan.sdk.error.InvalidTargetException;
 import com.hcl.appscan.sdk.error.ScannerException;
+import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.results.IResultsProvider;
 
 public interface IScan {
@@ -40,6 +41,7 @@ public interface IScan {
 	 * @return The {@link IResultsProvider}.
 	 */
 	public IResultsProvider getResultsProvider();
+    
 	
 	/**
 	 * Gets the name of the scan.
@@ -47,4 +49,13 @@ public interface IScan {
 	 * @return The name of the scan.
 	 */
 	public String getName();
+        
+        /**
+	 * Gets the provider of scanning services. 
+	 * 
+	 * @return The {@link IScanServiceProvider}.
+	 */
+        public IScanServiceProvider getServiceProvider(); 
+        
+        public String getReportFormat();
 }
