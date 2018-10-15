@@ -27,6 +27,7 @@ public interface SASTConstants {
 	String DEBUG						= "debug";							//$NON-NLS-1$
 	String VERBOSE						= "verbose";						//$NON-NLS-1$
 	String THIRD_PARTY					= "thirdParty";						//$NON-NLS-1$
+        String OPEN_SOURCE_ONLY                                  = "openSourceOnly";                                     //$NON-NLS-1$
 	
 	String OPT_NAME						= "-n";								//$NON-NLS-1$
 	String OPT_SAVE_LOCATION			= "-d";								//$NON-NLS-1$
@@ -35,6 +36,7 @@ public interface SASTConstants {
 	String OPT_THIRD_PARTY				= "-t";								//$NON-NLS-1$
 	String OPT_VERBOSE					= "-v";								//$NON-NLS-1$
 	String OPT_DEBUG					= "-X";								//$NON-NLS-1$
+        String OPT_OPEN_SOURCE_ONLY                             = "-oso";                                                       //$NON-NLS-1$
 	
 	//Messages
 	String DONE							= "message.done";					//$NON-NLS-1$

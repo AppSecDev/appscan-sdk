@@ -69,7 +69,7 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 	}
 
 	@Override
-	protected String getReportFormat() {
+	public String getReportFormat() {
 		return REPORT_FORMAT;
 	}
 }

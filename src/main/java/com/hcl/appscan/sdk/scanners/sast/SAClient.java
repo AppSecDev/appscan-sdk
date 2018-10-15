@@ -269,6 +269,8 @@ public class SAClient implements SASTConstants {
 			args.add(OPT_VERBOSE);
 		if(properties.containsKey(THIRD_PARTY))
 			args.add(OPT_THIRD_PARTY);
+                if (properties.containsKey(OPEN_SOURCE_ONLY))
+                        args.add(OPT_OPEN_SOURCE_ONLY);
 		
 		return args;
 	}

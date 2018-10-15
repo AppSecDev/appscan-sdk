@@ -82,6 +82,13 @@ public interface IResultsProvider {
 	 * @return The format of the results file.
 	 */
 	public String getResultsFormat();
+        
+        /**
+	 * Specifies the format to use for reports.
+	 * 
+	 * @param format The format of the report. 
+	 */
+	public void setReportFormat(String format);
 	
 	/**
 	 * Sets the IProgress for tracking status.
