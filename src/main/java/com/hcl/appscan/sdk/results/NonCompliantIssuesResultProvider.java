@@ -56,7 +56,7 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider{
 					case "low":
 						m_lowFindings++;
 						break;
-					case "info":
+					case "informational":
 						m_infoFindings++;
 						break;
 						
