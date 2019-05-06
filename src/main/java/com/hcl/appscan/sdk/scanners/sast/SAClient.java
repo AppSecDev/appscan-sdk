@@ -162,7 +162,7 @@ public class SAClient implements SASTConstants {
 		return SystemUtil.isWindows() ? WIN_SCRIPT : UNIX_SCRIPT;
 	}
 	
-	private boolean shouldUpdateClient() throws IOException {
+	public boolean shouldUpdateClient() throws IOException {
 		String serverVersion = ServiceUtil.getSAClientVersion();
 		String localVersion = getLocalClientVersion();
 
@@ -263,19 +263,22 @@ public class SAClient implements SASTConstants {
 			args.add(OPT_CONFIG);
 			args.add(properties.get(CONFIG_FILE));
 		}
-		if(properties.containsKey(DEBUG))
+		if(properties.containsKey(DEBUG) || System.getProperty(DEBUG.toUpperCase()) != null)
 			args.add(OPT_DEBUG);
 		if(properties.containsKey(VERBOSE))
 			args.add(OPT_VERBOSE);
-		if(properties.containsKey(THIRD_PARTY))
+		if(properties.containsKey(THIRD_PARTY) || System.getProperty(THIRD_PARTY) != null)
 			args.add(OPT_THIRD_PARTY);
-                if (properties.containsKey(OPEN_SOURCE_ONLY))
-                        args.add(OPT_OPEN_SOURCE_ONLY);
+		if (properties.containsKey(OPEN_SOURCE_ONLY) || System.getProperty(OPEN_SOURCE_ONLY) != null)
+			args.add(OPT_OPEN_SOURCE_ONLY);
 		
 		return args;
 	}
 
 	private boolean compareVersions(String baseVersion, String newVersion) {
+		if(baseVersion == null)
+			return true;
+		
 		if(baseVersion != null && newVersion != null) {
 			String[] base = baseVersion.split("\\."); //$NON-NLS-1$
 			String[] next = newVersion.split("\\."); //$NON-NLS-1$

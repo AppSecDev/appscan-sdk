@@ -14,7 +14,6 @@ import com.hcl.appscan.sdk.logging.DefaultProgress;
 import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.results.CloudResultsProvider;
 import com.hcl.appscan.sdk.results.IResultsProvider;
-import com.hcl.appscan.sdk.results.NonCompliantIssuesResultProvider;
 import com.hcl.appscan.sdk.scan.IScan;
 import com.hcl.appscan.sdk.scan.IScanServiceProvider;
 import com.hcl.appscan.sdk.utils.SystemUtil;
