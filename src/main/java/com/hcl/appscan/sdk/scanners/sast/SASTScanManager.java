@@ -83,7 +83,7 @@ public class SASTScanManager implements IScanManager{
 		}
 	}
 
-	private void createConfig() throws AppScanException  {
+	public void createConfig() throws AppScanException  {
 		if(m_targets.isEmpty())
 			return;
 		try {
