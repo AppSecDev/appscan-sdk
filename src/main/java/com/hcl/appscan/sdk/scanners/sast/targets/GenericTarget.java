@@ -2,6 +2,7 @@ package com.hcl.appscan.sdk.scanners.sast.targets;
 
 import java.io.File;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -10,9 +11,11 @@ import java.util.Map;
 public class GenericTarget extends DefaultTarget {
 
 	private File m_targetFile;
+	private Map m_properties;
 	
 	public GenericTarget(String target) {
 		m_targetFile = new File(target);
+		m_properties = new HashMap<String, String>();
 	}
 	
 	@Override
@@ -22,6 +25,6 @@ public class GenericTarget extends DefaultTarget {
 
 	@Override
 	public Map<String, String> getProperties() {
-		return Collections.emptyMap();
+		return m_properties;
 	}
 }
