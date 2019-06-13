@@ -61,20 +61,13 @@ public class AuthenticationHandler implements CoreConstants {
 		Map<String, String> params = new HashMap<String, String>();
 		String url;
 		
-		if(type == LoginType.Bluemix) {
-			params.put(BINDING_ID, username);
-			params.put(PASSWORD, password);
-		    url = m_authProvider.getServer() + API_BLUEMIX_LOGIN;			
-		}
-		else if(type == LoginType.ASoC) {
-			params.put(USERNAME, username);
-			params.put(PASSWORD, password);
-		    url = m_authProvider.getServer() + API_IBM_LOGIN;
-		}
-		else { //Federated login
+		if(type == LoginType.ASoC_Federated) {
 			params.put(KEY_ID, username);
 			params.put(KEY_SECRET, password);
 		    url = m_authProvider.getServer() + API_KEY_LOGIN;
+		}
+		else {
+			throw new HttpException(500, Messages.getMessage("error.login.type.deprectated")); //$NON-NLS-1$
 		}
 
 		HttpClient client = new HttpClient();
