@@ -8,6 +8,8 @@ package com.hcl.appscan.sdk.scanners.sast.xml;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -25,7 +27,16 @@ implements	IModelXMLConstants
 	private DOMWriter m_config;  
 	private String m_configOutputDirectory = null;
 	private String m_configFileName = APPSCAN_CONFIG + DOT_XML;
+	private boolean m_useRelativePaths;
 
+	public XmlWriter() {
+		this(false);
+	}
+	
+	public XmlWriter(boolean relativeTargetPaths) {
+		m_useRelativePaths = relativeTargetPaths;
+	}
+	
 	@Override
 	public void initWriters(File directory) throws IOException {
 		m_configOutputDirectory = directory.getCanonicalPath();
@@ -47,7 +58,7 @@ implements	IModelXMLConstants
 		for (ISASTTarget target: targets){
 			//Add Target
 			m_config.beginElement(E_TARGET);
-			m_config.setAttribute(A_PATH, target.getTargetFile().getAbsolutePath());
+			m_config.setAttribute(A_PATH, getTargetPath(target));
 			if(target.outputsOnly())
 				m_config.setAttribute(A_OUTPUTS_ONLY, "true");
 			
@@ -92,5 +103,14 @@ implements	IModelXMLConstants
 	@Override
 	public String getOutputLocation() {
 		return m_configOutputDirectory+File.separator+m_configFileName;
+	}
+	
+	private String getTargetPath(ISASTTarget target) {
+		if(!m_useRelativePaths)
+			return target.getTargetFile().getAbsolutePath();
+		
+		Path targetPath = Paths.get(target.getTargetFile().getAbsolutePath());
+		Path base = Paths.get(m_configOutputDirectory);
+		return base.relativize(targetPath).toString();
 	}
 }
