@@ -165,7 +165,7 @@ public class SAClient implements SASTConstants {
 	public boolean majorVersionChanged() throws IOException {
 		String serverMajorVersion = ServiceUtil.getSAClientVersion().substring(0, 1);
 		String localMajorVersion = getLocalClientVersion().substring(0, 1);
-		return localMajorVersion.equals(serverMajorVersion) ? false: true;
+		return !localMajorVersion.equals(serverMajorVersion);
 	}
 	
 	public boolean shouldUpdateClient() throws IOException {
