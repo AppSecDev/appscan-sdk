@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -20,11 +20,11 @@ import javax.xml.transform.TransformerException;
 
 import com.hcl.appscan.sdk.scanners.sast.targets.ISASTTarget;
 
-public class XmlWriter extends ModelWriter 
-implements	IModelXMLConstants 
+public class XmlWriter extends ModelWriter
+implements	IModelXMLConstants
 {
 
-	private DOMWriter m_config;  
+	private DOMWriter m_config;
 	private String m_configOutputDirectory = null;
 	private String m_configFileName = APPSCAN_CONFIG + DOT_XML;
 	private boolean m_useRelativePaths;
@@ -32,11 +32,11 @@ implements	IModelXMLConstants
 	public XmlWriter() {
 		this(false);
 	}
-	
+
 	public XmlWriter(boolean relativeTargetPaths) {
 		m_useRelativePaths = relativeTargetPaths;
 	}
-	
+
 	@Override
 	public void initWriters(File directory) throws IOException {
 		m_configOutputDirectory = directory.getCanonicalPath();
@@ -51,8 +51,14 @@ implements	IModelXMLConstants
 	}
 
 	@Override
-	public void visit(List<ISASTTarget> targets) {
+	public void visit(List<ISASTTarget> targets, boolean isThirdPartyScanningEnabled) {
 		m_config.beginElement(E_CONFIGURATION);
+
+		if (isThirdPartyScanningEnabled) {
+			m_config.beginElement(E_ThirdParty);
+			m_config.endElement();
+		}
+
 		m_config.beginElement(E_TARGETS);
 
 		for (ISASTTarget target: targets){
@@ -61,29 +67,29 @@ implements	IModelXMLConstants
 			m_config.setAttribute(A_PATH, getTargetPath(target));
 			if(target.outputsOnly())
 				m_config.setAttribute(A_OUTPUTS_ONLY, "true");
-			
+
 			//Add CustomBuildInfo
 			if(target.getProperties().size() > 0) {
 				m_config.beginElement(E_CUSTOM_BUILD_INFO);
-				
+
 				for (Entry<String, String> buildInfo : target.getProperties().entrySet())
 					m_config.setAttribute(buildInfo.getKey(), buildInfo.getValue());
 
 				m_config.endElement();
 			}
-			
+
 			//Add Include patterns
 			for(String include : target.getInclusionPatterns()) {
 				m_config.beginElement(E_INCLUDE);
 				m_config.endElement(include);
 			}
-						
+
 			//Add Exclude patterns
 			for(String exclude : target.getExclusionPatterns()) {
 				m_config.beginElement(E_EXCLUDE);
 				m_config.endElement(exclude);
 			}
-			
+
 			m_config.endElement(); // </Target>
 		}
 
@@ -104,11 +110,11 @@ implements	IModelXMLConstants
 	public String getOutputLocation() {
 		return m_configOutputDirectory+File.separator+m_configFileName;
 	}
-	
+
 	private String getTargetPath(ISASTTarget target) {
 		if(!m_useRelativePaths)
 			return target.getTargetFile().getAbsolutePath();
-		
+
 		Path targetPath = Paths.get(target.getTargetFile().getAbsolutePath());
 		Path base = Paths.get(m_configOutputDirectory);
 		return base.relativize(targetPath).toString();

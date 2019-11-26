@@ -12,6 +12,7 @@ public interface IModelXMLConstants {
 	String DOT_XML					= ".xml";					//$NON-NLS-1$
 	
 	String E_CONFIGURATION			= "Configuration";			//$NON-NLS-1$
+	String E_ThirdParty             = "ThirdParty";             //$NON-NLS-1$
 	String E_TARGETS				= "Targets";				//$NON-NLS-1$
 	String E_TARGET					= "Target";					//$NON-NLS-1$
 	String E_TARGET_SETTINGS		= "TargetSettings";			//$NON-NLS-1$

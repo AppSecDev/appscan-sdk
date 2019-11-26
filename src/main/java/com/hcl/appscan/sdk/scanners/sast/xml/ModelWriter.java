@@ -118,7 +118,7 @@ public abstract class ModelWriter {
 	 */
 	public abstract void write() throws TransformerException;
 
-	public abstract String getOutputLocation() ;
+	public abstract String getOutputLocation();
 
-	public abstract void visit(List<ISASTTarget> targets) ;
+	public abstract void visit(List<ISASTTarget> targets, boolean isThirdPartyScanningEnabled);
 }
