@@ -57,7 +57,7 @@ public class SASTScan extends ASoCScan implements SASTConstants {
 	}
 	
 	@Override
-	protected String getReportFormat() {
+	public String getReportFormat() {
 		return REPORT_FORMAT;
 	}
 

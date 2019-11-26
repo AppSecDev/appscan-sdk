@@ -30,13 +30,13 @@ public class AuthenticationHandler implements CoreConstants {
 	}
 	
 	/**
-	 * Authenticates a user with the IBM Application Security on Cloud service using a username and password.
-	 * @param username
-	 * @param password
+	 * Authenticates a user with the HCL AppScan on Cloud service using a username and password.
+	 * @param username The username.
+	 * @param password The password.
 	 * @param persist True to persist the credentials.
 	 * @return True if successful.
-	 * @throws IOException 
-	 * @throws JSONException 
+	 * @throws IOException If an error occurs.
+	 * @throws JSONException If an error occurs.
 	 */
 	public boolean login(String username, String password, boolean persist) throws IOException, JSONException {
 		return login(username, password, persist, LoginType.ASoC);
@@ -44,13 +44,13 @@ public class AuthenticationHandler implements CoreConstants {
 
 	/**
 	 * Authenticates a user using the given LoginType.
-	 * @param id The key id.
-	 * @param secret The key secret.
+	 * @param username The username.
+	 * @param password The password.
 	 * @param persist True to persist the credentials.
 	 * @param type The LoginType.
 	 * @return True if successful.
-	 * @throws IOException 
-	 * @throws JSONException 
+	 * @throws IOException If an error occurs.
+	 * @throws JSONException If an error occurs.
 	 */
 	public boolean login(String username, String password, boolean persist, LoginType type) throws IOException, JSONException {
 		
@@ -61,20 +61,13 @@ public class AuthenticationHandler implements CoreConstants {
 		Map<String, String> params = new HashMap<String, String>();
 		String url;
 		
-		if(type == LoginType.Bluemix) {
-			params.put(BINDING_ID, username);
-			params.put(PASSWORD, password);
-		    url = m_authProvider.getServer() + API_BLUEMIX_LOGIN;			
-		}
-		else if(type == LoginType.ASoC) {
-			params.put(USERNAME, username);
-			params.put(PASSWORD, password);
-		    url = m_authProvider.getServer() + API_IBM_LOGIN;
-		}
-		else { //Federated login
+		if(type == LoginType.ASoC_Federated) {
 			params.put(KEY_ID, username);
 			params.put(KEY_SECRET, password);
 		    url = m_authProvider.getServer() + API_KEY_LOGIN;
+		}
+		else {
+			throw new HttpException(500, Messages.getMessage("error.login.type.deprectated")); //$NON-NLS-1$
 		}
 
 		HttpClient client = new HttpClient();

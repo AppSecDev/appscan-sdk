@@ -1,7 +1,7 @@
 # This repository has moved to https://github.com/hclproducts/appscan-sdk
 
 # appscan-sdk
-SDK for interacting with Application Security on Cloud
+SDK for interacting with HCL AppScan on Cloud
 
 # License
 

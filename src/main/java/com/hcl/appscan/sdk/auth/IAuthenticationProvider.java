@@ -22,7 +22,7 @@ public interface IAuthenticationProvider {
 	 * Retrieves the authorization header for use in requests.
 	 * 
 	 * @param persist True for a persistent connection.
-	 * @return
+	 * @return The authorization header
 	 */
 	public Map<String, String> getAuthorizationHeader(boolean persist);
 	

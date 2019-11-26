@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2018. 
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -51,29 +51,37 @@ public class SAClient implements SASTConstants {
 	 * @param workingDir The directory where the SAClient will run.
 	 * @param properties A Map of properties that will be converted to program arguments.
 	 * @return The process exit code, 0 for success.
-	 * @throws IOException
-	 * @throws ScannerException
+	 * @throws IOException If an error occurs.
+	 * @throws ScannerException If an error occurs.
 	 */
 	public int run(String workingDir, Map<String, String> properties) throws IOException, ScannerException {
-		return runClient(workingDir, getClientArgs(properties));
+		return runClient(workingDir, getClientArgs(properties), properties.get(APPSCAN_IRGEN_CLIENT));
 	}
-	
+
 	/**
+	 * Run the SAClient
+	 * @param workingDir The directory where the SAClient will run.
+	 * @param args A List of program arguments.
+	 * @return The process exit code, 0 for success.
+	 * @throws IOException If an error occurs.
+	 * @throws ScannerException If an error occurs.
 	 * @deprecated Use {@link #run(String, Map)} instead.
 	 */
 	@Deprecated
 	public int run(String workingDir, List<String> args) throws IOException, ScannerException {
-		return runClient(workingDir, args);
+		return runClient(workingDir, args, "");
 	}
 		
-	private int runClient(String workingDir, List<String> args) throws IOException, ScannerException {
-		ArrayList<String> arguments = new ArrayList<String>();
+	private int runClient(String workingDir, List<String> args, String irGenClient) throws IOException, ScannerException {
+		List<String> arguments = new ArrayList<String>();
 		arguments.add(getClientScript());
 		arguments.addAll(args);
 		m_builder = new ProcessBuilder(arguments);
 		m_builder.directory(new File(workingDir));
 		m_builder.redirectErrorStream(true);
-		
+		if (irGenClient != null && !irGenClient.isEmpty()) {
+			m_builder.environment().put(APPSCAN_IRGEN_CLIENT, irGenClient);
+		}
 		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(PREPARING_IRX, getLocalClientVersion())));
 		final Process proc = m_builder.start();
 		new Thread(new Runnable() {
@@ -112,8 +120,8 @@ public class SAClient implements SASTConstants {
 	 * Gets the absolute path to the "appscan" script for running the IRGen process, downloading the package if it's
 	 * not found or if the current version is out of date.
 	 * @return The absolute path to the "appscan" script.
-	 * @throws IOException
-	 * @throws ScannerException
+	 * @throws IOException If an error occurs.
+	 * @throws ScannerException If an error occurs getting the client.
 	 */
 	public String getClientScript() throws IOException, ScannerException {
 		//See if we already have the client package.
@@ -154,25 +162,19 @@ public class SAClient implements SASTConstants {
 		return SystemUtil.isWindows() ? WIN_SCRIPT : UNIX_SCRIPT;
 	}
 	
-	private boolean shouldUpdateClient() throws IOException {
+	public boolean majorVersionChanged() throws IOException {
+		String serverMajorVersion = ServiceUtil.getSAClientVersion().substring(0, 1);
+		String localMajorVersion = getLocalClientVersion().substring(0, 1);
+		return !localMajorVersion.equals(serverMajorVersion);
+	}
+	
+	public boolean shouldUpdateClient() throws IOException {
 		String serverVersion = ServiceUtil.getSAClientVersion();
 		String localVersion = getLocalClientVersion();
 
-		if(localVersion != null && serverVersion != null) {
-			String[] local = localVersion.split("\\."); //$NON-NLS-1$
-			String[] server = serverVersion.split("\\."); //$NON-NLS-1$
-
-			for(int iter = 0; iter < local.length && iter < server.length; iter++) {
-				int lVersion = Integer.parseInt(local[iter]);
-				int sVersion = Integer.parseInt(server[iter]);
-				
-				if (((iter==0) && lVersion<sVersion)
-						|| (iter==1 && lVersion<sVersion)
-						|| (iter==2 && lVersion<sVersion)) {
-					m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(SACLIENT_OUTDATED, localVersion, serverVersion)));
-					return true;
-				}
-			}
+		if(compareVersions(localVersion, serverVersion)) {
+			m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(SACLIENT_OUTDATED, localVersion, serverVersion)));
+			return true;
 		}
 		return false;
 	}
@@ -186,7 +188,27 @@ public class SAClient implements SASTConstants {
 				return name.startsWith(SACLIENT) && new File(dir, name).isDirectory();
 			}
 		});
-		return files.length == 0 ? null : files[0];
+		
+		//If there's more than 1 directory, we need to determine the latest. Delete any older directories that are found.
+		if(files.length > 1) {
+			File latest = files[0];
+			String latestVersion = getVersionFromString(latest.getName());
+			
+			for(int i = 1; i < files.length; i++) {
+				String otherVersion = getVersionFromString(files[i].getName());
+				if(compareVersions(latestVersion, otherVersion)) {
+					deleteDirectory(latest);
+					latest = files[i];
+					latestVersion = getVersionFromString(latest.getName());
+				}
+				else
+					deleteDirectory(files[i]);
+			}
+			
+			return latest;
+		}
+		else
+			return files.length == 0 ? null : files[0];
 	}
 	
 	private String getLocalClientVersion() {
@@ -247,13 +269,48 @@ public class SAClient implements SASTConstants {
 			args.add(OPT_CONFIG);
 			args.add(properties.get(CONFIG_FILE));
 		}
-		if(properties.containsKey(DEBUG))
+		if(properties.containsKey(DEBUG) || System.getProperty(DEBUG.toUpperCase()) != null)
 			args.add(OPT_DEBUG);
 		if(properties.containsKey(VERBOSE))
 			args.add(OPT_VERBOSE);
-		if(properties.containsKey(THIRD_PARTY))
+		if(properties.containsKey(THIRD_PARTY) || System.getProperty(THIRD_PARTY) != null)
 			args.add(OPT_THIRD_PARTY);
+		if (properties.containsKey(OPEN_SOURCE_ONLY) || System.getProperty(OPEN_SOURCE_ONLY) != null)
+			args.add(OPT_OPEN_SOURCE_ONLY);
 		
 		return args;
+	}
+
+	private boolean compareVersions(String baseVersion, String newVersion) {
+		if(baseVersion == null)
+			return true;
+		
+		if(baseVersion != null && newVersion != null) {
+			String[] base = baseVersion.split("\\."); //$NON-NLS-1$
+			String[] next = newVersion.split("\\."); //$NON-NLS-1$
+
+			try {
+				for(int iter = 0; iter < base.length && iter < next.length; iter++) {
+					int lVersion = Integer.parseInt(base[iter]);
+					int sVersion = Integer.parseInt(next[iter]);
+					
+					if (((iter==0) && lVersion<sVersion)
+							|| (iter==1 && lVersion<sVersion)
+							|| (iter==2 && lVersion<sVersion)) {
+						return true;
+					}
+				}
+			} catch (NumberFormatException e) {
+				return false;
+			}
+		}
+		return false;
+	}
+	
+	private String getVersionFromString(String name) {
+		String version = name.substring(SACLIENT.length());
+		if(version.trim().startsWith(".")) //$NON-NLS-1$
+			version = version.substring(1);
+		return version;
 	}
 }

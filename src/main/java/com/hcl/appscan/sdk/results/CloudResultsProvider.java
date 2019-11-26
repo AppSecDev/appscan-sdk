@@ -33,19 +33,19 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 
 	private static String DEFAULT_REPORT_FORMAT = "html"; //$NON-NLS-1$
 	
-	private String m_type;
-	private String m_scanId;
-	private String m_status;
-	private String m_reportFormat;
-	private boolean m_hasResults;
-	private IScanServiceProvider m_scanProvider;
-	private IProgress m_progress;
+	protected String m_type;
+	protected String m_scanId;
+	protected String m_status;
+	private   String m_reportFormat;
+	private   boolean m_hasResults;
+	protected IScanServiceProvider m_scanProvider;
+	protected IProgress m_progress;
 	
-	private int m_totalFindings;
-	private int m_highFindings;
-	private int m_mediumFindings;
-	private int m_lowFindings;
-	private int m_infoFindings;
+	protected int m_totalFindings;
+	protected int m_highFindings;
+	protected int m_mediumFindings;
+	protected int m_lowFindings;
+	protected int m_infoFindings;
 	
 	public CloudResultsProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
 		m_type = type;
@@ -59,7 +59,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	@Override
 	public void getResultsFile(File file, String format) {
 		if(format == null)
-			format = m_reportFormat;
+			format = getResultsFormat();
 		
 		if(file != null && !file.exists()) {
 			try {
@@ -116,6 +116,10 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		return m_hasResults;
 	}
 	
+        protected void setHasResult(boolean value){
+            m_hasResults=value;
+        }
+        
 	@Override
 	public String getStatus() {
 		checkResults();
@@ -142,12 +146,12 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		m_reportFormat = format;
 	}
 	
-	private void loadResults() {
+	protected void loadResults() {
 		try {
 			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
 			obj = (JSONObject) obj.get(LATEST_EXECUTION);
 			m_status = obj.getString(STATUS);
-			if(m_status != null && !m_status.equalsIgnoreCase(RUNNING)) {
+			if(m_status != null && !(m_status.equalsIgnoreCase(INQUEUE) || m_status.equalsIgnoreCase(RUNNING))) {
 				m_totalFindings = obj.getInt(TOTAL_ISSUES);
 				m_highFindings = obj.getInt(HIGH_ISSUES);
 				m_mediumFindings = obj.getInt(MEDIUM_ISSUES);
@@ -161,7 +165,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		}
 	}
 	
-	private void getReport(String scanId, String format, File destination) throws IOException, JSONException {
+	protected void getReport(String scanId, String format, File destination) throws IOException, JSONException {
 		IAuthenticationProvider authProvider = m_scanProvider.getAuthenticationProvider();
 		if(authProvider.isTokenExpired()) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_LOGIN_EXPIRED)));
@@ -198,4 +202,26 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		if(!m_hasResults)
 			loadResults();
 	}
+	
+    protected String getReportStatus(String reportId) throws IOException, JSONException {
+		IAuthenticationProvider authProvider = m_scanProvider.getAuthenticationProvider();
+		if(authProvider.isTokenExpired()) {
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_LOGIN_EXPIRED)));
+			return FAILED;
+		}
+	
+		String request_url = authProvider.getServer() + String.format(API_REPORT_STATUS, reportId);
+		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
+		request_headers.put(CONTENT_LENGTH, "0"); //$NON-NLS-1$
+	
+		HttpClient client = new HttpClient();
+		HttpResponse response = client.get(request_url, request_headers, null);
+    	
+		if (response.getResponseCode() != HttpsURLConnection.HTTP_OK) {
+		    return null;
+		}
+    	
+    	JSONObject obj = (JSONObject) response.getResponseBodyAsJSON();
+    	return obj.getString(STATUS);
+    }
 }

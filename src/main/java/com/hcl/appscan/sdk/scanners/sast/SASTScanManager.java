@@ -83,11 +83,15 @@ public class SASTScanManager implements IScanManager{
 		}
 	}
 
-	private void createConfig() throws AppScanException  {
+	public void createConfig() throws AppScanException {
+		createConfig(false);
+	}
+	
+	public void createConfig(boolean useRelativeTargetPaths) throws AppScanException  {
 		if(m_targets.isEmpty())
 			return;
 		try {
-			ModelWriter writer = new XmlWriter();
+			ModelWriter writer = new XmlWriter(useRelativeTargetPaths);
 			writer.initWriters(new File(m_workingDirectory));		
 			writer.visit(m_targets);
 			writer.write();
