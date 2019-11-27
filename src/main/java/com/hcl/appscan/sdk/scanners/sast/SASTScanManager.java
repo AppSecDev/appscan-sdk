@@ -23,8 +23,6 @@ import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.scan.IScanManager;
 import com.hcl.appscan.sdk.scan.IScanServiceProvider;
 import com.hcl.appscan.sdk.scan.ITarget;
-import com.hcl.appscan.sdk.scanners.sast.SASTConstants;
-import com.hcl.appscan.sdk.scanners.sast.SASTScan;
 import com.hcl.appscan.sdk.scanners.sast.targets.ISASTTarget;
 import com.hcl.appscan.sdk.scanners.sast.xml.ModelWriter;
 import com.hcl.appscan.sdk.scanners.sast.xml.XmlWriter;
@@ -34,10 +32,14 @@ public class SASTScanManager implements IScanManager{
 	private List<ISASTTarget> m_targets;
 	private SASTScan m_scan;
 	private String m_workingDirectory;
+	private boolean m_isThirdPartyScanningEnabled;
+	private boolean m_isOpenSourceOnlyEnabled;
 
 	public SASTScanManager(String workingDir) {
 		m_workingDirectory = workingDir;
-		m_targets = new ArrayList<ISASTTarget>();
+		m_targets = new ArrayList<>();
+		m_isThirdPartyScanningEnabled = false;
+		m_isOpenSourceOnlyEnabled = false;
 	}
 
 	@Override
@@ -74,13 +76,21 @@ public class SASTScanManager implements IScanManager{
 			throw new AppScanException(Messages.getMessage("message.results.unavailable")); //$NON-NLS-1$
 	}
 	
-	private  void run(IProgress progress,Map<String, String> properties, IScanServiceProvider provider) throws AppScanException {
+	private void run(IProgress progress,Map<String, String> properties, IScanServiceProvider provider) throws AppScanException {
 		try {
 			m_scan = new SASTScan(properties, progress, provider);
 			m_scan.run();
 		} catch (InvalidTargetException | ScannerException e) {
 			throw new AppScanException(e.getLocalizedMessage());
 		}
+	}
+	
+	public void setIsThirdPartyScanningEnabled(boolean isThirdPartyScanningEnabled) {
+		m_isThirdPartyScanningEnabled = isThirdPartyScanningEnabled;
+	}
+
+	public void setIsOpenSourceOnlyEnabled(boolean isOpenSourceOnlyEnabled) {
+		m_isOpenSourceOnlyEnabled = isOpenSourceOnlyEnabled;
 	}
 
 	public void createConfig() throws AppScanException {
@@ -93,7 +103,7 @@ public class SASTScanManager implements IScanManager{
 		try {
 			ModelWriter writer = new XmlWriter(useRelativeTargetPaths);
 			writer.initWriters(new File(m_workingDirectory));		
-			writer.visit(m_targets);
+			writer.visit(m_targets, m_isThirdPartyScanningEnabled, m_isOpenSourceOnlyEnabled);
 			writer.write();
 		} catch (IOException | TransformerException  e) {
 			throw new AppScanException(e.getLocalizedMessage(), e);

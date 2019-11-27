@@ -49,3 +49,7 @@ build.properties
 .scala_dependencies
 .worksheet
 Contact GitHub API Training Shop Blog About
+
+# IntelliJ
+.idea/
+appscan.sdk.iml
