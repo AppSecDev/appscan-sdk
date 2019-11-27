@@ -33,11 +33,13 @@ public class SASTScanManager implements IScanManager{
 	private SASTScan m_scan;
 	private String m_workingDirectory;
 	private boolean m_isThirdPartyScanningEnabled;
+	private boolean m_isOpenSourceOnlyEnabled;
 
 	public SASTScanManager(String workingDir) {
 		m_workingDirectory = workingDir;
 		m_targets = new ArrayList<>();
 		m_isThirdPartyScanningEnabled = false;
+		m_isOpenSourceOnlyEnabled = false;
 	}
 
 	@Override
@@ -87,6 +89,10 @@ public class SASTScanManager implements IScanManager{
 		m_isThirdPartyScanningEnabled = isThirdPartyScanningEnabled;
 	}
 
+	public void setIsOpenSourceOnlyEnabled(boolean isOpenSourceOnlyEnabled) {
+		m_isOpenSourceOnlyEnabled = isOpenSourceOnlyEnabled;
+	}
+
 	public void createConfig() throws AppScanException {
 		createConfig(false);
 	}
@@ -97,7 +103,7 @@ public class SASTScanManager implements IScanManager{
 		try {
 			ModelWriter writer = new XmlWriter(useRelativeTargetPaths);
 			writer.initWriters(new File(m_workingDirectory));		
-			writer.visit(m_targets, m_isThirdPartyScanningEnabled);
+			writer.visit(m_targets, m_isThirdPartyScanningEnabled, m_isOpenSourceOnlyEnabled);
 			writer.write();
 		} catch (IOException | TransformerException  e) {
 			throw new AppScanException(e.getLocalizedMessage(), e);

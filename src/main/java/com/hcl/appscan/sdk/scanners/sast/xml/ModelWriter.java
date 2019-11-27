@@ -120,5 +120,5 @@ public abstract class ModelWriter {
 
 	public abstract String getOutputLocation();
 
-	public abstract void visit(List<ISASTTarget> targets, boolean isThirdPartyScanningEnabled);
+	public abstract void visit(List<ISASTTarget> targets, boolean isThirdPartyScanningEnabled, boolean isOpenSourceOnlyEnabled);
 }
