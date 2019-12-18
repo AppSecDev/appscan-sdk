@@ -1,5 +1,8 @@
 # appscan-sdk
-SDK for interacting with HCL AppScan on Cloud
+SDK for interacting with HCL AppScan on Cloud.
+
+# JavaDoc
+https://www.javadoc.io/doc/com.hcl/appscan.sdk/latest/index.html
 
 # License
 
