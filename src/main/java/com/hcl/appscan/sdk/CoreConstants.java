@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017,2018. 
+ * © Copyright HCL Technologies Ltd. 2017,2019.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -32,14 +32,14 @@ public interface CoreConstants {
 	String PASSWORD						= "Password";											//$NON-NLS-1$
 	String TOKEN						= "Token";												//$NON-NLS-1$
 	String USERNAME						= "Username";											//$NON-NLS-1$
-	
+
 	String CHARSET 						= "charset"; 											//$NON-NLS-1$
 	String UTF8 						= "utf-8";								 				//$NON-NLS-1$
-	
+
 	String CONTENT_DISPOSITION 			= "Content-Disposition";				 				//$NON-NLS-1$
 	String CONTENT_LENGTH				= "Content-Length";				 						//$NON-NLS-1$
 	String CONTENT_TYPE					= "Content-Type";		 								//$NON-NLS-1$
-	
+
 	String API_ENV						= "/api/v2";				 							//$NON-NLS-1$
 	String API_BLUEMIX					= "Bluemix";					 						//$NON-NLS-1$
 	String API_BLUEMIX_LOGIN 			= API_ENV + "/Account/BluemixLogin";					//$NON-NLS-1$
@@ -64,36 +64,69 @@ public interface CoreConstants {
 	String API_SACLIENT_VERSION			= "/api/%s/StaticAnalyzer/SAClientUtil?os=%s&meta=%s"; 	//$NON-NLS-1$
 	String API_KEY_PATH					= "/api/ideclientuilogin";								//$NON-NLS-1$
 	String API_REPORT_STATUS			= "/api/V2/Reports/%s";									//$NON-NLS-1$
-	
+
 	String DEFAULT_RESULT_NAME			= "asoc_results";										//$NON-NLS-1$
 	String SACLIENT_INSTALL_DIR			= "SAClientInstall";									//$NON-NLS-1$
-	
+
 	String RUNNING						= "Running";											//$NON-NLS-1$
-	String INQUEUE 						= "InQueue"; 											//$NON-NLS-1$
+	String WAITING_TO_RUN				= "Waiting to Run";										//$NON-NLS-1$
+	String STARTING					    = "Starting";											//$NON-NLS-1$
+	String INQUEUE 					    = "InQueue"; 											//$NON-NLS-1$
 	String READY						= "Ready";												//$NON-NLS-1$
 	String FAILED						= "Failed";												//$NON-NLS-1$
-	
+
 	String TOTAL_ISSUES					= "NIssuesFound";										//$NON-NLS-1$
 	String HIGH_ISSUES					= "NHighIssues";										//$NON-NLS-1$
 	String MEDIUM_ISSUES				= "NMediumIssues";										//$NON-NLS-1$
 	String LOW_ISSUES					= "NLowIssues";											//$NON-NLS-1$
 	String INFO_ISSUES					= "NInfoIssues";										//$NON-NLS-1$
-	
+
 	String CREATE_SCAN_SUCCESS			= "message.created.scan";								//$NON-NLS-1$
 	String DOWNLOADING_CLIENT			= "message.downloading.client";							//$NON-NLS-1$
 	String EXECUTING_SCAN				= "message.running.scan";								//$NON-NLS-1$
 	String UPLOADING_FILE				= "message.uploading.file";								//$NON-NLS-1$
-	
+
 	String ERROR_AUTHENTICATING			= "error.authenticating";								//$NON-NLS-1$
 	String ERROR_DOWNLOADING_CLIENT 	= "error.download.client";								//$NON-NLS-1$
 	String ERROR_GETTING_DETAILS		= "error.getting.details";								//$NON-NLS-1$
 	String ERROR_GETTING_RESULT			= "error.getting.result";								//$NON-NLS-1$
 	String ERROR_GENERATING_REPORT      = "error.generating.report";                            //$NON-NLS-1$
-	String ERROR_INVALID_APP			= "error.invalid.app";									//$NON-NLS-1$	
+	String ERROR_INVALID_APP			= "error.invalid.app";									//$NON-NLS-1$
 	String ERROR_INVALID_OPTIONS		= "error.invalid.opts";									//$NON-NLS-1$
 	String ERROR_LOADING_APPS			= "error.loading.apps";									//$NON-NLS-1$
 	String ERROR_LOGIN_EXPIRED			= "login.token.expired";								//$NON-NLS-1$
 	String ERROR_INVALID_JOB_ID			= "error.invalid.job.id";								//$NON-NLS-1$
 	String ERROR_SUBMITTING_SCAN		= "error.submit.scan";									//$NON-NLS-1$
 	String ERROR_UPLOADING_FILE			= "error.upload.file";									//$NON-NLS-1$
+	
+	// ASE Status Messages
+	String CREATING_JOB                 = "message.creating.job";                               //$NON-NLS-1$
+	String CREATE_JOB_SUCCESS			= "message.created.job";								//$NON-NLS-1$
+	String ERROR_CREATE_JOB  			= "error.create.job";									//$NON-NLS-1$
+	String ERROR_UPDATE_JOB  			= "error.update.job";									//$NON-NLS-1$
+	String EXECUTING_JOB				= "message.running.job";								//$NON-NLS-1$
+	String EXECUTE_JOB_SUCCESS    		= "message.executed.job";								//$NON-NLS-1$
+	String ERROR_EXECUTE_JOB  			= "error.execute.job";									//$NON-NLS-1$
+	
+    // ASE APIs
+    String ASE_API                      = "/api";                                                //$NON-NLS-1$
+    String ASE_APPS                     = ASE_API + "/applications";                             //$NON-NLS-1$
+    String ASE_FOLDERS                  = ASE_API + "/folders";                                  //$NON-NLS-1$
+    String ASE_TEST_POLICIES            = ASE_API + "/testPolicies";                             //$NON-NLS-1$
+    String ASE_AGENT_SERVER             = ASE_API + "/agentServer";                              //$NON-NLS-1$
+    String ASE_UPDSCANT                 = ASE_API + "/jobs/%s/dastconfig/updatescant";           //$NON-NLS-1$
+    String ASE_UPDTRAFFIC               = ASE_API + "/jobs/%s/dastconfig/updatetraffic/%s";      //$NON-NLS-1$
+    String ASE_UPDTAGENT     			= ASE_API + "/jobs/%s/designateAgentServer/%s";			 //$NON-NLS-1$
+    String ASE_SCAN_TYPE		        = ASE_API + "/jobs/scantype";				             //$NON-NLS-1$
+    String ASE_LOGIN_API                = ASE_API + "/keylogin/apikeylogin";                     //$NON-NLS-1$
+    String ASE_KEY_ID                   = "keyId";										         //$NON-NLS-1$
+    String ASE_KEY_SECRET               = "keySecret";                                           //$NON-NLS-1$
+    String ASE_NAME_ATTRIBUTE           = "name";                                                //$NON-NLS-1$
+    String ASE_ID_ATTRIBUTE             = "id";                                                  //$NON-NLS-1$
+    String ASE_CREATEJOB_TEMPLATE_ID    = ASE_API + "/jobs/%s/dastconfig/createjob";             //$NON-NLS-1$
+    String ASE_GET_JOB                  = ASE_API + "/jobs/%s";                                  //$NON-NLS-1$
+    String ASE_RUN_JOB_ACTION           = ASE_API +"/jobs/%s/actions";                           //$NON-NLS-1$
+    String ASE_REPORTPACK               = ASE_API + "/folderitems/%s/reportPack";                //$NON-NLS-1$
+    String ASE_REPORTS                  = ASE_API + "/folderitems/%s/reports";                   //$NON-NLS-1$
+    String ASE_GET_FOLDERITEMS          = ASE_API + "/folderitems/%s";							 //$NON-NLS-1$    
 }
