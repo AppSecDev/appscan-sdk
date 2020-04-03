@@ -1,5 +1,5 @@
 /**
- * © Copyright HCL Technologies Ltd. 2019.
+ * © Copyright HCL Technologies Ltd. 2019,2020.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -215,7 +215,7 @@ public class ASEScanServiceProvider implements IScanServiceProvider, Serializabl
 		List<HttpPart> parts = new ArrayList<HttpPart>();
 		
 		try {
-		    parts.add(new HttpPart(FILE_TO_UPLOAD, file, "multipart/form-data")); //$NON-NLS-1$
+		    parts.add(new HttpPart(ASE_UPLOADED_FILE, file, "multipart/form-data")); //$NON-NLS-1$
 		} catch (IOException e) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_UPDATE_JOB, e.getLocalizedMessage())));
 			return false;

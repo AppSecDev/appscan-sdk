@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017,2019.
+ * © Copyright HCL Technologies Ltd. 2017,2020.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -128,5 +128,6 @@ public interface CoreConstants {
     String ASE_RUN_JOB_ACTION           = ASE_API +"/jobs/%s/actions";                           //$NON-NLS-1$
     String ASE_REPORTPACK               = ASE_API + "/folderitems/%s/reportPack";                //$NON-NLS-1$
     String ASE_REPORTS                  = ASE_API + "/folderitems/%s/reports";                   //$NON-NLS-1$
-    String ASE_GET_FOLDERITEMS          = ASE_API + "/folderitems/%s";							 //$NON-NLS-1$    
+    String ASE_GET_FOLDERITEMS          = ASE_API + "/folderitems/%s";							 //$NON-NLS-1$
+    String ASE_UPLOADED_FILE            = "uploadedfile";                                        //$NON-NLS-1$
 }
