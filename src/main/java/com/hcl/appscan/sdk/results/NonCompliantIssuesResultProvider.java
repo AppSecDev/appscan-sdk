@@ -1,7 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * © Copyright HCL Technologies Ltd. 2018,2020.
  */
 package com.hcl.appscan.sdk.results;
 
@@ -42,11 +40,19 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 			if (obj == null) {
 				m_status = FAILED;
 				return;
+			} else if (obj.has(KEY) && obj.get(KEY).equals(UNAUTHORIZED_ACTION)) {
+				m_status = FAILED;
+				setHasResult(true);
+				return;
 			}
+
 			obj = (JSONObject) obj.get(LATEST_EXECUTION);
 
 			m_status = obj.getString(STATUS);
-			if (m_status != null && !(m_status.equalsIgnoreCase(INQUEUE) || m_status.equalsIgnoreCase(RUNNING))) {
+			if (FAILED.equalsIgnoreCase(m_status) && obj.has(USER_MESSAGE)) {
+				m_progress.setStatus(new Message(Message.ERROR, obj.getString(USER_MESSAGE)));
+				setHasResult(true);
+			} else if (m_status != null && !(m_status.equalsIgnoreCase(INQUEUE) || m_status.equalsIgnoreCase(RUNNING))) {
 				JSONArray array = m_scanProvider.getNonCompliantIssues(m_scanId);
 				m_totalFindings = array.length();
 				for (int i = 0; i < array.length(); i++) {
