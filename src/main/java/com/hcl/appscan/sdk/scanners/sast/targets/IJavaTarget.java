@@ -10,13 +10,13 @@ public interface IJavaTarget extends ISASTTarget {
 
 	/**
 	 * Gets the classpath for this target as a String.
-	 * @return
+	 * @return The classpath as a String.
 	 */
 	String getClasspath();
 	
 	/**
 	 * Gets the jre/jdk associated with this target.
-	 * @return
+	 * @return The jre/jdk as a String.
 	 */
 	String getJava();
 }

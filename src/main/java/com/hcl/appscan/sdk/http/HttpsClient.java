@@ -1,6 +1,5 @@
 /**
- * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2019. 
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -8,46 +7,43 @@ package com.hcl.appscan.sdk.http;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.Proxy;
+//import java.net.HttpsURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
+import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class HttpClient {
-	
-	private String m_boundary;
-	private long m_totalMultipartLength;
-	private long m_uploadedMultipartLength;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+//import javax.net.ssl.X509TrustManager;
+//import java.security.cert.X509Certificate;
+import javax.net.ssl.X509TrustManager;
+import org.apache.wink.json4j.JSONObject;
+
+public class HttpsClient {
+    private String m_boundary;
+    private long m_totalMultipartLength;
+    private long m_uploadedMultipartLength;
     private static final String CR_LF = "\r\n"; //$NON-NLS-1$
     private static final String TWO_HYPHENS = "--"; //$NON-NLS-1$
     
     private IHttpProgress m_progressAdapter;
-    private Proxy m_proxy;
 	
 	
 	public enum Method {
 		GET, POST, PUT, DELETE;
 	}
 	
-	public HttpClient(IHttpProgress progressAdapter, Proxy proxy) {
+	public HttpsClient(IHttpProgress progressAdapter) {
 		m_progressAdapter = progressAdapter;
-		m_proxy = proxy;
 	}
 	
-	public HttpClient() {
-		this(new DefaultHttpProgress(), Proxy.NO_PROXY);
-	}
-	
-	public HttpClient(Proxy proxy) {
-		this(new DefaultHttpProgress(), proxy);
-	}
-	
-	public HttpClient(IHttpProgress progressAdapter) {
-		this(progressAdapter, Proxy.NO_PROXY);
+	public HttpsClient() {
+		this(new DefaultHttpProgress());
 	}
 	
 	// ==============================
@@ -199,7 +195,7 @@ public class HttpClient {
 	private HttpResponse makeMultipartRequest(Method method, String url,
 			Map<String, String> headerProperties, List<HttpPart> parts)
 					throws IOException {
-		HttpURLConnection conn = makeConnection(url, method, headerProperties);
+		HttpsURLConnection conn = makeConnection(url, method, headerProperties);
 				
 		DataOutputStream outputStream = null;
 		conn.setChunkedStreamingMode(1024);
@@ -255,7 +251,7 @@ public class HttpClient {
 	private HttpResponse makeRequest(Method method, String url,
 			Map<String, String> headerProperties, String payload)
 			throws IOException {
-		HttpURLConnection conn = makeConnection(url, method, headerProperties);
+		HttpsURLConnection conn = makeConnection(url, method, headerProperties);
 
 		// Write payload
 		if (payload != null) {
@@ -270,22 +266,36 @@ public class HttpClient {
 		return new HttpResponse(conn);
 	}
 	
-	private HttpURLConnection makeConnection(String url, Method method,
+	private HttpsURLConnection makeConnection(String url, Method method,
 			Map<String, String> headerProperties) throws IOException {
-		URL requestURL = new URL(url);
-		HttpURLConnection conn = null;
-		conn = (HttpURLConnection) requestURL.openConnection(m_proxy);
-		conn.setRequestMethod(method.name());
-		conn.setReadTimeout(0);
+			URL requestURL = new URL(url);
+                
+            try {
+	                SSLContext sc = SSLContext.getInstance("TLS");
+	                sc.init(null, new TrustManager[] { new TrustAllX509TrustManager() }, new java.security.SecureRandom());
+	                HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+	                HttpsURLConnection.setDefaultHostnameVerifier( new HostnameVerifier() {
+	                public boolean verify(String string,SSLSession ssls) {
+	                	return true;
+                }	
+               });
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+			HttpsURLConnection conn = null;
+			conn = (HttpsURLConnection) requestURL.openConnection();
+			conn.setRequestMethod(method.name());
+			conn.setReadTimeout(0);
 
-		// HTTP headers
-		if (headerProperties != null) {
-			for (String key : headerProperties.keySet()) {
-				conn.setRequestProperty(key, headerProperties.get(key));
+			// HTTP headers
+			if (headerProperties != null) {
+				for (String key : headerProperties.keySet()) {
+					conn.setRequestProperty(key, headerProperties.get(key));
+				}
 			}
-		}
-		return conn;
-	}
+			return conn;
+	}       
 	
 	private long getTotalPartsLength(List<HttpPart> parts) {
 		long totalSize = 0;
@@ -299,28 +309,24 @@ public class HttpClient {
 		int progress = (int) ((float)m_uploadedMultipartLength/m_totalMultipartLength*100);
 		m_progressAdapter.setProgress(progress);
 	}
-	
-	private String buildQueryString(Map<String, String> params) throws UnsupportedEncodingException {
-	    StringBuilder result = new StringBuilder();
-	    boolean first = true;
 
-	    if (params == null)
-	    	return ""; //$NON-NLS-1$
-	    
-	    Iterator<String> iter = params.keySet().iterator();
-	    while (iter.hasNext()) {
-	    	String key = iter.next();
-	    	String value = params.get(key);
-	        if (first)
-	            first = false;
-	        else
-	            result.append("&"); //$NON-NLS-1$
+        
+    private String buildQueryString(Map<String , String > params){
+        JSONObject obj= new JSONObject(params);
+        return obj.toString();
+    }
+}
 
-	        result.append(URLEncoder.encode(key, "UTF-8")); //$NON-NLS-1$
-	        result.append("="); //$NON-NLS-1$
-	        result.append(URLEncoder.encode(value, "UTF-8")); //$NON-NLS-1$
+	class TrustAllX509TrustManager implements X509TrustManager {
+	    public X509Certificate[] getAcceptedIssuers() {
+	        return new X509Certificate[0];
 	    }
-
-	    return result.toString();
-	}
+	
+	    public void checkClientTrusted(java.security.cert.X509Certificate[] certs,
+	            String authType) {
+	    }
+	
+	    public void checkServerTrusted(java.security.cert.X509Certificate[] certs,
+	            String authType) {
+	    }
 }

@@ -39,7 +39,7 @@ public class ArchiveUtil {
 	 * Unzip an archive.
 	 * 
 	 * @param source An input file.
-	 * @param dest The destination directory to unzip to.
+	 * @param destDir The destination directory to unzip to.
 	 * @throws IOException If an error occurs during the unzip operation.
 	 */
 	public static void unzip(File source, File destDir) throws IOException {

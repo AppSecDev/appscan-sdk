@@ -99,7 +99,8 @@ public final class DOMWriter {
 
 	/**
 	 * Constructor.
-	 * Makes a new DOMWriter
+	 * @param stream The OutputStream to write to.
+	 * @param builder A document builder.
 	 */
 	public DOMWriter(OutputStream stream,DocumentBuilder builder) {
 		m_stream=stream;

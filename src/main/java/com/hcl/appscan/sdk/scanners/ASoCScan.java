@@ -35,6 +35,8 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 	public ASoCScan(Map<String, String> properties, IProgress progress, IScanServiceProvider provider) {
 		m_target = properties.remove(CoreConstants.TARGET);
 		m_properties = properties;
+		if(!m_properties.containsKey(CoreConstants.SCAN_NAME))
+			m_properties.put(CoreConstants.SCAN_NAME, getType() + SystemUtil.getTimeStamp());
 		m_progress = progress;
 		m_serviceProvider = provider;
 	}
@@ -55,6 +57,7 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 		provider.setReportFormat(getReportFormat());
 		return provider;
 	}
+        
 
 	protected void setScanId(String id) {
 		m_scanId = id;
@@ -68,11 +71,11 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 		return m_target;
 	}
 	
-	protected IProgress getProgress() {
+	public IProgress getProgress() {
 		return m_progress;
 	}
 	
-	protected IScanServiceProvider getServiceProvider() {
+	public IScanServiceProvider getServiceProvider() {
 		return m_serviceProvider;
 	}
 	
@@ -85,6 +88,5 @@ public abstract class ASoCScan implements IScan, ScanConstants, Serializable {
 		return m_properties;
 	}
 	
-	protected abstract String getReportFormat();
+	public abstract String getReportFormat();
 }
-

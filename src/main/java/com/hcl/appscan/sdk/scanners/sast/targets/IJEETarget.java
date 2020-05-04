@@ -10,7 +10,7 @@ public interface IJEETarget extends IJavaTarget {
 
 	/**
 	 * Gets the jsp compiler that should be used for this target.
-	 * @return
+	 * @return The jsp compiler as a String.
 	 */
 	String getJSPCompiler();
 	

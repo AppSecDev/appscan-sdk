@@ -10,6 +10,9 @@ package com.hcl.appscan.sdk.scanners.sast;
 public interface SASTConstants {
 
 	String APPSCAN_INSTALL_DIR			= "APPSCAN_INSTALL_DIR";			//$NON-NLS-1$
+	String APPSCAN_IRGEN_CLIENT         = "APPSCAN_IRGEN_CLIENT";			//$NON-NLS-1$
+	String APPSCAN_CLIENT_VERSION       = "APPSCAN_CLIENT_VERSION";			//$NON-NLS-1$
+	String IRGEN_CLIENT_PLUGIN_VERSION  = "IRGEN_CLIENT_PLUGIN_VERSION";	//$NON-NLS-1$
 	String ARSA_FILE_ID					= "ARSAFileId";						//$NON-NLS-1$
 	String WIN_SCRIPT					= "appscan.bat";					//$NON-NLS-1$
 	String UNIX_SCRIPT					= "appscan.sh";						//$NON-NLS-1$
@@ -26,6 +29,7 @@ public interface SASTConstants {
 	String DEBUG						= "debug";							//$NON-NLS-1$
 	String VERBOSE						= "verbose";						//$NON-NLS-1$
 	String THIRD_PARTY					= "thirdParty";						//$NON-NLS-1$
+        String OPEN_SOURCE_ONLY                                  = "openSourceOnly";                                     //$NON-NLS-1$
 	
 	String OPT_NAME						= "-n";								//$NON-NLS-1$
 	String OPT_SAVE_LOCATION			= "-d";								//$NON-NLS-1$
@@ -34,6 +38,7 @@ public interface SASTConstants {
 	String OPT_THIRD_PARTY				= "-t";								//$NON-NLS-1$
 	String OPT_VERBOSE					= "-v";								//$NON-NLS-1$
 	String OPT_DEBUG					= "-X";								//$NON-NLS-1$
+        String OPT_OPEN_SOURCE_ONLY                             = "-oso";                                                       //$NON-NLS-1$
 	
 	//Messages
 	String DONE							= "message.done";					//$NON-NLS-1$
@@ -42,6 +47,7 @@ public interface SASTConstants {
 	String EXTRACTING_CLIENT			= "message.extracting.client";		//$NON-NLS-1$
 	String PREPARING_IRX				= "message.preparing.irx";			//$NON-NLS-1$
 	String SACLIENT_OUTDATED			= "message.saclient.old";			//$NON-NLS-1$
+	String SERVER_UNAVAILABLE			= "message.server.unavailable";		//$NON-NLS-1$
 	
 	//Errors
 	String IRX_MISSING					= "error.irx.missing";				//$NON-NLS-1$
