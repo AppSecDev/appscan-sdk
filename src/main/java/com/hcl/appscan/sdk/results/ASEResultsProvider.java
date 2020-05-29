@@ -1,5 +1,5 @@
 /**
- * © Copyright HCL Technologies Ltd. 2019. 
+ * © Copyright HCL Technologies Ltd. 2019, 2020.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -14,6 +14,7 @@ import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.logging.Message;
 import com.hcl.appscan.sdk.scan.ASEScanServiceProvider;
 import com.hcl.appscan.sdk.scan.IScanServiceProvider;
+import com.hcl.appscan.sdk.scanners.ScanConstants;
 import com.hcl.appscan.sdk.utils.SystemUtil;
 import java.io.File;
 import java.io.FileWriter;
@@ -41,19 +42,21 @@ public class ASEResultsProvider implements IResultsProvider, Serializable, CoreC
 	private IScanServiceProvider m_scanProvider;
 	private IProgress m_progress;
 	private String m_message;
-	
+	private String m_scanName;
+
 	private int m_totalFindings;
 	private int m_highFindings;
 	private int m_mediumFindings;
 	private int m_lowFindings;
 	private int m_infoFindings;
-    public ASEResultsProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress) {
+    public ASEResultsProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress, String scanName) {
         m_type = type;
 		m_scanId = scanId;
 		m_hasResults = false;
 		m_scanProvider = provider;
 		m_progress = progress;
 		m_reportFormat = DEFAULT_REPORT_FORMAT;
+		m_scanName = scanName;
     }
     
     @Override
@@ -150,17 +153,48 @@ public class ASEResultsProvider implements IResultsProvider, Serializable, CoreC
     private void loadResults() {
 		try {
 			m_status = getScanStatus(m_scanId);
+//			m_status = getStatisticsStatus(m_scanId);
             if (m_status != null && m_status.equalsIgnoreCase("Ready")) {
+                m_message = "";
                 m_status=getReportPackStatus(m_scanId);
             }
 			if(m_status != null && m_status.equalsIgnoreCase("Ready")) {
                 JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
+                if (obj == null) {
+                    m_message = Messages.getMessage(RESULTS_UNAVAILABLE);
+                    throw new NullPointerException(Messages.getMessage(RESULTS_UNAVAILABLE));
+                }
+
 				m_totalFindings = obj.getInt(TOTAL_ISSUES);
 				m_highFindings = obj.getInt(HIGH_ISSUES);
 				m_mediumFindings = obj.getInt(MEDIUM_ISSUES);
 				m_lowFindings = obj.getInt(LOW_ISSUES);
 				m_infoFindings = obj.getInt(INFO_ISSUES);
 				m_hasResults = true;
+				m_message = "";
+			}
+			if (RUNNING.equalsIgnoreCase(m_status)) {
+				m_message = "";
+			} else if (m_status != null && m_status.startsWith(SUSPENDED)) {    // In case of Scan Failure ASE returns Suspended (With Reason) in Status
+				this.m_message = m_status;
+
+				String description = "";
+				boolean isSuspendedByUser = false;
+				if (m_status.contains("(") && m_status.contains(")")) {
+					description = m_status.substring(m_status.indexOf("(") + 1, m_status.indexOf(")"));
+					// If User Suspends(Pause) Job in ASE then it returns Suspended(By User) status message, Scan status is not set to FAILED
+					if ("by user".equals(description.toLowerCase())) {
+						m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(SUSPEND_JOB_BYUSER, "Scan Name: "  + m_scanName)));
+						m_message = Messages.getMessage(SUSPEND_JOB_BYUSER, "Scan Name: "  + m_scanName);
+						isSuspendedByUser = true;
+					}
+				}
+				// If Scan is not Paused by User and we get Suspended state from ASE, Job status is set to FAILED to determine Scan has FAILED in Jenkins
+				if (!isSuspendedByUser) {
+					m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ScanConstants.ERROR_RUNNING_SCAN, m_status)));
+					m_message = Messages.getMessage(ScanConstants.ERROR_RUNNING_SCAN, m_status);
+					m_status = FAILED;
+				}
 			}
 		} catch (IOException | JSONException | NullPointerException e) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
@@ -286,7 +320,7 @@ public class ASEResultsProvider implements IResultsProvider, Serializable, CoreC
                     return state.getString("name");
                 }
                 else {
-                    m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_RESULT)));
+                    m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_RESULT, "")));
                 }
             } catch (IOException |JSONException ex) {
                 Logger.getLogger(ASEResultsProvider.class.getName()).log(Level.SEVERE, null, ex);
@@ -317,11 +351,45 @@ public class ASEResultsProvider implements IResultsProvider, Serializable, CoreC
                     
                 }
                 else {
-                    m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_RESULT)));
+                    m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_RESULT, "")));
                 }
             } catch (IOException |JSONException ex) {
                 Logger.getLogger(ASEResultsProvider.class.getName()).log(Level.SEVERE, null, ex);
             }
             return null;
     }
+
+	private String getStatisticsStatus(String jobId) {
+		IAuthenticationProvider authProvider = m_scanProvider.getAuthenticationProvider();
+		if(authProvider.isTokenExpired()) {
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_LOGIN_EXPIRED)));
+			return null;
+		}
+
+		String request_url = authProvider.getServer() + String.format(ASE_GET_FOLDER_ITEMS_STATISTICS, jobId);
+		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
+
+		HttpsClient client = new HttpsClient();
+
+		try {
+			HttpResponse response = client.get(request_url, request_headers, null);
+			if (response.getResponseCode() == HttpsURLConnection.HTTP_OK){
+				JSONObject object = (JSONObject) response.getResponseBodyAsJSON();
+				if (object != null) {
+					JSONObject reportPack = object.has("statistics") ? object.getJSONObject("statistics") : null;
+					String state = (reportPack != null && reportPack.has("status")) ? reportPack.getString("status") : null;
+					if (state != null) {
+                    //  return state.split("[ (]")[0];
+						return state;
+					}
+				}
+			}
+			else {
+				m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_RESULT, "")));
+			}
+		} catch (IOException |JSONException ex) {
+			Logger.getLogger(ASEResultsProvider.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
 }
