@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2020. 
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -80,6 +80,14 @@ public class SASTScanManager implements IScanManager{
 			m_scan.getResultsProvider().getResultsFile(destination, format);
 		else
 			throw new AppScanException(Messages.getMessage("message.results.unavailable")); //$NON-NLS-1$
+	}
+
+	/**
+	 * Gets the scan id.
+	 * @return The scan id as a String, if one has been created. Otherwise null.
+	 */
+	public String getScanId() {
+		return m_scan == null ? null : m_scan.getScanId();
 	}
 	
 	private void run(IProgress progress,Map<String, String> properties, IScanServiceProvider provider) throws AppScanException {
