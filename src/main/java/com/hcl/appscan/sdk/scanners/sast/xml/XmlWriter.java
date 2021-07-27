@@ -52,7 +52,7 @@ implements	IModelXMLConstants
 
 	@Override
 	public void visit(List<ISASTTarget> targets, boolean isThirdPartyScanningEnabled,
-	                  boolean isOpenSourceOnlyEnabled) {
+	                  boolean isOpenSourceOnlyEnabled, boolean isSourceCodeOnlyEnabled) {
 		m_config.beginElement(E_CONFIGURATION);
 
 		if (isThirdPartyScanningEnabled) {
@@ -61,6 +61,10 @@ implements	IModelXMLConstants
 
 		if (isOpenSourceOnlyEnabled) {
 			m_config.setAttribute(A_OPEN_SOURCE_ONLY, "true");
+		}
+		
+		if (isSourceCodeOnlyEnabled) {
+			m_config.setAttribute(A_SOURCE_CODE_ONLY, "true");
 		}
 
 		m_config.beginElement(E_TARGETS);
