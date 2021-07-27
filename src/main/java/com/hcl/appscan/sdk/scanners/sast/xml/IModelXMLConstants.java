@@ -22,6 +22,7 @@ public interface IModelXMLConstants {
 	//Configuration Options
 	String A_THIRD_PARTY            = "thirdParty";             //$NON-NLS-1$
 	String A_OPEN_SOURCE_ONLY       = "openSourceOnly";         //$NON-NLS-1$
+	String A_SOURCE_CODE_ONLY		= "sourceCodeOnly";         //$NON-NLS-1$
 
 	//Java
 	String A_PATH					= "path";					//$NON-NLS-1$
