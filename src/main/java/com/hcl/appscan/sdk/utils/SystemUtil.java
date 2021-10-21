@@ -6,6 +6,8 @@
 
 package com.hcl.appscan.sdk.utils;
 
+import com.hcl.appscan.sdk.CoreConstants;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -125,5 +127,14 @@ public class SystemUtil {
 	 */
 	public static String getLocale() {
 		return Locale.getDefault().toString().replace('_', '-'); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	/**
+	 * Check if source code only enabled.
+	 *
+	 * @return True if source code only enabled.
+	 */
+	public static boolean isSourceCodeOnly() {
+		return System.getProperty(CoreConstants.SOURCE_CODE_ONLY) != null;
 	}
 }
