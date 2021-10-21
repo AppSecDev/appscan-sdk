@@ -135,6 +135,6 @@ public class SystemUtil {
 	 * @return True if source code only enabled.
 	 */
 	public static boolean isSourceCodeOnly() {
-		return System.getProperty(CoreConstants.SOURCE_CODE_ONLY) != null; //$NON-NLS-1$ //$NON-NLS-2$
+		return System.getProperty(CoreConstants.SOURCE_CODE_ONLY) != null;
 	}
 }
