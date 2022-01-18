@@ -113,12 +113,13 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
 		
 		HttpClient client = new HttpClient(m_authProvider.getProxy());
+                try {
 		HttpResponse response = client.get(request_url, request_headers, null);
 		
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED)
 			return (JSONObject) response.getResponseBodyAsJSON();
-        else if (response.getResponseCode() == -1)	//If the server is not reachable Internet disconnect
-            return new JSONObject().put(STATUS,UNKNOWN);
+                else if (response.getResponseCode() == -1)	//If the server is not reachable Internet disconnect
+                    return new JSONObject().put(STATUS,UNKNOWN);
 		else if (response.getResponseCode() != HttpsURLConnection.HTTP_BAD_REQUEST) {
 			JSONArtifact json = response.getResponseBodyAsJSON();
 			if (json != null && ((JSONObject)json).has(MESSAGE))
@@ -130,6 +131,10 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_INVALID_JOB_ID, scanId)));
+                }
+                catch(IOException | JSONException e) {
+                    return new JSONObject().put(STATUS,UNKNOWN);
+		}
 		
 		return null;
 	}
