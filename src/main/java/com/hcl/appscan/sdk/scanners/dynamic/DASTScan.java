@@ -41,12 +41,36 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 
 		Map<String, String> params = getProperties();
 		params.put(STARTING_URL, target);
-		
+
+		String scanLoginType = null;
+		if (params.get(LOGIN_TYPE) != null) {
+			scanLoginType = params.get(LOGIN_TYPE);
+			params.remove(LOGIN_TYPE);
+		}
+
+		if (("Manual").equals(scanLoginType)) {
+			String trafficFile = params.remove(TRAFFIC_FILE);
+			if (trafficFile != null && new File(trafficFile).isFile()) {
+				File fileTraffic = new File(trafficFile);
+
+				try {
+					String fileTrafficId = getServiceProvider().submitFile(fileTraffic);
+					if (fileTrafficId == null) {
+						throw new ScannerException(Messages.getMessage(ERROR_FILE_UPLOAD, fileTraffic.getName()));
+					}
+					params.put(TRAFFIC_FILE_ID, fileTrafficId);
+				} catch (IOException e) {
+					throw new ScannerException(Messages.getMessage(SCAN_FAILED, e.getLocalizedMessage()));
+				}
+			}
+		}
+
 		String scanFile = params.remove(SCAN_FILE);
-		if(scanFile != null && new File(scanFile).isFile()) {
+
+		if (scanFile != null && new File(scanFile).isFile()) {
 			type = DYNAMIC_ANALYZER_WITH_FILE;
 			File file = new File(scanFile);
-			
+
 			try {
 				String fileId = getServiceProvider().submitFile(file);
 				if(fileId == null)
@@ -56,9 +80,9 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 				throw new ScannerException(Messages.getMessage(SCAN_FAILED, e.getLocalizedMessage()));
 			}
 		}
-			
+
 		setScanId(getServiceProvider().createAndExecuteScan(type, params));
-		
+
 		if(getScanId() == null)
 			throw new ScannerException(Messages.getMessage(ERROR_CREATING_SCAN));
 	}
