@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2022.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -62,6 +62,8 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 				} catch (IOException e) {
 					throw new ScannerException(Messages.getMessage(SCAN_FAILED, e.getLocalizedMessage()));
 				}
+			} else if(trafficFile != null){
+				throw new ScannerException(Messages.getMessage(ERROR_FILE_UPLOAD,trafficFile));
 			}
 		}
 
