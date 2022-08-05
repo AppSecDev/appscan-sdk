@@ -7,6 +7,7 @@
 package com.hcl.appscan.sdk.utils;
 
 import com.hcl.appscan.sdk.CoreConstants;
+import com.hcl.appscan.sdk.scanners.sast.xml.IModelXMLConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -136,5 +137,14 @@ public class SystemUtil {
 	 */
 	public static boolean isSourceCodeOnly() {
 		return System.getProperty(CoreConstants.SOURCE_CODE_ONLY) != null;
+	}
+	
+	/**
+	 * Get the IRX cache location from IRX_MINOR_CACHE_HOME flag
+	 *
+	 * @return A string representation of the user-specified irx cache location
+	 */
+	public static String getIrxMinorCacheHome() {
+		return System.getProperty(IModelXMLConstants.A_IRX_MINOR_CACHE_HOME.toUpperCase());
 	}
 }
