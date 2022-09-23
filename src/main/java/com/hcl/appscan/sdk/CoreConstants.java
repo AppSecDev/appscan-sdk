@@ -157,4 +157,5 @@ public interface CoreConstants {
     String ASE_GET_FOLDER_ITEMS_STATISTICS	= ASE_API + "/folderitems/%s/statistics";			 //$NON-NLS-1$
 
     String UNAUTHORIZED_ACTION			= "UNAUTHORIZED_ACTION";								 //$NON-NLS-1$
+	 String FORMAT_PARAMS			    = "FormatParams";								         //$NON-NLS-1$
 }
