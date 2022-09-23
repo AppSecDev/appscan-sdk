@@ -119,6 +119,7 @@ public interface CoreConstants {
 	String ERROR_SUBMITTING_SCAN		= "error.submit.scan";									//$NON-NLS-1$
 	String ERROR_UPLOADING_FILE			= "error.upload.file";									//$NON-NLS-1$
 	String ERROR_GETTING_INFO			= "error.getting.info";									//$NON-NLS-1$
+	String FORMAT_PARAMS			        = "FormatParams";								        //$NON-NLS-1$
 	
 	// ASE Status Messages
 	String CREATING_JOB                 = "message.creating.job";                               //$NON-NLS-1$
@@ -157,5 +158,4 @@ public interface CoreConstants {
     String ASE_GET_FOLDER_ITEMS_STATISTICS	= ASE_API + "/folderitems/%s/statistics";			 //$NON-NLS-1$
 
     String UNAUTHORIZED_ACTION			= "UNAUTHORIZED_ACTION";								 //$NON-NLS-1$
-	 String FORMAT_PARAMS			    = "FormatParams";								         //$NON-NLS-1$
 }
