@@ -9,6 +9,7 @@ package com.hcl.appscan.sdk.scan;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,8 +66,18 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 				m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(CREATE_SCAN_SUCCESS)));
 				return json.getString(ID);
 			}
-			else if (json != null && json.has(MESSAGE))
-				m_progress.setStatus(new Message(Message.ERROR, json.getString(MESSAGE)));
+			else if (json != null && json.has(MESSAGE)) {
+                                String errorResponse = json.getString(MESSAGE);
+				JSONArray jsonArray = json.getJSONArray(FORMAT_PARAMS);
+				if(jsonArray != null){
+					String[] test = new String[jsonArray.size()];
+					for (int i = 0; i < jsonArray.size(); i++) {
+						test[i] = (String)jsonArray.get(i);
+					}
+					errorResponse = MessageFormat.format(errorResponse, (Object[]) test);
+				}
+				m_progress.setStatus(new Message(Message.ERROR, errorResponse));
+			}
 			else
 				m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_SUBMITTING_SCAN, status)));
 		} catch(IOException | JSONException e) {
