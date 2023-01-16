@@ -43,6 +43,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	protected String m_message;
 
 	protected int m_totalFindings;
+    protected int m_criticalFindings;
 	protected int m_highFindings;
 	protected int m_mediumFindings;
 	protected int m_lowFindings;
@@ -81,6 +82,12 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		checkResults();
 		return m_totalFindings;
 	}
+
+    @Override
+    public int getCriticalCount() {
+        checkResults();
+        return m_criticalFindings;
+    }
 
 	@Override
 	public int getHighCount() {
@@ -158,6 +165,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !(m_status.equalsIgnoreCase(INQUEUE) || m_status.equalsIgnoreCase(RUNNING))) {
 				m_totalFindings = obj.getInt(TOTAL_ISSUES);
+                m_criticalFindings = obj.getInt(CRITICAL_ISSUES);
 				m_highFindings = obj.getInt(HIGH_ISSUES);
 				m_mediumFindings = obj.getInt(MEDIUM_ISSUES);
 				m_lowFindings = obj.getInt(LOW_ISSUES);

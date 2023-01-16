@@ -48,6 +48,7 @@ public class ASEResultsProvider implements IResultsProvider, Serializable, CoreC
 	private int m_highFindings;
 	private int m_mediumFindings;
 	private int m_lowFindings;
+    private int m_criticalFindings;
 	private int m_infoFindings;
     public ASEResultsProvider(String scanId, String type, IScanServiceProvider provider, IProgress progress, String scanName) {
         m_type = type;
@@ -84,7 +85,13 @@ public class ASEResultsProvider implements IResultsProvider, Serializable, CoreC
 		return m_totalFindings;
 	}
 
-	@Override
+    @Override
+    public int getCriticalCount() {
+        checkResults();
+        return m_criticalFindings;
+    }
+    
+    @Override
 	public int getHighCount() {
 		checkResults();
 		return m_highFindings;
@@ -166,6 +173,7 @@ public class ASEResultsProvider implements IResultsProvider, Serializable, CoreC
                 }
 
 				m_totalFindings = obj.getInt(TOTAL_ISSUES);
+                m_criticalFindings = obj.getInt(CRITICAL_ISSUES);
 				m_highFindings = obj.getInt(HIGH_ISSUES);
 				m_mediumFindings = obj.getInt(MEDIUM_ISSUES);
 				m_lowFindings = obj.getInt(LOW_ISSUES);
