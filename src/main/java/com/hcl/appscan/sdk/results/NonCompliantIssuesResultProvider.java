@@ -67,10 +67,10 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 					int count = jobj.getInt("Count");
 					
 					switch (sev.toLowerCase()) {
-                        case "critical":
-                            m_criticalFindings = count;
-                            m_totalFindings += count;
-                            break;
+                                        case "critical":
+                                                m_criticalFindings = count;
+                                                m_totalFindings += count;
+                                                break;
 					case "high":
 						m_highFindings = count;
 						m_totalFindings += count;
