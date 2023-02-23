@@ -40,6 +40,12 @@ public interface IResultsProvider {
 	 */
 	public int getFindingsCount();
 
+        /**
+         * The number of critical findings in the result.
+         * @return The total number of critical findings.
+        */
+        public int getCriticalCount();
+	
 	/**
 	 * The number of high findings in the result.
 	 * @return The total number of high findings.

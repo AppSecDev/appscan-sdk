@@ -461,6 +461,10 @@ public class ASEScanServiceProvider implements IScanServiceProvider, Serializabl
                         JSONObject severityDetails=severityCount.getJSONObject("severity");
                         count=Integer.parseInt(severityCount.getString("count"));
                         switch(severityDetails.getString("name")) {
+                            case "Critical":
+                                result.put("NCriticalIssues", count);
+                                totalCount=totalCount+count;
+                                break;
                             case "High":
                                 result.put("NHighIssues", count);
                                 totalCount=totalCount+count;
