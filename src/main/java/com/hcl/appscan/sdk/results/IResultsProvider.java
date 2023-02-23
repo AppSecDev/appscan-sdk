@@ -42,7 +42,7 @@ public interface IResultsProvider {
 
         /**
          * The number of critical findings in the result.
-         * @return The total number of low findings.
+         * @return The total number of critical findings.
         */
         public int getCriticalCount();
 	
