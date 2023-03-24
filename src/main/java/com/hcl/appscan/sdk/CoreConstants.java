@@ -51,7 +51,7 @@ public interface CoreConstants {
 	String API_BLUEMIX_LOGIN 			= API_ENV + "/Account/BluemixLogin";					//$NON-NLS-1$
 	String API_KEY_LOGIN				= API_ENV + "/Account/ApiKeyLogin";						//$NON-NLS-1$
 	String API_LOGOUT					= API_ENV + "/Account/Logout";							//$NON-NLS-1$
-	String API_APPS						= API_ENV + "/Apps"; 									//$NON-NLS-1$
+	String API_APPS						= API_ENV + "/Apps/GetAsPage"; 							//$NON-NLS-1$
 	String API_PRESENCES				= API_ENV + "/Presences";								//$NON-NLS-1$
 	String API_PRESENCES_ID				= API_ENV + "/Presences/%s";							//$NON-NLS-1$
 	String API_PRESENCES_NEW_KEY		= API_ENV + "/Presences/%s/NewKey";						//$NON-NLS-1$
@@ -73,7 +73,7 @@ public interface CoreConstants {
 	String API_ISSUES_COUNT				= "/api/v2/Issues/CountBySeverity/%s/%s";				//$NON-NLS-1$
 	String API_REGIONS					= "/api/v2/Utils/Regions";								//$NON-NLS-1$
 	String API_IS_VALID_URL				= "/api/v2/Scans/IsValidUrl";							//$NON-NLS-1$
-	String API_APPS_COUNT				= "/api/V2/Apps/Count";									//$NON-NLS-1$
+	String API_AUTHENTICATION			= "/api/V2/Account/IsAuthenticated";					//$NON-NLS-1$
 
 	String DEFAULT_RESULT_NAME			= "asoc_results";										//$NON-NLS-1$
 	String SACLIENT_INSTALL_DIR			= "SAClientInstall";									//$NON-NLS-1$
@@ -96,6 +96,7 @@ public interface CoreConstants {
 	String MEDIUM_ISSUES				= "NMediumIssues";										//$NON-NLS-1$
 	String LOW_ISSUES					= "NLowIssues";											//$NON-NLS-1$
 	String INFO_ISSUES					= "NInfoIssues";										//$NON-NLS-1$
+    String ITEMS					    = "Items";										        //$NON-NLS-1$
 
 	String CREATE_SCAN_SUCCESS			= "message.created.scan";								//$NON-NLS-1$
 	String DOWNLOADING_CLIENT			= "message.downloading.client";							//$NON-NLS-1$
