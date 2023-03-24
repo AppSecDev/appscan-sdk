@@ -73,7 +73,7 @@ public interface CoreConstants {
 	String API_ISSUES_COUNT				= "/api/v2/Issues/CountBySeverity/%s/%s";				//$NON-NLS-1$
 	String API_REGIONS					= "/api/v2/Utils/Regions";								//$NON-NLS-1$
 	String API_IS_VALID_URL				= "/api/v2/Scans/IsValidUrl";							//$NON-NLS-1$
-	String API_AUTHENTICATION			= "/api/V2/Account/IsAuthenticated";					//$NON-NLS-1$
+	String API_AUTHENTICATION		= "/api/V2/Account/IsAuthenticated";					//$NON-NLS-1$
 
 	String DEFAULT_RESULT_NAME			= "asoc_results";										//$NON-NLS-1$
 	String SACLIENT_INSTALL_DIR			= "SAClientInstall";									//$NON-NLS-1$
