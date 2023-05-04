@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2022. 
+ * © Copyright HCL Technologies Ltd. 2017, 2022, 2023.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -104,16 +104,13 @@ public class SAClient implements SASTConstants {
 			m_builder.environment().put(IRGEN_CLIENT_PLUGIN_VERSION, irgenClientPluginVersion);
 			
 		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(PREPARING_IRX, getLocalClientVersion())));
-        if(properties.get("certificates")!=null && properties.get("certificates").equals("true")){
-            String server360 = "-DBLUEMIX_SERVER="+properties.get("serverURL")+" -Dacceptssl";
-            m_builder.environment().put("APPSCAN_OPTS",server360);
-            properties.remove("serverURL");
+        String server = "-DBLUEMIX_SERVER="+properties.get("serverURL");
+        if(properties.get("acceptInvalidCerts")!=null && properties.get("acceptInvalidCerts").equals("true")){
+            server = server+" -Dacceptssl";
             properties.remove("certificates");
-        } else{
-            String server = "-DBLUEMIX_SERVER="+properties.get("serverURL");
-            m_builder.environment().put("APPSCAN_OPTS",server);
-            properties.remove("serverURL");
         }
+        m_builder.environment().put("APPSCAN_OPTS",server);
+        properties.remove("serverURL");
         final Process proc = m_builder.start();
 		new Thread(new Runnable() {
 			@Override

@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2023.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -46,5 +46,5 @@ public interface IAuthenticationProvider {
 	 */
 	public Proxy getProxy();
 
-    public boolean getCertificates();
+    public boolean getacceptInvalidCerts();
 }
