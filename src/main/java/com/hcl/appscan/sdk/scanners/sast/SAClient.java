@@ -89,7 +89,7 @@ public class SAClient implements SASTConstants {
 		
 	private int runClient(String workingDir, List<String> args, String irGenClient, String clientVersion, String irgenClientPluginVersion, Map<String, String> properties) throws IOException, ScannerException {
 		List<String> arguments = new ArrayList<String>();
-		arguments.add(getClientScript());
+		arguments.add(getClientScript(properties));
 		arguments.addAll(args);
 		m_builder = new ProcessBuilder(arguments);
 		m_builder.directory(new File(workingDir));
@@ -107,10 +107,9 @@ public class SAClient implements SASTConstants {
         String server = "-DBLUEMIX_SERVER="+properties.get("serverURL");
         if(properties.get("acceptInvalidCerts")!=null && properties.get("acceptInvalidCerts").equals("true")){
             server = server+" -Dacceptssl";
-            properties.remove("certificates");
+            properties.remove("acceptInvalidCerts");
         }
         m_builder.environment().put("APPSCAN_OPTS",server);
-        properties.remove("serverURL");
         final Process proc = m_builder.start();
 		new Thread(new Runnable() {
 			@Override
@@ -151,7 +150,7 @@ public class SAClient implements SASTConstants {
 	 * @throws IOException If an error occurs.
 	 * @throws ScannerException If an error occurs getting the client.
 	 */
-	public String getClientScript() throws IOException, ScannerException {
+	public String getClientScript(Map<String, String> properties) throws IOException, ScannerException {
 		//See if we already have the client package.
 		String scriptPath = "bin" + File.separator + getScriptName(); //$NON-NLS-1$
 		File install = findClientInstall();
@@ -169,7 +168,7 @@ public class SAClient implements SASTConstants {
 			clientZip.delete();
 		
 		try {
-			ServiceUtil.getSAClientUtil(clientZip, m_proxy);
+			ServiceUtil.getSAClientUtil(clientZip, m_proxy, properties);
 		} catch(OutOfMemoryError e) {
 			throw new ScannerException(Messages.getMessage(DOWNLOAD_OUT_OF_MEMORY));
 		} catch(IOException e) {
