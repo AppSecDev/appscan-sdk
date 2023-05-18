@@ -117,8 +117,9 @@ public class AuthenticationHandler implements CoreConstants {
 		headers.put(CHARSET, UTF8);
 
                 HttpClient httpClient = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
+		HttpResponse httpResponse;
                 try {
-                	HttpResponse httpResponse = httpClient.get(request_url, headers, null);
+                	httpResponse = httpClient.get(request_url, headers, null);
                 	isExpired = httpResponse.getResponseCode() != HttpsURLConnection.HTTP_OK;
             	} catch (IOException e) {
                 	isExpired = true;
