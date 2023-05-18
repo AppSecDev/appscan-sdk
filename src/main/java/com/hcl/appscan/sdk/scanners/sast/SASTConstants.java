@@ -39,7 +39,7 @@ public interface SASTConstants {
 	String OPT_VERBOSE					= "-v";								//$NON-NLS-1$
 	String OPT_DEBUG					= "-X";								//$NON-NLS-1$
         String OPT_OPEN_SOURCE_ONLY                             = "-oso";                                                       //$NON-NLS-1$
-        String OPT_SOURCE_CODE_ONLY                             = "-sco";                                                       //$NON-NLS-1$
+	String OPT_SOURCE_CODE_ONLY                             = "-sco";                                                       //$NON-NLS-1$
 
 	//Messages
 	String DONE							= "message.done";					//$NON-NLS-1$
