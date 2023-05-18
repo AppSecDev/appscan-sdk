@@ -116,13 +116,13 @@ public class AuthenticationHandler implements CoreConstants {
 		headers.put("Accept", "application/json"); //$NON-NLS-1$ //$NON-NLS-2$
 		headers.put(CHARSET, UTF8);
 
-            HttpClient httpClient = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
-            try {
-                HttpResponse httpResponse = httpClient.get(request_url, headers, null);
-                isExpired = httpResponse.getResponseCode() != HttpsURLConnection.HTTP_OK;
-            } catch (IOException e) {
-                isExpired = true;
-            }
+                HttpClient httpClient = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
+                try {
+                	HttpResponse httpResponse = httpClient.get(request_url, headers, null);
+                	isExpired = httpResponse.getResponseCode() != HttpsURLConnection.HTTP_OK;
+            	} catch (IOException e) {
+                	isExpired = true;
+                }
 		return isExpired;
 	}
 }
