@@ -86,6 +86,10 @@ public class SAClient implements SASTConstants {
 	public int run(String workingDir, List<String> args) throws IOException, ScannerException {
 		return runClient(workingDir, args, "", "", "",null);
 	}
+
+    private int runClient(String workingDir, List<String> args, String irGenClient, String clientVersion, String irgenClientPluginVersion) throws IOException, ScannerException{
+        return runClient(workingDir,args,irGenClient,clientVersion,irgenClientPluginVersion,null);
+    }
 		
 	private int runClient(String workingDir, List<String> args, String irGenClient, String clientVersion, String irgenClientPluginVersion, Map<String, String> properties) throws IOException, ScannerException {
 		List<String> arguments = new ArrayList<String>();
@@ -107,7 +111,6 @@ public class SAClient implements SASTConstants {
         String server = "-DBLUEMIX_SERVER="+properties.get("serverURL");
         if(properties.get("acceptInvalidCerts")!=null && properties.get("acceptInvalidCerts").equals("true")){
             server = server+" -Dacceptssl";
-            properties.remove("acceptInvalidCerts");
         }
         m_builder.environment().put("APPSCAN_OPTS",server);
         final Process proc = m_builder.start();
@@ -150,7 +153,11 @@ public class SAClient implements SASTConstants {
 	 * @throws IOException If an error occurs.
 	 * @throws ScannerException If an error occurs getting the client.
 	 */
-	public String getClientScript(Map<String, String> properties) throws IOException, ScannerException {
+    public String getClientScript() throws IOException, ScannerException {
+        return getClientScript(null);
+    }
+
+    public String getClientScript(Map<String, String> properties) throws IOException, ScannerException {
 		//See if we already have the client package.
 		String scriptPath = "bin" + File.separator + getScriptName(); //$NON-NLS-1$
 		File install = findClientInstall();

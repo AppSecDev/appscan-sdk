@@ -147,7 +147,7 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
 		request_headers.put(CONTENT_LENGTH, "0"); //$NON-NLS-1$
 
-		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy());
+		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy(),m_scanProvider.getAuthenticationProvider().getacceptInvalidCerts());
 		HttpResponse response = client.get(request_url, request_headers, null);
 		int responseCode = response.getResponseCode();
 		if (responseCode == HttpsURLConnection.HTTP_OK)
@@ -180,7 +180,7 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 		request_headers.put("Content-Type", "application/json; charset=UTF-8");
 		request_headers.put("Accept", "application/json");
 
-		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy());
+		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy(),m_scanProvider.getAuthenticationProvider().getacceptInvalidCerts());
 		HttpResponse response = client.post(request_url, request_headers, getBodyParams(format).toString());
 		if (response.getResponseCode() != HttpsURLConnection.HTTP_OK) {
 			return null;

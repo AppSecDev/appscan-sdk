@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2023. 
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -9,13 +9,23 @@ package com.hcl.appscan.sdk.http;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class HttpClient {
 	
@@ -27,27 +37,37 @@ public class HttpClient {
     
     private IHttpProgress m_progressAdapter;
     private Proxy m_proxy;
+    private boolean m_bypassSSL;
 	
 	
 	public enum Method {
 		GET, POST, PUT, DELETE;
 	}
 	
-	public HttpClient(IHttpProgress progressAdapter, Proxy proxy) {
+	public HttpClient(IHttpProgress progressAdapter, Proxy proxy, boolean bypassSSL) {
 		m_progressAdapter = progressAdapter;
 		m_proxy = proxy;
+		m_bypassSSL = bypassSSL;
 	}
 	
 	public HttpClient() {
-		this(new DefaultHttpProgress(), Proxy.NO_PROXY);
+		this(new DefaultHttpProgress(), Proxy.NO_PROXY, false);
 	}
 	
 	public HttpClient(Proxy proxy) {
-		this(new DefaultHttpProgress(), proxy);
+		this(new DefaultHttpProgress(), proxy, false);
+	}
+	
+	public HttpClient(Proxy proxy, boolean bypassSSL) {
+		this(new DefaultHttpProgress(), proxy, bypassSSL);
 	}
 	
 	public HttpClient(IHttpProgress progressAdapter) {
-		this(progressAdapter, Proxy.NO_PROXY);
+		this(progressAdapter, Proxy.NO_PROXY, false);
+	}
+	
+	public HttpClient(IHttpProgress progressAdapter, boolean bypassSSL) {
+		this(progressAdapter, Proxy.NO_PROXY, bypassSSL);
 	}
 	
 	// ==============================
@@ -199,7 +219,7 @@ public class HttpClient {
 	private HttpResponse makeMultipartRequest(Method method, String url,
 			Map<String, String> headerProperties, List<HttpPart> parts)
 					throws IOException {
-		HttpURLConnection conn = makeConnection(url, method, headerProperties);
+		HttpsURLConnection conn = makeConnection(url, method, headerProperties);
 				
 		DataOutputStream outputStream = null;
 		conn.setChunkedStreamingMode(1024);
@@ -255,7 +275,7 @@ public class HttpClient {
 	private HttpResponse makeRequest(Method method, String url,
 			Map<String, String> headerProperties, String payload)
 			throws IOException {
-		HttpURLConnection conn = makeConnection(url, method, headerProperties);
+		HttpsURLConnection conn = makeConnection(url, method, headerProperties);
 
 		// Write payload
 		if (payload != null) {
@@ -270,13 +290,16 @@ public class HttpClient {
 		return new HttpResponse(conn);
 	}
 	
-	private HttpURLConnection makeConnection(String url, Method method,
+	private HttpsURLConnection makeConnection(String url, Method method,
 			Map<String, String> headerProperties) throws IOException {
 		URL requestURL = new URL(url);
-		HttpURLConnection conn = null;
-		conn = (HttpURLConnection) requestURL.openConnection(m_proxy);
+		HttpsURLConnection conn = null;
+		conn = (HttpsURLConnection) requestURL.openConnection(m_proxy);
 		conn.setRequestMethod(method.name());
 		conn.setReadTimeout(0);
+		if(m_bypassSSL) {
+			bypassSSL(conn);
+		}
 
 		// HTTP headers
 		if (headerProperties != null) {
@@ -322,5 +345,42 @@ public class HttpClient {
 	    }
 
 	    return result.toString();
+	}
+	
+	private void bypassSSL(HttpsURLConnection conn)  {
+		conn.setHostnameVerifier(new HostnameVerifier() {
+			@Override
+			public boolean verify(String hostname, SSLSession session) {
+				return true;
+			}
+		});
+
+		TrustManager[] trustManagers = new TrustManager[] { new X509TrustManager() {
+
+			private X509Certificate[] x509Certificates = new X509Certificate[0];
+
+			@Override
+			public X509Certificate[] getAcceptedIssuers() {
+				return x509Certificates;
+			}
+
+			@Override
+			public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+				// do nothing
+			}
+
+			@Override
+			public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+				// do nothing
+			}
+		}};
+
+		try {
+			SSLContext context = SSLContext.getInstance("TLSv1.2"); //$NON-NLS-1$
+			context.init(null, trustManagers, null);
+			conn.setSSLSocketFactory(context.getSocketFactory());
+		} catch (NoSuchAlgorithmException | KeyManagementException e) {
+			//Ignore. The connection should fail.
+		}
 	}
 }

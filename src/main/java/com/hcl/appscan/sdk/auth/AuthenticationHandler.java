@@ -92,7 +92,7 @@ public class AuthenticationHandler implements CoreConstants {
 			throw new HttpException(500, Messages.getMessage("error.login.type.deprectated")); //$NON-NLS-1$
 		}
 
-		HttpClient client = new HttpClient(m_authProvider.getProxy());
+		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
 	    HttpResponse response = client.postForm(url, headers, params);
 	    
 		if(response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
@@ -118,23 +118,13 @@ public class AuthenticationHandler implements CoreConstants {
 		headers.put(CHARSET, UTF8);
         HttpResponse httpResponse;
 
-        if((!(m_authProvider.getServer().contains("appscan.com"))) ){
-            HttpsClient httpClient = new HttpsClient();
+            HttpClient httpClient = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
             try {
                 httpResponse = httpClient.get(request_url, headers, null);
                 isExpired = httpResponse.getResponseCode() != HttpsURLConnection.HTTP_OK;
             } catch (IOException e) {
                 isExpired = true;
             }
-        } else {
-            HttpClient httpClient = new HttpClient(m_authProvider.getProxy());
-            try {
-                httpResponse = httpClient.get(request_url, headers, null);
-                isExpired = httpResponse.getResponseCode() != HttpsURLConnection.HTTP_OK;
-            } catch (IOException e) {
-                isExpired = true;
-            }
-        }
 		return isExpired;
 	}
 }

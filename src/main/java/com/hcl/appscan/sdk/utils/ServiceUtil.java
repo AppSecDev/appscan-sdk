@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2020. 
+ * © Copyright HCL Technologies Ltd. 2017, 2020, 2023.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -55,15 +55,13 @@ public class ServiceUtil implements CoreConstants {
         HttpResponse response;
         if(fetchServer != null && !fetchServer.isEmpty() && !fetchServer.contains("appscan.com")){
             request_url = fetchServer + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
-            HttpsClient clients = new HttpsClient();
-            response = clients.get(request_url, properties, null);
         } else {
             request_url = SystemUtil.getDefaultServer() + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
-            HttpClient client = new HttpClient(proxy);
-            response = client.get(request_url, null, null);
         }
-        
-		
+
+        HttpClient client = new HttpClient(proxy,properties.get("acceptInvalidCerts").equals("true"));
+        response = client.get(request_url, null, null);
+
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
 			if(!destination.getParentFile().isDirectory())
 				destination.getParentFile().mkdirs();
