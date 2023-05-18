@@ -30,8 +30,8 @@ public interface SASTConstants {
 	String VERBOSE						= "verbose";						//$NON-NLS-1$
 	String THIRD_PARTY					= "thirdParty";						//$NON-NLS-1$
         String OPEN_SOURCE_ONLY                                  = "openSourceOnly";                                     //$NON-NLS-1$
-    String SOURCE_CODE_ONLY                                  = "sourceCodeOnly";                                     //$NON-NLS-1$
-    String OPT_NAME						= "-n";								//$NON-NLS-1$
+        String SOURCE_CODE_ONLY                                  = "sourceCodeOnly";                                     //$NON-NLS-1$
+        String OPT_NAME						= "-n";								//$NON-NLS-1$
 	String OPT_SAVE_LOCATION			= "-d";								//$NON-NLS-1$
 	String OPT_LOG_LOCATION				= "-l";								//$NON-NLS-1$
 	String OPT_CONFIG					= "-c";								//$NON-NLS-1$
@@ -39,7 +39,7 @@ public interface SASTConstants {
 	String OPT_VERBOSE					= "-v";								//$NON-NLS-1$
 	String OPT_DEBUG					= "-X";								//$NON-NLS-1$
         String OPT_OPEN_SOURCE_ONLY                             = "-oso";                                                       //$NON-NLS-1$
-    String OPT_SOURCE_CODE_ONLY                             = "-sco";                                                       //$NON-NLS-1$
+        String OPT_SOURCE_CODE_ONLY                             = "-sco";                                                       //$NON-NLS-1$
 
 	//Messages
 	String DONE							= "message.done";					//$NON-NLS-1$
