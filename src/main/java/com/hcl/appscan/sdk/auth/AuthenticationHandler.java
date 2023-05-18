@@ -19,7 +19,6 @@ import com.hcl.appscan.sdk.CoreConstants;
 import com.hcl.appscan.sdk.Messages;
 import com.hcl.appscan.sdk.error.HttpException;
 import com.hcl.appscan.sdk.http.HttpClient;
-import com.hcl.appscan.sdk.http.HttpsClient;
 import com.hcl.appscan.sdk.http.HttpResponse;
 
 public class AuthenticationHandler implements CoreConstants {
@@ -116,11 +115,10 @@ public class AuthenticationHandler implements CoreConstants {
 		Map<String, String> headers = m_authProvider.getAuthorizationHeader(false);
 		headers.put("Accept", "application/json"); //$NON-NLS-1$ //$NON-NLS-2$
 		headers.put(CHARSET, UTF8);
-        HttpResponse httpResponse;
 
             HttpClient httpClient = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
             try {
-                httpResponse = httpClient.get(request_url, headers, null);
+                HttpResponse httpResponse = httpClient.get(request_url, headers, null);
                 isExpired = httpResponse.getResponseCode() != HttpsURLConnection.HTTP_OK;
             } catch (IOException e) {
                 isExpired = true;
