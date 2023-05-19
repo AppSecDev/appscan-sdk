@@ -50,17 +50,16 @@ public class ServiceUtil implements CoreConstants {
 	 * @throws IOException If an error occurs.
 	 */
 	public static void getSAClientUtil(File destination, Proxy proxy, Map<String, String> properties) throws IOException {
-        String fetchServer = properties.get("serverURL");
+        String fetchServer = properties.get(CoreConstants.SERVER_URL);
         String request_url;
-        HttpResponse response;
         if(fetchServer != null && !fetchServer.isEmpty() && !fetchServer.contains("appscan.com")){
             request_url = fetchServer + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
         } else {
             request_url = SystemUtil.getDefaultServer() + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
         }
 
-        HttpClient client = new HttpClient(proxy,properties.get("acceptInvalidCerts").equals("true"));
-        response = client.get(request_url, null, null);
+        HttpClient client = new HttpClient(proxy,properties.get(CoreConstants.ACCEPT_INVALID_CERTS).equals("true"));
+        HttpResponse response = client.get(request_url, null, null);
 
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
 			if(!destination.getParentFile().isDirectory())
