@@ -38,9 +38,9 @@ public class ServiceUtil implements CoreConstants {
 		getSAClientUtil(destination, Proxy.NO_PROXY);
 	}
 
-    public static void getSAClientUtil(File destination, Proxy proxy) throws IOException {
-        getSAClientUtil(destination, Proxy.NO_PROXY,null);
-    }
+        public static void getSAClientUtil(File destination, Proxy proxy) throws IOException {
+                getSAClientUtil(destination, Proxy.NO_PROXY,null);
+        }
 	
 	/**
 	 * Gets the SAClientUtil package used for running static analysis.
