@@ -153,11 +153,11 @@ public class SAClient implements SASTConstants {
 	 * @throws IOException If an error occurs.
 	 * @throws ScannerException If an error occurs getting the client.
 	 */
-         public String getClientScript() throws IOException, ScannerException {
-             return getClientScript(null);
-         }
+        public String getClientScript() throws IOException, ScannerException {
+            return getClientScript(null);
+        }
 
-         public String getClientScript(Map<String, String> properties) throws IOException, ScannerException {
+        public String getClientScript(Map<String, String> properties) throws IOException, ScannerException {
 		//See if we already have the client package.
 		String scriptPath = "bin" + File.separator + getScriptName(); //$NON-NLS-1$
 		File install = findClientInstall();
