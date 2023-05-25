@@ -89,16 +89,16 @@ public interface CoreConstants {
 	String PAUSED						= "Paused";												//$NON-NLS-1$
 	String SUSPENDED					= "Suspended";											//$NON-NLS-1$
 	String UNKNOWN                      = "Unknown";                                            //$NON-NLS-1$
-    String SERVER_URL                      = "serverURL";                                            //$NON-NLS-1$
-    String ACCEPT_INVALID_CERTS                    = "acceptInvalidCerts";                                            //$NON-NLS-1$
+    	String SERVER_URL                      = "serverURL";                                            //$NON-NLS-1$
+    	String ACCEPT_INVALID_CERTS                    = "acceptInvalidCerts";                                            //$NON-NLS-1$
 
-    String TOTAL_ISSUES					= "NIssuesFound";										//$NON-NLS-1$
+    	String TOTAL_ISSUES					= "NIssuesFound";										//$NON-NLS-1$
         String CRITICAL_ISSUES                                  = "NCriticalIssues";                                                                            //$NON-NLS-1$
 	String HIGH_ISSUES					= "NHighIssues";										//$NON-NLS-1$
 	String MEDIUM_ISSUES				= "NMediumIssues";										//$NON-NLS-1$
 	String LOW_ISSUES					= "NLowIssues";											//$NON-NLS-1$
 	String INFO_ISSUES					= "NInfoIssues";										//$NON-NLS-1$
-    String ITEMS					    = "Items";										        //$NON-NLS-1$
+    	String ITEMS					    = "Items";										        //$NON-NLS-1$
 
 	String CREATE_SCAN_SUCCESS			= "message.created.scan";								//$NON-NLS-1$
 	String DOWNLOADING_CLIENT			= "message.downloading.client";							//$NON-NLS-1$
