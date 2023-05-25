@@ -1,5 +1,5 @@
 /**
- * © Copyright HCL Technologies Ltd. 2018, 2022.
+ * © Copyright HCL Technologies Ltd. 2018, 2022, 2023.
  */
 package com.hcl.appscan.sdk.results;
 
