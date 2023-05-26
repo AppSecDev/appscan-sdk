@@ -39,7 +39,7 @@ public class ServiceUtil implements CoreConstants {
 	}
 
         public static void getSAClientUtil(File destination, Proxy proxy) throws IOException {
-                getSAClientUtil(destination, Proxy.NO_PROXY,null);
+                getSAClientUtil(destination, Proxy.NO_PROXY, "", "");
         }
 	
 	/**
@@ -49,16 +49,15 @@ public class ServiceUtil implements CoreConstants {
 	 * @param proxy The proxy for the connection, if required.
 	 * @throws IOException If an error occurs.
 	 */
-	public static void getSAClientUtil(File destination, Proxy proxy, Map<String, String> properties) throws IOException {
-        String fetchServer = properties.get(CoreConstants.SERVER_URL);
+	public static void getSAClientUtil(File destination, Proxy proxy, String serverURL, String acceptInvalidCerts) throws IOException {
         String request_url;
-        if(fetchServer != null && !fetchServer.isEmpty() && !fetchServer.contains("appscan.com")){
-            request_url = fetchServer + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
+        if(serverURL != null && !serverURL.isEmpty() && !serverURL.contains("appscan.com")){
+            request_url = serverURL + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
         } else {
             request_url = SystemUtil.getDefaultServer() + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
         }
 
-        HttpClient client = new HttpClient(proxy,properties.get(CoreConstants.ACCEPT_INVALID_CERTS).equals("true"));
+        HttpClient client = new HttpClient(proxy,acceptInvalidCerts.equals("true"));
         HttpResponse response = client.get(request_url, null, null);
 
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {

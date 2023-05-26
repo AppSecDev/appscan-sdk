@@ -70,7 +70,7 @@ public class SAClient implements SASTConstants {
 						 getClientArgs(properties),
 						 properties.get(APPSCAN_IRGEN_CLIENT),
 						 properties.get(APPSCAN_CLIENT_VERSION),
-						 properties.get(IRGEN_CLIENT_PLUGIN_VERSION),properties);
+						 properties.get(IRGEN_CLIENT_PLUGIN_VERSION), properties.get(CoreConstants.SERVER_URL), properties.get(CoreConstants.ACCEPT_INVALID_CERTS));
 	}
 
 	/**
@@ -84,16 +84,16 @@ public class SAClient implements SASTConstants {
 	 */
 	@Deprecated
 	public int run(String workingDir, List<String> args) throws IOException, ScannerException {
-		return runClient(workingDir, args, "", "", "",null);
+		return runClient(workingDir, args, "", "", "");
 	}
 
     	private int runClient(String workingDir, List<String> args, String irGenClient, String clientVersion, String irgenClientPluginVersion) throws IOException, ScannerException{
-		 return runClient(workingDir,args,irGenClient,clientVersion,irgenClientPluginVersion,null);
+		 return runClient(workingDir,args,irGenClient,clientVersion,irgenClientPluginVersion, "", "");
         }
 		
-	private int runClient(String workingDir, List<String> args, String irGenClient, String clientVersion, String irgenClientPluginVersion, Map<String, String> properties) throws IOException, ScannerException {
+	private int runClient(String workingDir, List<String> args, String irGenClient, String clientVersion, String irgenClientPluginVersion, String serverURL, String acceptInvalidCerts) throws IOException, ScannerException {
 		List<String> arguments = new ArrayList<String>();
-		arguments.add(getClientScript(properties));
+		arguments.add(getClientScript(serverURL,acceptInvalidCerts));
 		arguments.addAll(args);
 		m_builder = new ProcessBuilder(arguments);
 		m_builder.directory(new File(workingDir));
@@ -108,11 +108,14 @@ public class SAClient implements SASTConstants {
 			m_builder.environment().put(IRGEN_CLIENT_PLUGIN_VERSION, irgenClientPluginVersion);
 			
 		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(PREPARING_IRX, getLocalClientVersion())));
-                String server = "-DBLUEMIX_SERVER="+properties.get("serverURL");
-                if(properties.get(CoreConstants.ACCEPT_INVALID_CERTS)!=null && properties.get(CoreConstants.ACCEPT_INVALID_CERTS).equals("true")){
-                    server = server+" -Dacceptssl";
+                if((serverURL !=null) && !serverURL.isEmpty()){
+                    String server = "-DBLUEMIX_SERVER="+serverURL;
+                    if(acceptInvalidCerts != null && acceptInvalidCerts.equals("true")){
+                        server = server+" -Dacceptssl";
+                        m_builder.environment().put("APPSCAN_OPTS",server);
+                    }
                 }
-                m_builder.environment().put("APPSCAN_OPTS",server);
+
                 final Process proc = m_builder.start();
 		    new Thread(new Runnable() {
 			@Override
@@ -154,10 +157,10 @@ public class SAClient implements SASTConstants {
 	 * @throws ScannerException If an error occurs getting the client.
 	 */
         public String getClientScript() throws IOException, ScannerException {
-            return getClientScript(null);
+            return getClientScript("","");
         }
 
-        public String getClientScript(Map<String, String> properties) throws IOException, ScannerException {
+        public String getClientScript(String serverURL, String acceptInvalidCerts) throws IOException, ScannerException {
 		//See if we already have the client package.
 		String scriptPath = "bin" + File.separator + getScriptName(); //$NON-NLS-1$
 		File install = findClientInstall();
@@ -175,7 +178,7 @@ public class SAClient implements SASTConstants {
 			clientZip.delete();
 		
 		try {
-			ServiceUtil.getSAClientUtil(clientZip, m_proxy, properties);
+			ServiceUtil.getSAClientUtil(clientZip, m_proxy, serverURL, acceptInvalidCerts);
 		} catch(OutOfMemoryError e) {
 			throw new ScannerException(Messages.getMessage(DOWNLOAD_OUT_OF_MEMORY));
 		} catch(IOException e) {
