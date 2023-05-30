@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2020.
+ * © Copyright HCL Technologies Ltd. 2017, 2020, 2023.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -189,7 +189,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
 		request_headers.put(CONTENT_LENGTH, "0"); //$NON-NLS-1$
 	
-		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy());
+		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy(),m_scanProvider.getAuthenticationProvider().getacceptInvalidCerts());
 		HttpResponse response = client.get(request_url, request_headers, null);
 	
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK) {
@@ -227,7 +227,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
 		request_headers.put(CONTENT_LENGTH, "0"); //$NON-NLS-1$
 	
-		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy());
+		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy(),m_scanProvider.getAuthenticationProvider().getacceptInvalidCerts());
 		HttpResponse response = client.get(request_url, request_headers, null);
     	
 		if (response.getResponseCode() != HttpsURLConnection.HTTP_OK) {

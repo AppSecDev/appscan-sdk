@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2023.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -50,7 +50,7 @@ public class CloudApplicationProvider implements IApplicationProvider, CoreConst
 		Map<String, String> headers = m_authProvider.getAuthorizationHeader(true);
 		headers.putAll(Collections.singletonMap("range", "items=0-999999")); //$NON-NLS-1$ //$NON-NLS-2$
 		
-		HttpClient client = new HttpClient(m_authProvider.getProxy());
+		HttpClient client = new HttpClient(m_authProvider.getProxy(),m_authProvider.getacceptInvalidCerts());
 		
 		try {
 			HttpResponse response = client.get(url, headers, null);

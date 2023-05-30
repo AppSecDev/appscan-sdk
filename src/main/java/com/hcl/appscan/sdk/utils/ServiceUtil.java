@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2020. 
+ * © Copyright HCL Technologies Ltd. 2017, 2020, 2023.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -9,9 +9,11 @@ package com.hcl.appscan.sdk.utils;
 import java.io.File;
 import java.io.IOException;
 import java.net.Proxy;
+import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.hcl.appscan.sdk.http.HttpsClient;
 import org.apache.wink.json4j.JSONArtifact;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
@@ -35,6 +37,10 @@ public class ServiceUtil implements CoreConstants {
 	public static void getSAClientUtil(File destination) throws IOException {
 		getSAClientUtil(destination, Proxy.NO_PROXY);
 	}
+
+        public static void getSAClientUtil(File destination, Proxy proxy) throws IOException {
+                getSAClientUtil(destination, Proxy.NO_PROXY, "", "");
+        }
 	
 	/**
 	 * Gets the SAClientUtil package used for running static analysis.
@@ -43,12 +49,17 @@ public class ServiceUtil implements CoreConstants {
 	 * @param proxy The proxy for the connection, if required.
 	 * @throws IOException If an error occurs.
 	 */
-	public static void getSAClientUtil(File destination, Proxy proxy) throws IOException {
-		String request_url = SystemUtil.getDefaultServer() + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
-		
-		HttpClient client = new HttpClient(proxy);
-		HttpResponse response = client.get(request_url, null, null);
-		
+	public static void getSAClientUtil(File destination, Proxy proxy, String serverURL, String acceptInvalidCerts) throws IOException {
+        String request_url;
+        if(serverURL != null && !serverURL.isEmpty() && !serverURL.contains("appscan.com")){
+            request_url = serverURL + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
+        } else {
+            request_url = SystemUtil.getDefaultServer() + String.format(API_SACLIENT_DOWNLOAD, API_SCX, SystemUtil.getOS());
+        }
+
+        HttpClient client = new HttpClient(proxy,acceptInvalidCerts.equals("true"));
+        HttpResponse response = client.get(request_url, null, null);
+
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
 			if(!destination.getParentFile().isDirectory())
 				destination.getParentFile().mkdirs();

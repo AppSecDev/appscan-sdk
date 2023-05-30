@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017,2022.
+ * © Copyright HCL Technologies Ltd. 2017,2022, 2023.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -54,7 +54,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		String request_url =  m_authProvider.getServer() + String.format(API_SCANNER, type);
 		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
 		
-		HttpClient client = new HttpClient(m_authProvider.getProxy());
+		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
 		
 		try {
 			HttpResponse response = client.postForm(request_url, request_headers, params);
@@ -100,7 +100,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		List<HttpPart> parts = new ArrayList<HttpPart>();
 		parts.add(new HttpPart(FILE_TO_UPLOAD, file, "multipart/form-data")); //$NON-NLS-1$
 		
-		HttpClient client = new HttpClient(m_authProvider.getProxy());
+		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
 		
 		try {
 			HttpResponse response = client.postMultipart(fileUploadAPI, m_authProvider.getAuthorizationHeader(true), parts);		
@@ -125,7 +125,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		String request_url = m_authProvider.getServer() + String.format(API_BASIC_DETAILS, scanId);
 		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
 		
-		HttpClient client = new HttpClient(m_authProvider.getProxy());
+		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
                 try {
 		HttpResponse response = client.get(request_url, request_headers, null);
 		
@@ -163,7 +163,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
     		request_headers.put("Content-Type", "application/json; charset=UTF-8");
     		request_headers.put("Accept", "application/json");
     		
-    		HttpClient client = new HttpClient(m_authProvider.getProxy());
+    		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
     		HttpResponse response = client.get(request_url, request_headers, null);
     		
     		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK)

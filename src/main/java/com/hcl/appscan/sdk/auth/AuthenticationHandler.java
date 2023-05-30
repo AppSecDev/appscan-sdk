@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2022. 
+ * © Copyright HCL Technologies Ltd. 2017, 2022, 2023.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -91,7 +91,7 @@ public class AuthenticationHandler implements CoreConstants {
 			throw new HttpException(500, Messages.getMessage("error.login.type.deprectated")); //$NON-NLS-1$
 		}
 
-		HttpClient client = new HttpClient(m_authProvider.getProxy());
+		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
 	    HttpResponse response = client.postForm(url, headers, params);
 	    
 		if(response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
@@ -115,15 +115,15 @@ public class AuthenticationHandler implements CoreConstants {
 		Map<String, String> headers = m_authProvider.getAuthorizationHeader(false);
 		headers.put("Accept", "application/json"); //$NON-NLS-1$ //$NON-NLS-2$
 		headers.put(CHARSET, UTF8);
-		
-		HttpClient httpClient = new HttpClient(m_authProvider.getProxy());
+
+                HttpClient httpClient = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
 		HttpResponse httpResponse;
-		try {
-			httpResponse = httpClient.get(request_url, headers, null);
-			isExpired = httpResponse.getResponseCode() != HttpsURLConnection.HTTP_OK;
-		} catch (IOException e) {
-			isExpired = true;
-		}
+                try {
+                	httpResponse = httpClient.get(request_url, headers, null);
+                	isExpired = httpResponse.getResponseCode() != HttpsURLConnection.HTTP_OK;
+            	} catch (IOException e) {
+                	isExpired = true;
+                }
 		return isExpired;
 	}
 }
