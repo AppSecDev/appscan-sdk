@@ -108,13 +108,16 @@ public class SAClient implements SASTConstants {
 			m_builder.environment().put(IRGEN_CLIENT_PLUGIN_VERSION, irgenClientPluginVersion);
 			
 		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(PREPARING_IRX, getLocalClientVersion())));
-                if((serverURL !=null) && !serverURL.isEmpty()){
-                    String server = "-DBLUEMIX_SERVER="+serverURL;
-                    if(acceptInvalidCerts != null && acceptInvalidCerts.equals("true")){
-                        server = server+" -Dacceptssl";
-                        m_builder.environment().put("APPSCAN_OPTS",server);
-                    }
-                }
+        if((serverURL !=null) && !serverURL.isEmpty()){
+            String options = System.getenv(CoreConstants.APPSCAN_OPTS) == null ? "" : System.getenv(CoreConstants.APPSCAN_OPTS);
+            if(!options.contains(CoreConstants.BLUEMIX_SERVER)) {
+                options += " -DBLUEMIX_SERVER=" + serverURL;
+            }
+            if("true".equals(acceptInvalidCerts)) {
+                options += " -Dacceptssl";
+            }
+            m_builder.environment().put(CoreConstants.APPSCAN_OPTS, options);
+        }
 
                 final Process proc = m_builder.start();
 		    new Thread(new Runnable() {
@@ -165,7 +168,7 @@ public class SAClient implements SASTConstants {
 		String scriptPath = "bin" + File.separator + getScriptName(); //$NON-NLS-1$
 		File install = findClientInstall();
 		
-		if(install != null && new File(install, scriptPath).isFile() && !shouldUpdateClient())
+		if(install != null && new File(install, scriptPath).isFile() && !shouldUpdateClient(serverURL))
 			return new File(install, scriptPath).getAbsolutePath();
 		
 		//Download it.
@@ -213,9 +216,13 @@ public class SAClient implements SASTConstants {
 			return false;
 		}
 	}
+
+    	public boolean shouldUpdateClient() throws IOException {
+            	return shouldUpdateClient("");
+    	}
 	
-	public boolean shouldUpdateClient() throws IOException {
-		String serverVersion = ServiceUtil.getSAClientVersion(m_proxy);
+	public boolean shouldUpdateClient(String serverURL) throws IOException {
+		String serverVersion = ServiceUtil.getSAClientVersion(m_proxy,serverURL);
 		String localVersion = getLocalClientVersion();
 
 		if(compareVersions(localVersion, serverVersion) && System.getProperty(CoreConstants.SKIP_UPDATE) == null) {
