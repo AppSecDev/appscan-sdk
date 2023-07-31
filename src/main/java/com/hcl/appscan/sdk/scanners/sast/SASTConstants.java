@@ -18,6 +18,7 @@ public interface SASTConstants {
 	String UNIX_SCRIPT					= "appscan.sh";						//$NON-NLS-1$
 
 	String IRX_EXTENSION				= ".irx";							//$NON-NLS-1$
+    String ZIP_EXTENSION                = ".zip";                           //$NON-NLS-1$
 	String SAST							= "Static Analyzer";				//$NON-NLS-1$
 	String STATIC_ANALYZER				= "StaticAnalyzer";					//$NON-NLS-1$
 
@@ -65,6 +66,7 @@ public interface SASTConstants {
 	String ERROR_CHECKING_SACLIENT_VER 	= "error.checking.local.version";	//$NON-NLS-1$
 	String ERROR_DOWNLOADING_CLIENT 	= "error.download.client";			//$NON-NLS-1$
 	String ERROR_GENERATING_IRX			= "error.generating.irx";			//$NON-NLS-1$
+    String ERROR_GENERATING_ZIP         = "error.generating.zip";           //$NON-NLS-1$
 	String ERROR_SUBMITTING_IRX			= "error.submitting.irx";			//$NON-NLS-1$
 	String DOWNLOAD_OUT_OF_MEMORY		= "error.out.of.memory";			//$NON-NLS-1$
 }

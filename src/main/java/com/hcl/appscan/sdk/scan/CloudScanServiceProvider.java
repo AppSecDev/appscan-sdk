@@ -31,6 +31,7 @@ import com.hcl.appscan.sdk.http.HttpPart;
 import com.hcl.appscan.sdk.http.HttpResponse;
 import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.logging.Message;
+import com.hcl.appscan.sdk.scanners.sast.SASTConstants;
 
 public class CloudScanServiceProvider implements IScanServiceProvider, Serializable, CoreConstants {
 
@@ -87,35 +88,37 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		}
 		return null;
 	}
+  
+    @Override
+	  public String submitFile(File file) throws IOException {
+		  if(loginExpired())
+			    return null;
+		
+		   m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(UPLOADING_FILE, file.getAbsolutePath())));
+            String fileUploadAPI =  m_authProvider.getServer() + API_FILE_UPLOAD;
+            if(!file.getName().toLowerCase().endsWith(SASTConstants.IRX_EXTENSION)) {
+                fileUploadAPI += "?fileType=SourceCodeArchive";
+            }
+		
+		  List<HttpPart> parts = new ArrayList<HttpPart>();
+		  parts.add(new HttpPart(FILE_TO_UPLOAD, file, "multipart/form-data")); //$NON-NLS-1$
+		
+		  HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
+		
+		  try {
+			    HttpResponse response = client.postMultipart(fileUploadAPI, m_authProvider.getAuthorizationHeader(true), parts);		
+			    JSONObject object = (JSONObject) response.getResponseBodyAsJSON();
 
-	@Override
-	public String submitFile(File file) throws IOException {
-		if(loginExpired())
-			return null;
-		
-		m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(UPLOADING_FILE, file.getAbsolutePath())));
-		
-		String fileUploadAPI =  m_authProvider.getServer() + API_FILE_UPLOAD;
-		
-		List<HttpPart> parts = new ArrayList<HttpPart>();
-		parts.add(new HttpPart(FILE_TO_UPLOAD, file, "multipart/form-data")); //$NON-NLS-1$
-		
-		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
-		
-		try {
-			HttpResponse response = client.postMultipart(fileUploadAPI, m_authProvider.getAuthorizationHeader(true), parts);		
-			JSONObject object = (JSONObject) response.getResponseBodyAsJSON();
-
-			if (object.has(MESSAGE)) {
-				m_progress.setStatus(new Message(Message.ERROR, object.getString(MESSAGE)));
-			} else {
-				return object.getString(FILE_ID);
-			}		
-		} catch (JSONException e) {
-			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_UPLOADING_FILE, file, e.getLocalizedMessage())));
-		}
-		return null;
-	}
+			    if (object.has(MESSAGE)) {
+				    m_progress.setStatus(new Message(Message.ERROR, object.getString(MESSAGE)));
+			    } else {
+				    return object.getString(FILE_ID);
+			      }		
+		  } catch (JSONException e) {
+			    m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_UPLOADING_FILE, file, e.getLocalizedMessage())));
+		   }
+		   return null;
+	  }
 	
 	@Override
 	public JSONObject getScanDetails(String scanId) throws IOException, JSONException {

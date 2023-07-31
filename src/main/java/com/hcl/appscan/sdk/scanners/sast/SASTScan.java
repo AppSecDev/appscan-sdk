@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.Proxy;
 import java.util.Map;
 
+import com.hcl.appscan.sdk.CoreConstants;
 import com.hcl.appscan.sdk.Messages;
 import com.hcl.appscan.sdk.error.InvalidTargetException;
 import com.hcl.appscan.sdk.error.ScannerException;
@@ -18,6 +19,8 @@ import com.hcl.appscan.sdk.logging.DefaultProgress;
 import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.scan.IScanServiceProvider;
 import com.hcl.appscan.sdk.scanners.ASoCScan;
+import com.hcl.appscan.sdk.utils.ArchiveUtil;
+import com.hcl.appscan.sdk.utils.FileUtil;
 
 /**
  * A class for running static scans. For greater control over what gets scanned a {@link SASTScanManager} should be used.
@@ -44,12 +47,16 @@ public class SASTScan extends ASoCScan implements SASTConstants {
 		if(target == null || !(new File(target).exists()))
 			throw new InvalidTargetException(Messages.getMessage(TARGET_INVALID, target));
 
-		try {
-			generateIR();
-			analyzeIR();
-		} catch(IOException e) {
-			throw new ScannerException(Messages.getMessage(SCAN_FAILED, e.getLocalizedMessage()));
-		}
+        try {
+            if(getProperties().containsKey(CoreConstants.UPLOAD_DIRECT)){
+                generateZip();
+            } else {
+                generateIR();
+            }
+            analyzeIR();
+        } catch(IOException e) {
+            throw new ScannerException(Messages.getMessage(SCAN_FAILED, e.getLocalizedMessage()));
+        }
 	}
 
 	@Override
@@ -86,6 +93,20 @@ public class SASTScan extends ASoCScan implements SASTConstants {
 		if(!m_irx.isFile())
 			throw new ScannerException(Messages.getMessage(ERROR_GENERATING_IRX, getScanLogs().getAbsolutePath()));
 	}
+
+    private void generateZip() throws IOException,ScannerException {
+        File targetFile = new File(getTarget());
+        if(targetFile.isFile()){
+            m_irx = targetFile;
+        } else if (targetFile.isDirectory()) {
+            String validatedZipName = FileUtil.getValidFilename(getName());
+            String zipLocation = System.getProperty("java.io.tmpdir")+File.separator+validatedZipName+ZIP_EXTENSION;
+            ArchiveUtil.zipFileOrFolder(targetFile, new File(zipLocation));
+            m_irx = new File(zipLocation);
+        }
+        if(!m_irx.isFile())
+            throw new ScannerException(Messages.getMessage(ERROR_GENERATING_ZIP, getScanLogs().getAbsolutePath()));
+    }
 	
 	private void analyzeIR() throws IOException, ScannerException {
 		if(getProperties().containsKey(PREPARE_ONLY))

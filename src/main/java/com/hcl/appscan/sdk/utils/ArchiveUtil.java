@@ -15,8 +15,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import com.hcl.appscan.sdk.Messages;
+import com.hcl.appscan.sdk.scanners.sast.SASTConstants;
 
 public class ArchiveUtil {
 
@@ -111,4 +113,34 @@ public class ArchiveUtil {
 				output.close();
 		}
 	}
+
+    public static void zipFileOrFolder(File fileToZip, File zipFile) throws IOException {
+        FileOutputStream fos = new FileOutputStream(zipFile.getAbsolutePath());
+        ZipOutputStream zipOut = new ZipOutputStream(fos);
+        zipFile(fileToZip, fileToZip.getName(), zipOut);
+        zipOut.close();
+        fos.close();
+    }
+
+    private static void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) throws IOException {
+        if (fileToZip.isHidden()) {
+            return;
+        }
+        if (fileToZip.isDirectory()) {
+            File[] children = fileToZip.listFiles();
+            for (File childFile : children) {
+                zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
+            }
+            return;
+        }
+        FileInputStream fis = new FileInputStream(fileToZip);
+        ZipEntry zipEntry = new ZipEntry(fileName);
+        zipOut.putNextEntry(zipEntry);
+        byte[] bytes = new byte[1024];
+        int length;
+        while ((length = fis.read(bytes)) >= 0) {
+            zipOut.write(bytes, 0, length);
+        }
+        fis.close();
+    }
 }
