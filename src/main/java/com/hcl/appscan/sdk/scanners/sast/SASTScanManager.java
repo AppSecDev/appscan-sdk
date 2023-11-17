@@ -37,6 +37,8 @@ public class SASTScanManager implements IScanManager{
 	private boolean m_isOpenSourceOnlyEnabled = false;
 	private boolean m_isSourceCodeOnlyEnabled = false;
 	private boolean m_isStaticAnalysisOnlyEnabled = false;
+	private boolean m_isSecretsScanningEnabled = false;
+	private boolean m_isSecretsScanningOnlyEnabled = false;
 
 	public SASTScanManager(String workingDir) {
 		m_workingDirectory = workingDir;
@@ -108,6 +110,22 @@ public class SASTScanManager implements IScanManager{
 	}
 
 	/**
+	 * Enables scanning for secrets.
+	 * @param isSecretsScanningEnabled - True to scan for secrets vulnerabilities.
+	 */
+	public void setIsSecretsScanningEnabled(boolean isSecretsScanningEnabled) {
+		m_isSecretsScanningEnabled = isSecretsScanningEnabled;
+	}
+
+	/**
+	 * Only scan for secrets.
+	 * @param isSecretsScanningOnlyEnabled - True to only scan for secrets vulnerabilities.
+	 */
+	public void setIsSecretsScanningOnlyEnabled(boolean isSecretsScanningOnlyEnabled) {
+		m_isSecretsScanningOnlyEnabled = isSecretsScanningOnlyEnabled;
+	}
+
+	/**
 	 * Only scan for known vulnerabilities in 3rd party libraries. Disables static analysis.
 	 * @param isOpenSourceOnlyEnabled - True to scan only for known vulnerabilities in 3rd party libraries.
 	 */
@@ -141,7 +159,7 @@ public class SASTScanManager implements IScanManager{
 		try {
 			ModelWriter writer = new XmlWriter(useRelativeTargetPaths);
 			writer.initWriters(new File(m_workingDirectory));		
-			writer.visit(m_targets, m_isThirdPartyScanningEnabled, m_isOpenSourceOnlyEnabled, m_isSourceCodeOnlyEnabled, m_isStaticAnalysisOnlyEnabled);
+			writer.visit(m_targets, m_isThirdPartyScanningEnabled, m_isOpenSourceOnlyEnabled, m_isSourceCodeOnlyEnabled, m_isStaticAnalysisOnlyEnabled, m_isSecretsScanningEnabled, m_isSecretsScanningOnlyEnabled);
 			writer.write();
 		} catch (IOException | TransformerException  e) {
 			throw new AppScanException(e.getLocalizedMessage(), e);

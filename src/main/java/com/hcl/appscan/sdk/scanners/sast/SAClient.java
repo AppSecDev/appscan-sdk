@@ -332,6 +332,10 @@ public class SAClient implements SASTConstants {
                         args.add(OPT_SOURCE_CODE_ONLY);
                 if(properties.containsKey(SCAN_SPEED)){
                     	args.add(OPT_SCAN_SPEED);
+		if(properties.containsKey(SECRETS_ENABLED) || System.getProperty(SECRETS_ENABLED) != null)
+			args.add(OPT_SECRETS_ENABLED);
+		if(properties.containsKey(SECRETS_ONLY) || System.getProperty(SECRETS_ONLY) != null)
+			args.add(OPT_SECRETS_ONLY);
                         //it is being used to have the same values in the freestyle & pipeline projects
                         if(properties.get(SCAN_SPEED).equals(NORMAL)){
                             args.add(THOROUGH);
