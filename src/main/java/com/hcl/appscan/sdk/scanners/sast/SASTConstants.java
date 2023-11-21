@@ -33,6 +33,8 @@ public interface SASTConstants {
 	String THIRD_PARTY					= "thirdParty";						//$NON-NLS-1$
         String OPEN_SOURCE_ONLY                                  = "openSourceOnly";                                     //$NON-NLS-1$
         String SOURCE_CODE_ONLY                                  = "sourceCodeOnly";                                     //$NON-NLS-1$
+		String SECRETS_ENABLED                                   = "enableSecrets";                                     //$NON-NLS-1$
+		String SECRETS_ONLY                                      = "secretsOnly";                                     //$NON-NLS-1$
     	String SCAN_SPEED                                        = "scanSpeed";                                          //$NON-NLS-1$
     	String OPT_SCAN_SPEED                                    = "-s";                                                 //$NON-NLS-1$
     	String OPT_NAME						= "-n";								//$NON-NLS-1$
@@ -51,7 +53,10 @@ public interface SASTConstants {
 	String OPT_VERBOSE					= "-v";								//$NON-NLS-1$
 	String OPT_DEBUG					= "-X";								//$NON-NLS-1$
         String OPT_OPEN_SOURCE_ONLY                             = "-oso";                                                       //$NON-NLS-1$
-	String OPT_SOURCE_CODE_ONLY                             = "-sco";                                                       //$NON-NLS-1$
+		String OPT_SOURCE_CODE_ONLY                             = "-sco"; 												   //$NON-NLS-1$
+	String OPT_SECRETS_ENABLED                              = "-es";                                                       //$NON-NLS-1$
+	String OPT_SECRETS_ONLY                                 = "-so";                                                       //$NON-NLS-1$
+
 
 	//Messages
 	String DONE							= "message.done";					//$NON-NLS-1$
