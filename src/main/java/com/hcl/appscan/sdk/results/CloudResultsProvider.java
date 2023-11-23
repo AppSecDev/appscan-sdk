@@ -275,7 +275,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 			JSONObject object = (JSONObject) response.getResponseBodyAsJSON();
 			if (object.has(MESSAGE)) {
 				if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
-					m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_RESULT)));
+					m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_SCANLOG)));
 				else
 					m_progress.setStatus(new Message(Message.ERROR, object.getString(MESSAGE)));
 			}
