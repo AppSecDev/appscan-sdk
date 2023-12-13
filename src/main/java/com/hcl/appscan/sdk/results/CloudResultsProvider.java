@@ -263,7 +263,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy(),m_scanProvider.getAuthenticationProvider().getacceptInvalidCerts());
 		HttpResponse response = client.get(request_url, request_headers, null);
 
-		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+		if (response.isSuccess()) {
 			if (destination.isDirectory()) {
 				String fileName = "ScanLog" + "_" + SystemUtil.getTimeStamp() + "." + "zip"; //$NON-NLS-1$ //$NON-NLS-2$
 				destination = new File(destination, fileName);
@@ -274,10 +274,9 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		} else {
 			JSONObject object = (JSONObject) response.getResponseBodyAsJSON();
 			if (object.has(MESSAGE)) {
-				if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
-					m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_SCANLOG)));
-				else
-					m_progress.setStatus(new Message(Message.ERROR, object.getString(MESSAGE)));
+				m_progress.setStatus(new Message(Message.ERROR, object.getString(MESSAGE)));
+			}else{
+				m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_SCANLOG)));
 			}
 		}
 	}
