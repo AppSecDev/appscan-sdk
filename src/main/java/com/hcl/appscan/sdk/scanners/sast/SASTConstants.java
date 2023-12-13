@@ -14,7 +14,8 @@ public interface SASTConstants {
 	String APPSCAN_CLIENT_VERSION       = "APPSCAN_CLIENT_VERSION";			//$NON-NLS-1$
 	String IRGEN_CLIENT_PLUGIN_VERSION  = "IRGEN_CLIENT_PLUGIN_VERSION";	//$NON-NLS-1$
 	String ARSA_FILE_ID					= "ARSAFileId";						//$NON-NLS-1$
-	String WIN_SCRIPT					= "appscan.bat";					//$NON-NLS-1$
+    	String FILE_ID						= "ApplicationFileId";						//$NON-NLS-1$
+    	String WIN_SCRIPT					= "appscan.bat";					//$NON-NLS-1$
 	String UNIX_SCRIPT					= "appscan.sh";						//$NON-NLS-1$
 
 	String IRX_EXTENSION				= ".irx";							//$NON-NLS-1$
@@ -32,6 +33,8 @@ public interface SASTConstants {
 	String THIRD_PARTY					= "thirdParty";						//$NON-NLS-1$
         String OPEN_SOURCE_ONLY                                  = "openSourceOnly";                                     //$NON-NLS-1$
         String SOURCE_CODE_ONLY                                  = "sourceCodeOnly";                                     //$NON-NLS-1$
+		String SECRETS_ENABLED                                   = "enableSecrets";                                     //$NON-NLS-1$
+		String SECRETS_ONLY                                      = "secretsOnly";                                     //$NON-NLS-1$
     	String SCAN_SPEED                                        = "scanSpeed";                                          //$NON-NLS-1$
     	String OPT_SCAN_SPEED                                    = "-s";                                                 //$NON-NLS-1$
     	String OPT_NAME						= "-n";								//$NON-NLS-1$
@@ -50,7 +53,10 @@ public interface SASTConstants {
 	String OPT_VERBOSE					= "-v";								//$NON-NLS-1$
 	String OPT_DEBUG					= "-X";								//$NON-NLS-1$
         String OPT_OPEN_SOURCE_ONLY                             = "-oso";                                                       //$NON-NLS-1$
-	String OPT_SOURCE_CODE_ONLY                             = "-sco";                                                       //$NON-NLS-1$
+		String OPT_SOURCE_CODE_ONLY                             = "-sco"; 												   //$NON-NLS-1$
+	String OPT_SECRETS_ENABLED                              = "-es";                                                       //$NON-NLS-1$
+	String OPT_SECRETS_ONLY                                 = "-so";                                                       //$NON-NLS-1$
+
 
 	//Messages
 	String DONE							= "message.done";					//$NON-NLS-1$
