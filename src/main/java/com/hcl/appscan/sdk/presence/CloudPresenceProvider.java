@@ -144,7 +144,8 @@ public class CloudPresenceProvider implements IPresenceProvider, CoreConstants {
 			HttpResponse response = client.get(url, headers, null);
 			
 			if (response.isSuccess()) {
-				JSONArray array = (JSONArray)response.getResponseBodyAsJSON();
+				JSONObject json = (JSONObject) response.getResponseBodyAsJSON();
+				JSONArray array = json.getJSONArray("Items");
 				if(array == null)
 					return;
 				

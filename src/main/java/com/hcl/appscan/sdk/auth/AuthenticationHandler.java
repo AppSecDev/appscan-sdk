@@ -70,7 +70,7 @@ public class AuthenticationHandler implements CoreConstants {
 	public boolean login(String username, String password, boolean persist, LoginType type, String clientType) throws IOException, JSONException {
 		
 		Map<String, String> headers = new HashMap<String, String>();
-		headers.put(CONTENT_TYPE, "application/x-www-form-urlencoded"); //$NON-NLS-1$
+		headers.put(CONTENT_TYPE, "application/json"); //$NON-NLS-1$
 		headers.put(CHARSET, UTF8);
 		
 		Map<String, String> params = new HashMap<String, String>();
@@ -82,8 +82,8 @@ public class AuthenticationHandler implements CoreConstants {
 			if(clientType != null) {
 				//Only allow letters, numbers, -, _, and . characters.
 				clientType = clientType.replaceAll("[^a-zA-Z0-9\\-\\._]", "");
-				params.put(CoreConstants.CLIENT_TYPE, clientType);
-				headers.put(CoreConstants.CLIENT_TYPE, clientType);
+				//params.put(CoreConstants.CLIENT_TYPE, clientType);
+				//headers.put(CoreConstants.CLIENT_TYPE, clientType);
 			}
 		    url = m_authProvider.getServer() + API_KEY_LOGIN;
 		}
@@ -92,7 +92,7 @@ public class AuthenticationHandler implements CoreConstants {
 		}
 
 		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
-	    HttpResponse response = client.postForm(url, headers, params);
+	    HttpResponse response = client.post(url, headers, params);
 	    
 		if(response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
 			if(persist) {

@@ -31,8 +31,10 @@ public interface IScanServiceProvider {
 	 * @return The id of the submitted scan, if successful.  Otherwise, null.
 	 */
 	public String createAndExecuteScan(String type, Map<String, String> params);
-	
-	/**
+
+    public String createAndExecuteScans(String type, JSONObject params);
+
+    /**
 	 * Submits a file for scanning.
 	 * 
 	 * @param file The file to submit.

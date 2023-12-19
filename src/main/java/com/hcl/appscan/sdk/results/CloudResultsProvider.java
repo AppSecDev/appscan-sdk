@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
@@ -161,7 +162,6 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	protected void loadResults() {
 		try {
 			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
-			obj = (JSONObject) obj.get(LATEST_EXECUTION);
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !(m_status.equalsIgnoreCase(INQUEUE) || m_status.equalsIgnoreCase(RUNNING))) {
 				m_totalFindings = obj.getInt(TOTAL_ISSUES);
@@ -223,7 +223,8 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 			return FAILED;
 		}
 	
-		String request_url = authProvider.getServer() + String.format(API_REPORT_STATUS, reportId);
+		String request_url = authProvider.getServer() + API_REPORT_STATUS;
+		request_url += "?%24top=100&%24filter=Id%20eq%20"+String.format("%s",reportId)+"&%24count=false";
 		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
 		request_headers.put(CONTENT_LENGTH, "0"); //$NON-NLS-1$
 	
@@ -235,6 +236,8 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		}
     	
     	JSONObject obj = (JSONObject) response.getResponseBodyAsJSON();
-    	return obj.getString(STATUS);
+        JSONArray array = obj.getJSONArray("Items");
+        JSONObject json= (JSONObject) array.get(0);
+    	return json.getString(STATUS);
     }
 }

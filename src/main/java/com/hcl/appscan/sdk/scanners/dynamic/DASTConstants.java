@@ -12,7 +12,7 @@ public interface DASTConstants {
 	String DYNAMIC_ANALYZER 			= "DynamicAnalyzer";				//$NON-NLS-1$
 	String DYNAMIC_ANALYZER_WITH_FILE	= "DynamicAnalyzerWithFile";		//$NON-NLS-1$
 	String SCAN_FILE					= "ScanFile";						//$NON-NLS-1$
-	String SCAN_FILE_ID					= "ScanFileId";						//$NON-NLS-1$
+	String SCAN_FILE_ID					= "ScanOrTemplateFileId";						//$NON-NLS-1$
 	String PRESENCE_ID					= "PresenceId";						//$NON-NLS-1$
 	String STARTING_URL					= "StartingUrl";					//$NON-NLS-1$
 	String TRAFFIC_FILE                 = "trafficFile";

@@ -20,6 +20,8 @@ import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.scan.IScanServiceProvider;
 import com.hcl.appscan.sdk.scanners.ASoCScan;
 import com.hcl.appscan.sdk.utils.ServiceUtil;
+import org.apache.wink.json4j.JSONException;
+import org.apache.wink.json4j.JSONObject;
 
 public class DASTScan extends ASoCScan implements DASTConstants {
 
@@ -35,8 +37,8 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 	}
 
 	@Override
-	public void run() throws ScannerException, InvalidTargetException {
-		String type = DYNAMIC_ANALYZER;
+	public void run() throws ScannerException, InvalidTargetException, JSONException {
+		String type = "Dast";
 		String target = getTarget();
 		
 		if(target == null)
@@ -53,7 +55,6 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 		String scanLoginType = null;
 		if (params.get(LOGIN_TYPE) != null) {
 			scanLoginType = params.get(LOGIN_TYPE);
-			params.remove(LOGIN_TYPE);
 		}
 
 		if (("Manual").equals(scanLoginType)) {
@@ -78,7 +79,6 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 		String scanFile = params.remove(SCAN_FILE);
 
 		if (scanFile != null && new File(scanFile).isFile()) {
-			type = DYNAMIC_ANALYZER_WITH_FILE;
 			File file = new File(scanFile);
 
 			try {
@@ -91,11 +91,41 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 			}
 		}
 
-		setScanId(getServiceProvider().createAndExecuteScan(type, params));
+		JSONObject propertiesJSON = creatingJSONForProperties(params);
+		setScanId(getServiceProvider().createAndExecuteScans(type, propertiesJSON));
 
 		if(getScanId() == null)
 			throw new ScannerException(Messages.getMessage(ERROR_CREATING_SCAN));
 	}
+
+    private JSONObject creatingJSONForProperties(Map<String, String> params) throws JSONException {
+        JSONObject json = new JSONObject(params);
+        return json.put("ScanConfiguration", createScanConfiguration(json));
+    }
+
+    private JSONObject createScanConfiguration(JSONObject json) throws JSONException {
+        JSONObject scanConfiguration = new JSONObject();
+        scanConfiguration.put("Target", createTarget(json));
+        if (("Automatic").equals(json.get(LOGIN_TYPE))) {
+            scanConfiguration.put("Login", createLogin(json));
+        }
+        return scanConfiguration;
+    }
+
+    private JSONObject createTarget(JSONObject json) throws JSONException {
+        JSONObject target = new JSONObject();
+        target.put("StartingUrl", json.remove("StartingUrl"));
+        return target;
+    }
+
+    private JSONObject createLogin(JSONObject json) throws JSONException {
+        JSONObject login = new JSONObject();
+            if (json.containsKey("LoginUser") && json.containsKey("LoginPassword")) {
+                login.put("UserName", json.remove("LoginUser"));
+                login.put("Password", json.remove("LoginPassword"));
+            }
+        return login;
+    }
 
 	@Override
 	public String getType() {

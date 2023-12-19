@@ -7,6 +7,7 @@
 package com.hcl.appscan.sdk.http;
 
 import org.apache.wink.json4j.JSON;
+import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
 import java.io.DataOutputStream;
@@ -139,6 +140,30 @@ public class HttpClient {
         }
         JSONObject json = new JSONObject(objectMap);
         String body = json.toString();
+        return post(url, headerProperties, body);
+    }
+
+    public HttpResponse posts(String url, Map<String, String> headerProperties, JSONObject params)
+            throws IOException, JSONException {
+        JSONObject objectMap = new JSONObject();
+        for (Object key : params.keySet()) {
+            String value = params.get(key).toString();
+            if (value != null) {
+                if (value.equalsIgnoreCase("true")) {
+                    objectMap.put(key.toString(), true);
+                } else if (value.equalsIgnoreCase("false")) {
+                    objectMap.put(key.toString(), false);
+                } else {
+                    // If the string is not "true" or "false," keep it as is
+                    objectMap.put(key.toString(), params.get(key));
+                }
+            } else {
+                // If the value is not a string, keep it as is
+                objectMap.put(key.toString(), value);
+            }
+        }
+        //JSONObject json = new JSONObject(objectMap);
+        String body = objectMap.toString();
         return post(url, headerProperties, body);
     }
 

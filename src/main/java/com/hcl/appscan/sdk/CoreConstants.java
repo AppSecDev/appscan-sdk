@@ -54,34 +54,34 @@ public interface CoreConstants {
 	
 	String API_ENV						= "/api/v2";				 							//$NON-NLS-1$
     	String API_ENV_V4					= "/api/v4";				 							//$NON-NLS-1$
-	String API_BLUEMIX					= "Bluemix";					 						//$NON-NLS-1$
+	//String API_BLUEMIX					= "Bluemix";					 						//$NON-NLS-1$
 	String API_BLUEMIX_LOGIN 			= API_ENV + "/Account/BluemixLogin";					//$NON-NLS-1$
-	String API_KEY_LOGIN				= API_ENV + "/Account/ApiKeyLogin";						//$NON-NLS-1$
+	String API_KEY_LOGIN				= API_ENV_V4 + "/Account/ApiKeyLogin";						//$NON-NLS-1$
 	String API_LOGOUT					= API_ENV + "/Account/Logout";							//$NON-NLS-1$
-	String API_APPS						= API_ENV + "/Apps/GetAsPage"; 							//$NON-NLS-1$
-	String API_PRESENCES				= API_ENV + "/Presences";								//$NON-NLS-1$
-	String API_PRESENCES_ID				= API_ENV + "/Presences/%s";							//$NON-NLS-1$
-	String API_PRESENCES_NEW_KEY		= API_ENV + "/Presences/%s/NewKey";						//$NON-NLS-1$
-	String API_BASIC_DETAILS			= API_ENV + "/Scans/%s";								//$NON-NLS-1$
+	String API_APPS						= API_ENV_V4 + "/Apps"; 							//$NON-NLS-1$
+	String API_PRESENCES				= API_ENV_V4 + "/Presences";								//$NON-NLS-1$
+	String API_PRESENCES_ID				= API_ENV_V4 + "/Presences/%s";							//$NON-NLS-1$
+	String API_PRESENCES_NEW_KEY		= API_ENV_V4 + "/Presences/%s/NewKey";						//$NON-NLS-1$
+	String API_BASIC_DETAILS			= API_ENV_V4 + "/Scans/Executions/%s";								//$NON-NLS-1$
 	String API_SCANNER_DETAILS			= API_ENV + "/Scans/&s/&s";								//$NON-NLS-1$
-	String API_FILE_UPLOAD				= API_ENV + "/FileUpload";								//$NON-NLS-1$
+	String API_FILE_UPLOAD				= API_ENV_V4 + "/FileUpload";								//$NON-NLS-1$
 	String API_SCAN						= API_ENV + "/%s";										//$NON-NLS-1$
-	String API_SCANNER					= API_ENV + "/Scans/%s";								//$NON-NLS-1$
+	String API_SCANNER					= API_ENV_V4 + "/Scans/%s";								//$NON-NLS-1$
     	String API_SCANNER_V4               			= API_ENV_V4 + "/Scans/%s";                             //$NON-NLS-1$
 	String API_SCANS					= API_ENV + "/Scans";									//$NON-NLS-1$
 	String API_NONCOMPLIANT_ISSUES 		= API_ENV + "/Scans/%s/NonCompliantIssues";				//$NON-NLS-1$
-	String API_SCANS_REPORT				= API_ENV + "/Scans/%s/Report/%s";						//$NON-NLS-1$
+	String API_SCANS_REPORT				= API_ENV_V4 + "/Scans/%s/Report/%s";						//$NON-NLS-1$
 	String API_SCX						= "SCX";                                                //$NON-NLS-1$
-	String API_REPORT_SELECTED_ISSUES   = API_ENV + "/Reports/Security/%s/%s";					//$NON-NLS-1$
-	String API_DOWNLOAD_REPORT          = API_ENV + "/Reports/Download/%s";						//$NON-NLS-1$
+	String API_REPORT_SELECTED_ISSUES   = API_ENV_V4 + "/Reports/Security/%s/%s";					//$NON-NLS-1$
+	String API_DOWNLOAD_REPORT          = API_ENV_V4 + "/Reports/%s/Download";						//$NON-NLS-1$
 	String API_SACLIENT_DOWNLOAD		= "/api/%s/StaticAnalyzer/SAClientUtil?os=%s"; 			//$NON-NLS-1$
 	String API_SACLIENT_VERSION			= "/api/%s/StaticAnalyzer/SAClientUtil?os=%s&meta=%s"; 	//$NON-NLS-1$
 	String API_KEY_PATH					= "/api/ideclientuilogin";								//$NON-NLS-1$
-	String API_REPORT_STATUS			= "/api/V2/Reports/%s";									//$NON-NLS-1$
-	String API_ISSUES_COUNT				= "/api/v2/Issues/CountBySeverity/%s/%s";				//$NON-NLS-1$
-	String API_REGIONS					= "/api/v2/Utils/Regions";								//$NON-NLS-1$
-	String API_IS_VALID_URL				= "/api/v2/Scans/IsValidUrl";							//$NON-NLS-1$
-	String API_AUTHENTICATION		        = "/api/V2/Account/IsAuthenticated";					//$NON-NLS-1$
+	String API_REPORT_STATUS			= "/api/v4/Reports";									//$NON-NLS-1$
+	String API_ISSUES_COUNT				= "/api/v4/Issues/%s/%s";				//$NON-NLS-1$
+	String API_REGIONS					= "/api/v4/Utils/Regions";								//$NON-NLS-1$
+	String API_IS_VALID_URL				= "/api/v4/Scans/IsValidUrl";							//$NON-NLS-1$
+	String API_AUTHENTICATION		        = "/api/v4/Account/IsAuthenticated";					//$NON-NLS-1$
 
 	String DEFAULT_RESULT_NAME			= "asoc_results";										//$NON-NLS-1$
 	String SACLIENT_INSTALL_DIR			= "SAClientInstall";									//$NON-NLS-1$
