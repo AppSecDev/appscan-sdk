@@ -240,4 +240,48 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
         JSONObject json= (JSONObject) array.get(0);
     	return json.getString(STATUS);
     }
+
+
+	public void getScanLogFile(File file , String executionId) {
+
+		if(file != null && !file.exists()) {
+			try {
+				getScanLog(executionId, file);
+			} catch (IOException | JSONException e) {
+				m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_SCANLOG)), e);
+			}
+		}
+	}
+
+	private void getScanLog(String executionId, File destination) throws IOException, JSONException {
+		IAuthenticationProvider authProvider = m_scanProvider.getAuthenticationProvider();
+		if(authProvider.isTokenExpired()) {
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_LOGIN_EXPIRED)));
+			return;
+		}
+		String request_url = authProvider.getServer() + String.format(API_SCANS_SCANLOGS, executionId);
+		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
+		request_headers.put(CONTENT_LENGTH, "0"); //$NON-NLS-1$
+
+		HttpClient client = new HttpClient(m_scanProvider.getAuthenticationProvider().getProxy(),m_scanProvider.getAuthenticationProvider().getacceptInvalidCerts());
+		HttpResponse response = client.get(request_url, request_headers, null);
+
+		if (response.isSuccess()) {
+			if (destination.isDirectory()) {
+				String fileName = "ScanLog" + "_" + SystemUtil.getTimeStamp() + "." + "zip"; //$NON-NLS-1$ //$NON-NLS-2$
+				destination = new File(destination, fileName);
+			}
+
+			destination.getParentFile().mkdirs();
+			response.getResponseBodyAsFile(destination);
+		} else {
+			JSONObject object = (JSONObject) response.getResponseBodyAsJSON();
+			if (object.has(MESSAGE)) {
+				m_progress.setStatus(new Message(Message.ERROR, object.getString(MESSAGE)));
+			}else{
+				m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_SCANLOG)));
+			}
+		}
+	}
+
 }
