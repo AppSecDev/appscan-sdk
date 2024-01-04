@@ -162,7 +162,6 @@ public class HttpClient {
                 objectMap.put(key.toString(), value);
             }
         }
-        //JSONObject json = new JSONObject(objectMap);
         String body = objectMap.toString();
         return post(url, headerProperties, body);
     }

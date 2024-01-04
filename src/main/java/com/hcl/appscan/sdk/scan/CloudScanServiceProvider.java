@@ -62,7 +62,6 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
             HttpResponse response;
                 request_headers.put("Content-Type", "application/json");
                 request_headers.put("accept", "application/json");
-                //params.put("ScanOrTemplateFileId","");
                 String request_url = m_authProvider.getServer() + String.format(API_SCANNER, type);
                 response = client.post(request_url,request_headers,params);
 

@@ -82,8 +82,8 @@ public class AuthenticationHandler implements CoreConstants {
 			if(clientType != null) {
 				//Only allow letters, numbers, -, _, and . characters.
 				clientType = clientType.replaceAll("[^a-zA-Z0-9\\-\\._]", "");
-				//params.put(CoreConstants.CLIENT_TYPE, clientType);
-				//headers.put(CoreConstants.CLIENT_TYPE, clientType);
+				params.put(CoreConstants.CLIENT_TYPE, clientType);
+				headers.put(CoreConstants.CLIENT_TYPE, clientType);
 			}
 		    url = m_authProvider.getServer() + API_KEY_LOGIN;
 		}

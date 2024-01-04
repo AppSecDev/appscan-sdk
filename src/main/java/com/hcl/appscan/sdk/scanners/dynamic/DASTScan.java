@@ -48,7 +48,7 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 		params.put(STARTING_URL, target);
 
 		IAuthenticationProvider authProvider = getServiceProvider().getAuthenticationProvider();
-		if(params.get(PRESENCE_ID).isEmpty() && !ServiceUtil.isValidUrl(target, authProvider, authProvider.getProxy())) {
+		if(params.get(PRESENCE_ID)!=null && params.get(PRESENCE_ID).isEmpty() && !ServiceUtil.isValidUrl(target, authProvider, authProvider.getProxy())) {
 			throw new ScannerException(Messages.getMessage(CoreConstants.ERROR_URL_VALIDATION, target));
 		}
 
@@ -109,6 +109,7 @@ public class DASTScan extends ASoCScan implements DASTConstants {
         if (("Automatic").equals(json.get(LOGIN_TYPE))) {
             scanConfiguration.put("Login", createLogin(json));
         }
+        scanConfiguration.put("Tests", createTests(json));
         return scanConfiguration;
     }
 
@@ -125,6 +126,12 @@ public class DASTScan extends ASoCScan implements DASTConstants {
                 login.put("Password", json.remove("LoginPassword"));
             }
         return login;
+    }
+
+    private JSONObject createTests(JSONObject json) throws JSONException {
+        JSONObject tests = new JSONObject();
+        tests.put("TestOptimizationLevel", json.remove("TestOptimizationLevel"));
+        return tests;
     }
 
 	@Override
