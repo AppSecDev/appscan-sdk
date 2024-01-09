@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017,2022, 2023.
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -14,6 +14,7 @@ public interface CoreConstants {
 	String EMAIL_NOTIFICATION			= "EnableMailNotification";								//$NON-NLS-1$
 	String FILE_ID 						= "FileId"; 											//$NON-NLS-1$
 	String FILE_TO_UPLOAD 				= "fileToUpload";										//$NON-NLS-1$
+	String UPLOADED_FILE 				= "uploadedFile";										//$NON-NLS-1$
 	String ID							= "Id";													//$NON-NLS-1$
 	String KEY							= "Key";												//$NON-NLS-1$
 	String LATEST_EXECUTION				= "LatestExecution";									//$NON-NLS-1$

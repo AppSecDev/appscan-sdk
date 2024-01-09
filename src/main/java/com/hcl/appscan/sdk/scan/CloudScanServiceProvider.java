@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017,2022, 2023.
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -155,7 +155,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
             }
 		
 		  List<HttpPart> parts = new ArrayList<HttpPart>();
-		  parts.add(new HttpPart("uploadedFile", file, "multipart/form-data")); //$NON-NLS-1$
+		  parts.add(new HttpPart(CoreConstants.UPLOADED_FILE, file, "multipart/form-data")); //$NON-NLS-1$
 		
 		  HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
 		

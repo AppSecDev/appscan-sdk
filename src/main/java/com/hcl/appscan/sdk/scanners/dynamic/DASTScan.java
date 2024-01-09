@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2022.
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -100,37 +100,37 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 
     private JSONObject creatingJSONForProperties(Map<String, String> params) throws JSONException {
         JSONObject json = new JSONObject(params);
-        return json.put("ScanConfiguration", createScanConfiguration(json));
+        return json.put(SCAN_CONFIGURATION, createScanConfiguration(json));
     }
 
     private JSONObject createScanConfiguration(JSONObject json) throws JSONException {
         JSONObject scanConfiguration = new JSONObject();
-        scanConfiguration.put("Target", createTarget(json));
-        if (("Automatic").equals(json.get(LOGIN_TYPE))) {
-            scanConfiguration.put("Login", createLogin(json));
+        scanConfiguration.put(TARGET, createTarget(json));
+        if ((AUTOMATIC).equals(json.get(LOGIN_TYPE))) {
+            scanConfiguration.put(LOGIN, createLogin(json));
         }
-        scanConfiguration.put("Tests", createTests(json));
+        scanConfiguration.put(TESTS, createTests(json));
         return scanConfiguration;
     }
 
     private JSONObject createTarget(JSONObject json) throws JSONException {
         JSONObject target = new JSONObject();
-        target.put("StartingUrl", json.remove("StartingUrl"));
+        target.put(STARTING_URL, json.remove(STARTING_URL));
         return target;
     }
 
     private JSONObject createLogin(JSONObject json) throws JSONException {
         JSONObject login = new JSONObject();
-            if (json.containsKey("LoginUser") && json.containsKey("LoginPassword")) {
-                login.put("UserName", json.remove("LoginUser"));
-                login.put("Password", json.remove("LoginPassword"));
+            if (json.containsKey(LOGIN_USER) && json.containsKey(LOGIN_PASSWORD)) {
+                login.put(USER_NAME, json.remove(LOGIN_USER));
+                login.put(PASSWORD, json.remove(LOGIN_PASSWORD));
             }
         return login;
     }
 
     private JSONObject createTests(JSONObject json) throws JSONException {
         JSONObject tests = new JSONObject();
-        tests.put("TestOptimizationLevel", json.remove("TestOptimizationLevel"));
+        tests.put(TEST_OPTIMIZATION_LEVEL, json.remove(TEST_OPTIMIZATION_LEVEL));
         return tests;
     }
 
