@@ -52,7 +52,7 @@ public class ASEScanServiceProvider implements IScanServiceProvider, Serializabl
     }
 
     @Override
-    public String createAndExecuteScans(String type, JSONObject params) {
+    public String createAndExecuteScanWithJSONParameter(String type, JSONObject params) {
         return "";
     }
     

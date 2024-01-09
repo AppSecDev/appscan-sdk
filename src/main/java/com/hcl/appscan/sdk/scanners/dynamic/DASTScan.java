@@ -92,7 +92,7 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 		}
 
 		JSONObject propertiesJSON = creatingJSONForProperties(params);
-		setScanId(getServiceProvider().createAndExecuteScans(type, propertiesJSON));
+		setScanId(getServiceProvider().createAndExecuteScanWithJSONParameter(type, propertiesJSON));
 
 		if(getScanId() == null)
 			throw new ScannerException(Messages.getMessage(ERROR_CREATING_SCAN));
@@ -114,9 +114,7 @@ public class DASTScan extends ASoCScan implements DASTConstants {
     }
 
     private JSONObject createTarget(JSONObject json) throws JSONException {
-        JSONObject target = new JSONObject();
-        target.put(STARTING_URL, json.remove(STARTING_URL));
-        return target;
+        return new JSONObject().put(STARTING_URL, json.remove(STARTING_URL));
     }
 
     private JSONObject createLogin(JSONObject json) throws JSONException {
@@ -129,9 +127,7 @@ public class DASTScan extends ASoCScan implements DASTConstants {
     }
 
     private JSONObject createTests(JSONObject json) throws JSONException {
-        JSONObject tests = new JSONObject();
-        tests.put(TEST_OPTIMIZATION_LEVEL, json.remove(TEST_OPTIMIZATION_LEVEL));
-        return tests;
+        return new JSONObject().put(TEST_OPTIMIZATION_LEVEL, json.remove(TEST_OPTIMIZATION_LEVEL));
     }
 
 	@Override

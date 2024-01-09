@@ -95,7 +95,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 	  }
 
     @Override
-    public String createAndExecuteScans(String type, JSONObject params) {
+    public String createAndExecuteScanWithJSONParameter(String type, JSONObject params) {
         try {
             if(loginExpired() || !verifyApplication(params.get(APP_ID).toString()))
                 return null;
