@@ -38,7 +38,7 @@ public class DASTScan extends ASoCScan implements DASTConstants {
 
 	@Override
 	public void run() throws ScannerException, InvalidTargetException, JSONException {
-		String type = "Dast";
+		String type = DYNAMIC_ANALYZER;
 		String target = getTarget();
 		
 		if(target == null)

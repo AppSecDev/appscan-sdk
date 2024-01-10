@@ -187,11 +187,11 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		HttpResponse response = client.get(request_url, request_headers, null);
 		
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED){
-            JSONArray array = (JSONArray) response.getResponseBodyAsJSON();
-            return (JSONObject) array.getJSONObject(0);
-        } else if (response.getResponseCode() == -1) {
-            return new JSONObject().put(STATUS,UNKNOWN); //If the server is not reachable Internet disconnect
-        } else if (response.getResponseCode() != HttpsURLConnection.HTTP_BAD_REQUEST) {
+			JSONArray array = (JSONArray) response.getResponseBodyAsJSON();
+			return (JSONObject) array.getJSONObject(0);
+		} else if (response.getResponseCode() == -1) {
+			return new JSONObject().put(STATUS,UNKNOWN); //If the server is not reachable Internet disconnect
+		} else if (response.getResponseCode() != HttpsURLConnection.HTTP_BAD_REQUEST) {
 			JSONArtifact json = response.getResponseBodyAsJSON();
 			if (json != null && ((JSONObject)json).has(MESSAGE))
 				m_progress.setStatus(new Message(Message.ERROR, ((JSONObject)json).getString(MESSAGE)));
@@ -216,7 +216,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
     			return null;
     		
     		String request_url = m_authProvider.getServer() + String.format(API_ISSUES_COUNT, "Scan", scanId);
-    		request_url += "?%24top=100&%24count=true&%24apply=groupby%28%28Severity%29%2Caggregate%28%24count%20as%20N%29%29";
+    		request_url +="?$apply=groupby((Severity),aggregate($count as N))";
     		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
     		request_headers.put("Content-Type", "application/json; charset=UTF-8");
     		request_headers.put("Accept", "application/json");
@@ -224,7 +224,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
     		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
     		HttpResponse response = client.get(request_url, request_headers, null);
     		
-    		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK) {
+    		if (response.isSuccess()) {
     			JSONObject json = (JSONObject) response.getResponseBodyAsJSON();
     			return (JSONArray) json.getJSONArray("Items");
                 }

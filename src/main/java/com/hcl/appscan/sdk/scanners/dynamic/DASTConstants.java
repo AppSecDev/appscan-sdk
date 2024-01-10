@@ -9,7 +9,7 @@ package com.hcl.appscan.sdk.scanners.dynamic;
 public interface DASTConstants {
 
 	String DAST							= "Dynamic Analyzer";				//$NON-NLS-1$
-	String DYNAMIC_ANALYZER 			= "DynamicAnalyzer";				//$NON-NLS-1$
+	String DYNAMIC_ANALYZER 			= "Dast";				//$NON-NLS-1$
 	String DYNAMIC_ANALYZER_WITH_FILE	= "DynamicAnalyzerWithFile";		//$NON-NLS-1$
 	String SCAN_FILE					= "ScanFile";						//$NON-NLS-1$
 	String SCAN_FILE_ID					= "ScanOrTemplateFileId";						//$NON-NLS-1$
