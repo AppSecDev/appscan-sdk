@@ -147,19 +147,21 @@ public class HttpClient {
             throws IOException, JSONException {
         JSONObject objectMap = new JSONObject();
         for (Object key : params.keySet()) {
-            String value = params.get(key).toString();
-            if (value != null) {
-                if (value.equalsIgnoreCase("true")) {
-                    objectMap.put(key.toString(), true);
-                } else if (value.equalsIgnoreCase("false")) {
-                    objectMap.put(key.toString(), false);
+            if (params.get(key) != null){
+                String value = params.get(key).toString();
+                if (value != null) {
+                    if (value.equalsIgnoreCase("true")) {
+                        objectMap.put(key.toString(), true);
+                    } else if (value.equalsIgnoreCase("false")) {
+                        objectMap.put(key.toString(), false);
+                    } else {
+                        // If the string is not "true" or "false," keep it as is
+                        objectMap.put(key.toString(), params.get(key));
+                    }
                 } else {
-                    // If the string is not "true" or "false," keep it as is
-                    objectMap.put(key.toString(), params.get(key));
+                    // If the value is not a string, keep it as is
+                    objectMap.put(key.toString(), value);
                 }
-            } else {
-                // If the value is not a string, keep it as is
-                objectMap.put(key.toString(), value);
             }
         }
         String body = objectMap.toString();
