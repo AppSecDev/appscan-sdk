@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -10,6 +10,7 @@ import com.hcl.appscan.sdk.error.InvalidTargetException;
 import com.hcl.appscan.sdk.error.ScannerException;
 import com.hcl.appscan.sdk.logging.IProgress;
 import com.hcl.appscan.sdk.results.IResultsProvider;
+import org.apache.wink.json4j.JSONException;
 
 public interface IScan {
 
@@ -19,7 +20,7 @@ public interface IScan {
 	 * @throws ScannerException if a fatal error occurs in the scan.
 	 * @throws InvalidTargetException if the target is invalid.
 	 */
-	public void run() throws ScannerException, InvalidTargetException;
+	public void run() throws ScannerException, InvalidTargetException, JSONException;
 	
 	/**
 	 * Gets the id of the scan.

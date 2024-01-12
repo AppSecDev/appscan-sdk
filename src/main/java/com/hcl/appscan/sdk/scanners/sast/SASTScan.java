@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -61,7 +61,7 @@ public class SASTScan extends ASoCScan implements SASTConstants {
 
 	@Override
 	public String getType() {
-		return SAST;
+		return "Sast";
 	}
 	
 	@Override
@@ -125,7 +125,7 @@ public class SASTScan extends ASoCScan implements SASTConstants {
 	}
 
     	protected void submitScan() {
-        	setScanId(getServiceProvider().createAndExecuteScan(STATIC_ANALYZER, getProperties()));
+        	setScanId(getServiceProvider().createAndExecuteScan("Sast", getProperties()));
     	}
 	
 	private File getScanLogs() {

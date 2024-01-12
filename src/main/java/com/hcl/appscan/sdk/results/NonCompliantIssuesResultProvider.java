@@ -1,5 +1,5 @@
 /**
- * © Copyright HCL Technologies Ltd. 2018, 2022, 2023.
+ * © Copyright HCL Technologies Ltd. 2018, 2024.
  */
 package com.hcl.appscan.sdk.results;
 
@@ -48,7 +48,6 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
                 return;
 			}
 
-			obj = (JSONObject) obj.get(LATEST_EXECUTION);
 
 			m_status = obj.getString(STATUS);
 			if (FAILED.equalsIgnoreCase(m_status) && obj.has(USER_MESSAGE)) {
@@ -64,7 +63,7 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 				for (int i = 0; i < array.length(); i++) {
 					JSONObject jobj = array.getJSONObject(i);
 					String sev = jobj.getString("Severity");
-					int count = jobj.getInt("Count");
+					int count = jobj.getInt("N");
 					
 					switch (sev.toLowerCase()) {
                                         case "critical":

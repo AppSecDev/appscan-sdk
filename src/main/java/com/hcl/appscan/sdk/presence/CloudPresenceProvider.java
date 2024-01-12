@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017. 
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -144,7 +144,8 @@ public class CloudPresenceProvider implements IPresenceProvider, CoreConstants {
 			HttpResponse response = client.get(url, headers, null);
 			
 			if (response.isSuccess()) {
-				JSONArray array = (JSONArray)response.getResponseBodyAsJSON();
+				JSONObject json = (JSONObject) response.getResponseBodyAsJSON();
+				JSONArray array = json.getJSONArray("Items");
 				if(array == null)
 					return;
 				

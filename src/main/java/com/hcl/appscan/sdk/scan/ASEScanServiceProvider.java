@@ -1,5 +1,5 @@
 /**
- * © Copyright HCL Technologies Ltd. 2019,2020.
+ * © Copyright HCL Technologies Ltd. 2019, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -49,6 +49,11 @@ public class ASEScanServiceProvider implements IScanServiceProvider, Serializabl
             return jobId;
         }
         return null;
+    }
+
+    @Override
+    public String createAndExecuteScanWithJSONParameter(String type, JSONObject params) {
+        return "";
     }
     
     private String createJob(Map<String, String> params) {
