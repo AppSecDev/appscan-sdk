@@ -31,6 +31,7 @@ public interface DASTConstants {
 	String TEST_OPTIMIZATION_LEVEL	    = "TestOptimizationLevel";	       //$NON-NLS-1$
 	String USER_NAME		    = "UserName";		       //$NON-NLS-1$
 	String PASSWORD			    = "Password";		       //$NON-NLS-1$
-	//Errors
+    String EXTRA_FIELD			    = "ExtraField";		       //$NON-NLS-1$
+    //Errors
 	String ERROR_SUBMITTING_SCAN		= "error.submitting.scan";			//$NON-NLS-1$
 }

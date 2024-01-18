@@ -123,6 +123,9 @@ public class DASTScan extends ASoCScan implements DASTConstants {
                 login.put(USER_NAME, json.remove(LOGIN_USER));
                 login.put(PASSWORD, json.remove(LOGIN_PASSWORD));
             }
+            if (json.containsKey(EXTRA_FIELD)) {
+                login.put(EXTRA_FIELD, json.remove(EXTRA_FIELD));
+            }
         return login;
     }
 
