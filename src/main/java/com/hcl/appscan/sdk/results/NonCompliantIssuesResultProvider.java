@@ -218,13 +218,10 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 	}
 
 	private String getScanName() {
-		JSONObject obj;
 		try {
-			obj = m_scanProvider.getScanDetails(m_scanId);
-			return obj.getString("Name");
-		} catch (IOException | JSONException e) {
-			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())),
-					e);
+			return m_scanProvider.getScanExecutionName();
+		} catch (Exception e) {
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
 			return "";
 		}
 

@@ -39,7 +39,7 @@ public interface IScanServiceProvider {
 	 * @param params A JSON of scan parameters.
 	 * @return The id of the submitted scan, if successful.  Otherwise, null.
 	 */
-	public String createAndExecuteScanWithJSONParameter(String type, JSONObject params);
+	public String createAndExecuteScanWithJSONParameter(String type, JSONObject params) throws JSONException;
 
 	/**
 	 * Submits a file for scanning.
@@ -59,7 +59,9 @@ public interface IScanServiceProvider {
 	 * @throws JSONException If an error occurs.
 	 */
 	public JSONObject getScanDetails(String scanId) throws IOException, JSONException;
-	
+
+	public String getScanExecutionName();
+
 	/**
 	 * Gets the non compliant issues in JSON format.
 	 * 
