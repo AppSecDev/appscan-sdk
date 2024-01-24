@@ -56,8 +56,6 @@ public class ASEScanServiceProvider implements IScanServiceProvider, Serializabl
         return "";
     }
 
-    @Override
-    public String getScanExecutionName() {return "";};
     
     private String createJob(Map<String, String> params) {
     	

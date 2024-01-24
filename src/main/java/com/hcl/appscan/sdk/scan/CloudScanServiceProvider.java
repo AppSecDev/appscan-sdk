@@ -41,7 +41,6 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 	private static final long serialVersionUID = 1L;
 
 	private IProgress m_progress;
-	private String scanExecutionName;
 	private IAuthenticationProvider m_authProvider;
     private static final String[] DAST_FILES_EXTENSIONS = {DASTConstants.SCAN_EXTENSION, DASTConstants.SCANT_EXTENSION, DASTConstants.CONFIG_EXTENSION};
 	
@@ -58,7 +57,6 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
         m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(EXECUTING_SCAN)));
         Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
         HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
-        scanExecutionName = params.get("ScanName");
 
         try {
             HttpResponse response;
@@ -97,7 +95,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 	  }
 
     @Override
-    public String createAndExecuteScanWithJSONParameter(String type, JSONObject params) throws JSONException {
+    public String createAndExecuteScanWithJSONParameter(String type, JSONObject params) {
         try {
             if(loginExpired() || !verifyApplication(params.get(APP_ID).toString()))
                 return null;
@@ -108,7 +106,6 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
         m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(EXECUTING_SCAN)));
         Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
         HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
-        scanExecutionName = params.getString("ScanName");
 
         try {
             HttpResponse response;
@@ -182,7 +179,8 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		if(loginExpired())
 			return null;
 		
-		String request_url = m_authProvider.getServer() + String.format(API_BASIC_DETAILS, scanId);
+		String request_url = m_authProvider.getServer() + API_BASIC_DETAILS;
+		request_url += "?$filter=Id eq " +String.format("%s",scanId);
 		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
 		
 		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
@@ -190,7 +188,8 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		HttpResponse response = client.get(request_url, request_headers, null);
 		
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED){
-			JSONArray array = (JSONArray) response.getResponseBodyAsJSON();
+			JSONObject obj = (JSONObject) response.getResponseBodyAsJSON();
+			JSONArray array = (JSONArray) obj.get(ITEMS);
 			return (JSONObject) array.getJSONObject(0);
 		} else if (response.getResponseCode() == -1) {
 			return new JSONObject().put(STATUS,UNKNOWN); //If the server is not reachable Internet disconnect
@@ -211,11 +210,6 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		}
 		
 		return null;
-	}
-
-	@Override
-	public String getScanExecutionName() {
-		return scanExecutionName;
 	}
 
 	@Override

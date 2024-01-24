@@ -60,8 +60,6 @@ public interface IScanServiceProvider {
 	 */
 	public JSONObject getScanDetails(String scanId) throws IOException, JSONException;
 
-	public String getScanExecutionName();
-
 	/**
 	 * Gets the non compliant issues in JSON format.
 	 * 

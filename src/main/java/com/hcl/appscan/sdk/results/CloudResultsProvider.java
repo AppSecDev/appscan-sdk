@@ -161,7 +161,8 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	
 	protected void loadResults() {
 		try {
-			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
+			JSONObject items = m_scanProvider.getScanDetails(m_scanId);
+			JSONObject obj = items.getJSONObject(LATEST_EXECUTION);
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !(m_status.equalsIgnoreCase(INQUEUE) || m_status.equalsIgnoreCase(RUNNING))) {
 				m_totalFindings = obj.getInt(TOTAL_ISSUES);
