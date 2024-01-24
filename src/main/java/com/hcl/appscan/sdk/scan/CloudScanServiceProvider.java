@@ -180,7 +180,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 			return null;
 		
 		String request_url = m_authProvider.getServer() + API_BASIC_DETAILS;
-		request_url += "?$filter=Id eq " +String.format("%s",scanId);
+		request_url +=String.format("?$filter=Id eq %s",scanId);
 		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
 		
 		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
