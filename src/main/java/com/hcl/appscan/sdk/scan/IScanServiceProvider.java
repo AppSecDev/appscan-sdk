@@ -59,7 +59,7 @@ public interface IScanServiceProvider {
 	 * @throws JSONException If an error occurs.
 	 */
 	public JSONObject getScanDetails(String scanId) throws IOException, JSONException;
-
+	
 	/**
 	 * Gets the non compliant issues in JSON format.
 	 * 
