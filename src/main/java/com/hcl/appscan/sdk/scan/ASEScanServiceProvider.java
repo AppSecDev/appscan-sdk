@@ -55,7 +55,6 @@ public class ASEScanServiceProvider implements IScanServiceProvider, Serializabl
     public String createAndExecuteScanWithJSONParameter(String type, JSONObject params) {
         return "";
     }
-
     
     private String createJob(Map<String, String> params) {
     	

@@ -211,7 +211,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		
 		return null;
 	}
-
+	
 	@Override
 	public JSONArray getNonCompliantIssues(String scanId) throws IOException, JSONException {
         	if(loginExpired())
