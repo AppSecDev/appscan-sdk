@@ -61,7 +61,7 @@ public class SASTScan extends ASoCScan implements SASTConstants {
 
 	@Override
 	public String getType() {
-		return "Sast";
+		return STATIC_ANALYZER;
 	}
 	
 	@Override
@@ -125,7 +125,7 @@ public class SASTScan extends ASoCScan implements SASTConstants {
 	}
 
     	protected void submitScan() {
-        	setScanId(getServiceProvider().createAndExecuteScan("Sast", getProperties()));
+        	setScanId(getServiceProvider().createAndExecuteScan(STATIC_ANALYZER, getProperties()));
     	}
 	
 	private File getScanLogs() {

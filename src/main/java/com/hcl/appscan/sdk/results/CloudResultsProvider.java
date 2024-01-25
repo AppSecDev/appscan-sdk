@@ -225,7 +225,7 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		}
 	
 		String request_url = authProvider.getServer() + API_REPORT_STATUS;
-		request_url += "?$top=100&$filter=Id eq " +String.format("%s",reportId)+ "&$count=false";
+		request_url += String.format("?$top=100&$filter=Id eq %s&$count=false",reportId);
 		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
 		request_headers.put(CONTENT_LENGTH, "0"); //$NON-NLS-1$
 	
