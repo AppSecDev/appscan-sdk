@@ -21,7 +21,7 @@ public interface SASTConstants {
 	String IRX_EXTENSION				= ".irx";							//$NON-NLS-1$
     String ZIP_EXTENSION                = ".zip";                           //$NON-NLS-1$
 	String SAST							= "Static Analyzer";				//$NON-NLS-1$
-	String STATIC_ANALYZER				= "StaticAnalyzer";					//$NON-NLS-1$
+	String STATIC_ANALYZER				= "Sast";					//$NON-NLS-1$
 
 	String PREPARE						= "prepare";						//$NON-NLS-1$
 	String PREPARE_ONLY					= "prepareOnly";					//$NON-NLS-1$
