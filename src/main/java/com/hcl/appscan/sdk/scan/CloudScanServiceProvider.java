@@ -179,7 +179,8 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		if(loginExpired())
 			return null;
 		
-		String request_url = m_authProvider.getServer() + String.format(API_BASIC_DETAILS, scanId);
+		String request_url = m_authProvider.getServer() + API_BASIC_DETAILS;
+		request_url +=String.format("?$filter=Id eq %s",scanId);
 		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
 		
 		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
@@ -187,7 +188,8 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		HttpResponse response = client.get(request_url, request_headers, null);
 		
 		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED){
-			JSONArray array = (JSONArray) response.getResponseBodyAsJSON();
+			JSONObject obj = (JSONObject) response.getResponseBodyAsJSON();
+			JSONArray array = (JSONArray) obj.get(ITEMS);
 			return (JSONObject) array.getJSONObject(0);
 		} else if (response.getResponseCode() == -1) {
 			return new JSONObject().put(STATUS,UNKNOWN); //If the server is not reachable Internet disconnect
@@ -210,7 +212,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		return null;
 	}
 	
-        @Override
+	@Override
 	public JSONArray getNonCompliantIssues(String scanId) throws IOException, JSONException {
         	if(loginExpired())
     			return null;

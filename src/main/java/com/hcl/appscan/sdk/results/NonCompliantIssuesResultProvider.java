@@ -36,11 +36,12 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 	@Override
 	protected void loadResults() {
 		try {
-			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
+			JSONObject items = m_scanProvider.getScanDetails(m_scanId);
+			JSONObject obj = items.getJSONObject(LATEST_EXECUTION);
 			if (obj == null) {
 				m_status = FAILED;
 				return;
-			} else if (obj.has(KEY) && obj.get(KEY).equals(UNAUTHORIZED_ACTION)) {
+			} else if (items.has(KEY) && items.get(KEY).equals(UNAUTHORIZED_ACTION)) {
 				m_status = FAILED;
 				return;
 			} else if (obj.has(STATUS) && obj.get(STATUS).equals(UNKNOWN)) {
@@ -218,13 +219,11 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 	}
 
 	private String getScanName() {
-		JSONObject obj;
 		try {
-			obj = m_scanProvider.getScanDetails(m_scanId);
-			return obj.getString("Name");
+			JSONObject items = m_scanProvider.getScanDetails(m_scanId);
+			return items.getString(NAME);
 		} catch (IOException | JSONException e) {
-			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())),
-					e);
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
 			return "";
 		}
 
