@@ -1,14 +1,11 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2023. 
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
 package com.hcl.appscan.sdk.http;
-
-import org.apache.wink.json4j.JSON;
 import org.apache.wink.json4j.JSONObject;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
