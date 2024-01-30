@@ -330,18 +330,13 @@ public class HttpClient {
 	
 	private HttpURLConnection makeConnection(String url, Method method,
 			Map<String, String> headerProperties) throws IOException {
-		System.out.println("url \t"+ url);
 		URL requestURL = new URL(url);
-		//URL requestURL = new URL(null ,url, new sun.net.www.protocol.https.Handler());
-		//HttpsURLConnection conn = null;
 		HttpURLConnection conn = null;
 		conn = (HttpURLConnection) requestURL.openConnection(m_proxy);
-		//conn = (HttpsURLConnection) requestURL.openConnection(m_proxy);
 		conn.setRequestMethod(method.name());
 		conn.setReadTimeout(0);
 		if((conn instanceof HttpsURLConnection) && m_bypassSSL) {
 			bypassSSL((HttpsURLConnection)conn);
-			//bypassSSL(conn);
 		}
 
 		// HTTP headers
