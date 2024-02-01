@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017,2022, 2023.
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -51,7 +51,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
   
     @Override
     public String createAndExecuteScan(String type, Map<String, String> params) {
-        if(loginExpired() || !verifyApplication(params.get(APP_ID)))
+        if(loginExpired() || !verifyApplication(params.get(APP_ID).toString()))
             return null;
 
         m_progress.setStatus(new Message(Message.INFO, Messages.getMessage(EXECUTING_SCAN)));
@@ -60,15 +60,10 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 
         try {
             HttpResponse response;
-            if(shouldUseV4Api(type)) {
                 request_headers.put("Content-Type", "application/json");
                 request_headers.put("accept", "application/json");
-                String request_url = m_authProvider.getServer() + String.format(API_SCANNER_V4, type);
-                response = client.post(request_url,request_headers,params);
-            } else {
                 String request_url = m_authProvider.getServer() + String.format(API_SCANNER, type);
-                response = client.postForm(request_url,request_headers,params);
-            }
+                response = client.post(request_url,request_headers,params);
 
             int status = response.getResponseCode();
 
@@ -98,10 +93,6 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
         }
         return null;
 	  }
-
-    private boolean shouldUseV4Api(String type) {
-        return type.equals(CoreConstants.SCA);
-    }
   
     @Override
 	  public String submitFile(File file) throws IOException {
@@ -115,7 +106,7 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
             }
 		
 		  List<HttpPart> parts = new ArrayList<HttpPart>();
-		  parts.add(new HttpPart(FILE_TO_UPLOAD, file, "multipart/form-data")); //$NON-NLS-1$
+		  parts.add(new HttpPart(CoreConstants.UPLOADED_FILE, file, "multipart/form-data")); //$NON-NLS-1$
 		
 		  HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
 		
@@ -139,18 +130,21 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		if(loginExpired())
 			return null;
 		
-		String request_url = m_authProvider.getServer() + String.format(API_BASIC_DETAILS, scanId);
+		String request_url = m_authProvider.getServer() + API_BASIC_DETAILS;
+		request_url +=String.format("?$filter=Id eq %s",scanId);
 		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
 		
 		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
                 try {
 		HttpResponse response = client.get(request_url, request_headers, null);
 		
-		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED)
-			return (JSONObject) response.getResponseBodyAsJSON();
-                else if (response.getResponseCode() == -1)	//If the server is not reachable Internet disconnect
-                    return new JSONObject().put(STATUS,UNKNOWN);
-		else if (response.getResponseCode() != HttpsURLConnection.HTTP_BAD_REQUEST) {
+		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED){
+			JSONObject obj = (JSONObject) response.getResponseBodyAsJSON();
+			JSONArray array = (JSONArray) obj.get(ITEMS);
+			return (JSONObject) array.getJSONObject(0);
+		} else if (response.getResponseCode() == -1) {
+			return new JSONObject().put(STATUS,UNKNOWN); //If the server is not reachable Internet disconnect
+		} else if (response.getResponseCode() != HttpsURLConnection.HTTP_BAD_REQUEST) {
 			JSONArtifact json = response.getResponseBodyAsJSON();
 			if (json != null && ((JSONObject)json).has(MESSAGE))
 				m_progress.setStatus(new Message(Message.ERROR, ((JSONObject)json).getString(MESSAGE)));
@@ -169,13 +163,13 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
 		return null;
 	}
 	
-        @Override
+	@Override
 	public JSONArray getNonCompliantIssues(String scanId) throws IOException, JSONException {
         	if(loginExpired())
     			return null;
     		
     		String request_url = m_authProvider.getServer() + String.format(API_ISSUES_COUNT, "Scan", scanId);
-    		request_url += "?applyPolicies=All";
+    		request_url +="?$apply=groupby((Severity),aggregate($count as N))";
     		Map<String, String> request_headers = m_authProvider.getAuthorizationHeader(true);
     		request_headers.put("Content-Type", "application/json; charset=UTF-8");
     		request_headers.put("Accept", "application/json");
@@ -183,8 +177,10 @@ public class CloudScanServiceProvider implements IScanServiceProvider, Serializa
     		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
     		HttpResponse response = client.get(request_url, request_headers, null);
     		
-    		if (response.getResponseCode() == HttpsURLConnection.HTTP_OK)
-    			return (JSONArray)response.getResponseBodyAsJSON();
+    		if (response.isSuccess()) {
+    			JSONObject json = (JSONObject) response.getResponseBodyAsJSON();
+    			return (JSONArray) json.getJSONArray("Items");
+                }
 
     		if (response.getResponseCode() == HttpsURLConnection.HTTP_BAD_REQUEST)
     			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_INFO, "Scan", scanId)));

@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2020, 2023.
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.apache.wink.json4j.JSONArray;
 import org.apache.wink.json4j.JSONException;
 import org.apache.wink.json4j.JSONObject;
 
@@ -160,8 +161,8 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 	
 	protected void loadResults() {
 		try {
-			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
-			obj = (JSONObject) obj.get(LATEST_EXECUTION);
+			JSONObject items = m_scanProvider.getScanDetails(m_scanId);
+			JSONObject obj = items.getJSONObject(LATEST_EXECUTION);
 			m_status = obj.getString(STATUS);
 			if(m_status != null && !(m_status.equalsIgnoreCase(INQUEUE) || m_status.equalsIgnoreCase(RUNNING))) {
 				m_totalFindings = obj.getInt(TOTAL_ISSUES);
@@ -223,7 +224,8 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 			return FAILED;
 		}
 	
-		String request_url = authProvider.getServer() + String.format(API_REPORT_STATUS, reportId);
+		String request_url = authProvider.getServer() + API_REPORT_STATUS;
+		request_url += String.format("?$top=100&$filter=Id eq %s&$count=false",reportId);
 		Map<String, String> request_headers = authProvider.getAuthorizationHeader(true);
 		request_headers.put(CONTENT_LENGTH, "0"); //$NON-NLS-1$
 	
@@ -235,7 +237,9 @@ public class CloudResultsProvider implements IResultsProvider, Serializable, Cor
 		}
     	
     	JSONObject obj = (JSONObject) response.getResponseBodyAsJSON();
-    	return obj.getString(STATUS);
+        JSONArray array = obj.getJSONArray(ITEMS);
+        JSONObject json= (JSONObject) array.get(0);
+    	return json.getString(STATUS);
     }
 
 

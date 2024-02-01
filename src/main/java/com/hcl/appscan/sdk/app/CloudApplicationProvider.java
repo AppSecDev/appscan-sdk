@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2023.
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -46,7 +46,7 @@ public class CloudApplicationProvider implements IApplicationProvider, CoreConst
 			return;
 		
 		m_applications = new HashMap<String, String>();
-		String url =  m_authProvider.getServer() + API_APPS + "?$inlinecount=allpages"; //$NON-NLS-1$
+		String url =  m_authProvider.getServer() + API_APPS; //$NON-NLS-1$
 		Map<String, String> headers = m_authProvider.getAuthorizationHeader(true);
 		headers.putAll(Collections.singletonMap("range", "items=0-999999")); //$NON-NLS-1$ //$NON-NLS-2$
 		

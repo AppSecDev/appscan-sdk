@@ -1,5 +1,5 @@
 /**
- * © Copyright HCL Technologies Ltd. 2018, 2022, 2023.
+ * © Copyright HCL Technologies Ltd. 2018, 2024.
  */
 package com.hcl.appscan.sdk.results;
 
@@ -36,11 +36,12 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 	@Override
 	protected void loadResults() {
 		try {
-			JSONObject obj = m_scanProvider.getScanDetails(m_scanId);
+			JSONObject items = m_scanProvider.getScanDetails(m_scanId);
+			JSONObject obj = items.getJSONObject(LATEST_EXECUTION);
 			if (obj == null) {
 				m_status = FAILED;
 				return;
-			} else if (obj.has(KEY) && obj.get(KEY).equals(UNAUTHORIZED_ACTION)) {
+			} else if (items.has(KEY) && items.get(KEY).equals(UNAUTHORIZED_ACTION)) {
 				m_status = FAILED;
 				return;
 			} else if (obj.has(STATUS) && obj.get(STATUS).equals(UNKNOWN)) {
@@ -48,7 +49,6 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
                 return;
 			}
 
-			obj = (JSONObject) obj.get(LATEST_EXECUTION);
 
 			m_status = obj.getString(STATUS);
 			if (FAILED.equalsIgnoreCase(m_status) && obj.has(USER_MESSAGE)) {
@@ -64,7 +64,7 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 				for (int i = 0; i < array.length(); i++) {
 					JSONObject jobj = array.getJSONObject(i);
 					String sev = jobj.getString("Severity");
-					int count = jobj.getInt("Count");
+					int count = jobj.getInt("N");
 					
 					switch (sev.toLowerCase()) {
                                         case "critical":
@@ -219,13 +219,11 @@ public class NonCompliantIssuesResultProvider extends CloudResultsProvider {
 	}
 
 	private String getScanName() {
-		JSONObject obj;
 		try {
-			obj = m_scanProvider.getScanDetails(m_scanId);
-			return obj.getString("Name");
+			JSONObject items = m_scanProvider.getScanDetails(m_scanId);
+			return items.getString(NAME);
 		} catch (IOException | JSONException e) {
-			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())),
-					e);
+			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage(ERROR_GETTING_DETAILS, e.getMessage())), e);
 			return "";
 		}
 

@@ -1,6 +1,6 @@
 /**
  * © Copyright IBM Corporation 2016.
- * © Copyright HCL Technologies Ltd. 2017, 2022, 2023.
+ * © Copyright HCL Technologies Ltd. 2017, 2024.
  * LICENSE: Apache License, Version 2.0 https://www.apache.org/licenses/LICENSE-2.0
  */
 
@@ -70,7 +70,7 @@ public class AuthenticationHandler implements CoreConstants {
 	public boolean login(String username, String password, boolean persist, LoginType type, String clientType) throws IOException, JSONException {
 		
 		Map<String, String> headers = new HashMap<String, String>();
-		headers.put(CONTENT_TYPE, "application/x-www-form-urlencoded"); //$NON-NLS-1$
+		headers.put(CONTENT_TYPE, "application/json"); //$NON-NLS-1$
 		headers.put(CHARSET, UTF8);
 		
 		Map<String, String> params = new HashMap<String, String>();
@@ -92,7 +92,7 @@ public class AuthenticationHandler implements CoreConstants {
 		}
 
 		HttpClient client = new HttpClient(m_authProvider.getProxy(), m_authProvider.getacceptInvalidCerts());
-	    HttpResponse response = client.postForm(url, headers, params);
+	    HttpResponse response = client.post(url, headers, params);
 	    
 		if(response.getResponseCode() == HttpsURLConnection.HTTP_OK || response.getResponseCode() == HttpsURLConnection.HTTP_CREATED) {
 			if(persist) {
