@@ -78,19 +78,22 @@ public class CloudPresenceProvider implements IPresenceProvider, CoreConstants {
 	public Map<String, String> getDetails(String id) {
 		if(!authenticated())
 			return null;
-		
-		String url =  m_authProvider.getServer() + String.format(API_PRESENCES_ID, id);
+
+		String url =  m_authProvider.getServer() + API_PRESENCES+"?%24filter=Id%20eq%20"+id;
 		Map<String, String> headers = m_authProvider.getAuthorizationHeader(true);
 		Map<String, String> details = new HashMap<String, String>();
-
 		HttpClient client = new HttpClient(m_authProvider.getProxy());
-		
+
 		try {
 			HttpResponse response = client.get(url, headers, null);
 			if(response.isSuccess()) {
 				JSONObject json = (JSONObject) response.getResponseBodyAsJSON();
-				for(Object key : json.keySet())
-					details.put((String)key, json.getString((String)key));
+				JSONArray array = json.getJSONArray("Items");
+				if(array == null)
+					return details;
+				JSONObject presenceDetail = array.getJSONObject(0);
+				for(Object key : presenceDetail.keySet())
+					details.put((String)key, presenceDetail.getString((String)key));
 			}
 			else
 				handleError(response);
@@ -98,7 +101,7 @@ public class CloudPresenceProvider implements IPresenceProvider, CoreConstants {
 		catch(IOException | JSONException e) {
 			m_progress.setStatus(new Message(Message.ERROR, Messages.getMessage("error.getting.presence.details", id)), e); //$NON-NLS-1$
 		}
-		
+
 		return details;
 	}
 
